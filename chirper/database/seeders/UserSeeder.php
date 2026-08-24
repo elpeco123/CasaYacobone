@@ -13,20 +13,30 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        User::create([
-            'name' => 'Administrador',
-            'email' => 'admin@casayacobone.com',
-            'password' => Hash::make('Yacobone2026'),
-            'role' => 'admin',
-            'email_verified_at' => now(),
-        ]);
+        $adminEmail = env('SEEDER_ADMIN_EMAIL', 'admin@casayacobone.com');
+        $adminPassword = env('SEEDER_ADMIN_PASSWORD', 'admin123');
 
-        User::create([
-            'name' => 'Vendedor',
-            'email' => 'vendedor@casayacobone.com',
-            'password' => Hash::make('password'),
-            'role' => 'vendedor',
-            'email_verified_at' => now(),
-        ]);
+        $vendedorEmail = env('SEEDER_VENDEDOR_EMAIL', 'vendedor@casayacobone.com');
+        $vendedorPassword = env('SEEDER_VENDEDOR_PASSWORD', 'vendedor123');
+
+        User::firstOrCreate(
+            ['email' => $adminEmail],
+            [
+                'name' => 'Administrador',
+                'password' => Hash::make($adminPassword),
+                'role' => 'admin',
+                'email_verified_at' => now(),
+            ]
+        );
+
+        User::firstOrCreate(
+            ['email' => $vendedorEmail],
+            [
+                'name' => 'Vendedor',
+                'password' => Hash::make($vendedorPassword),
+                'role' => 'vendedor',
+                'email_verified_at' => now(),
+            ]
+        );
     }
 }
