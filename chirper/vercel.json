@@ -5,11 +5,7 @@
     "outputDirectory": "public",
     "functions": {
         "api/index.php": {
-            "runtime": "vercel-php@0.7.3",
-            "environment": {
-                "PHP_VERSION": "8.2",
-                "VERCEL_PHP_VERSION": "8.2"
-            }
+            "runtime": "vercel-php@0.8.0"
         }
     },
     "routes": [
