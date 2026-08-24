@@ -3,12 +3,13 @@
     "framework": null,
     "buildCommand": "npm run build",
     "outputDirectory": "public",
-    "env": {
-        "VERCEL_PHP_VERSION": "8.3"
-    },
     "functions": {
         "api/index.php": {
-            "runtime": "vercel-php@0.7.3"
+            "runtime": "vercel-php@0.7.3",
+            "environment": {
+                "PHP_VERSION": "8.2",
+                "VERCEL_PHP_VERSION": "8.2"
+            }
         }
     },
     "routes": [
