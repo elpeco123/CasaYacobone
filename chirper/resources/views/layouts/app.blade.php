@@ -358,7 +358,7 @@
         /* ===== FORMS ===== */
         .form-control-dark,
         .form-select-dark {
-            background: rgba(15, 15, 30, 0.6);
+            background: rgba(15, 15, 30, 0.7);
             border: 1px solid var(--cy-border);
             color: var(--cy-text);
             border-radius: 10px;
@@ -367,9 +367,15 @@
             transition: all 0.25s ease;
         }
 
+        .form-select-dark option {
+            background-color: #16213e;
+            color: #eaeaea;
+            padding: 10px;
+        }
+
         .form-control-dark:focus,
         .form-select-dark:focus {
-            background: rgba(15, 15, 30, 0.8);
+            background: rgba(15, 15, 30, 0.9);
             border-color: var(--cy-gold);
             color: var(--cy-text);
             box-shadow: 0 0 0 3px rgba(212, 165, 116, 0.15);
@@ -377,6 +383,22 @@
 
         .form-control-dark::placeholder {
             color: var(--cy-text-muted);
+        }
+
+        /* Hide browser default number spinners for dark inputs */
+        input[type=number].form-control-dark::-webkit-inner-spin-button,
+        input[type=number].form-control-dark::-webkit-outer-spin-button {
+            opacity: 0.5;
+        }
+
+        .bg-gold-light {
+            background: rgba(212, 165, 116, 0.2) !important;
+            color: var(--cy-gold-light) !important;
+            border: 1px solid rgba(212, 165, 116, 0.3);
+        }
+
+        .text-gold-light {
+            color: var(--cy-gold-light) !important;
         }
 
         .form-label {

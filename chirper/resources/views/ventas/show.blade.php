@@ -90,6 +90,22 @@
                         </span>
                     </div>
                     <div class="mb-3">
+                        <span class="form-label d-block">Forma de Pago</span>
+                        @if(($venta->tipo_pago ?? 'efectivo') === 'tarjeta')
+                            <span class="badge" style="background: rgba(155, 89, 182, 0.2); color: #af7ac5; border: 1px solid rgba(155, 89, 182, 0.4); font-size: 0.9rem;">
+                                💳 Tarjeta
+                            </span>
+                        @elseif(($venta->tipo_pago ?? 'efectivo') === 'factura')
+                            <span class="badge" style="background: rgba(52, 152, 219, 0.2); color: #5adeff; border: 1px solid rgba(52, 152, 219, 0.4); font-size: 0.9rem;">
+                                📄 Factura
+                            </span>
+                        @else
+                            <span class="badge" style="background: rgba(46, 204, 113, 0.2); color: #2ecc71; border: 1px solid rgba(46, 204, 113, 0.4); font-size: 0.9rem;">
+                                💵 Efectivo
+                            </span>
+                        @endif
+                    </div>
+                    <div class="mb-3">
                         <span class="form-label d-block">Items</span>
                         <span class="fw-bold">{{ $venta->items->count() }} productos ({{ $venta->items->sum('cantidad') }} unidades)</span>
                     </div>

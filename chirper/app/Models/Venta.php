@@ -18,6 +18,7 @@ class Venta extends Model
      */
     protected $fillable = [
         'user_id',
+        'tipo_pago',
         'total',
     ];
 

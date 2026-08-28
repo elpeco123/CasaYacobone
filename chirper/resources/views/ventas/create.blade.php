@@ -4,79 +4,122 @@
 
 @section('content')
 <div class="fade-in">
-    <div class="page-header">
-        <h1><i class="bi bi-cart-plus-fill me-2" style="color: var(--cy-accent);"></i>Nueva Venta</h1>
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb mb-0">
-                <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('ventas.index') }}">Ventas</a></li>
-                <li class="breadcrumb-item active">Nueva Venta</li>
-            </ol>
-        </nav>
+    <div class="page-header d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
+        <div>
+            <h1><i class="bi bi-cart-plus-fill me-2" style="color: var(--cy-accent);"></i>Registrar Nueva Venta</h1>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('ventas.index') }}">Ventas</a></li>
+                    <li class="breadcrumb-item active">Nueva Venta</li>
+                </ol>
+            </nav>
+        </div>
+        <a href="{{ route('ventas.index') }}" class="btn btn-glass">
+            <i class="bi bi-arrow-left me-1"></i>Volver a Ventas
+        </a>
     </div>
 
     <form method="POST" action="{{ route('ventas.store') }}" id="ventaForm">
         @csrf
 
         <div class="row g-4">
-            {{-- Items --}}
+            {{-- Left Column: Product Search & Selected Items --}}
             <div class="col-lg-8">
+
+                {{-- Buscador Rápido de Productos --}}
+                <div class="card-glass mb-4" style="background: rgba(15, 52, 96, 0.4); border: 1px solid rgba(212, 165, 116, 0.25);">
+                    <div class="card-body p-3">
+                        <div class="d-flex align-items-center gap-2 mb-2">
+                            <i class="bi bi-search text-warning fs-5"></i>
+                            <h6 class="mb-0 fw-bold text-light">Buscador Rápido de Productos</h6>
+                            <span class="badge bg-gold-light text-dark ms-auto" style="font-size: 0.75rem;">
+                                {{ $productos->count() }} disponibles
+                            </span>
+                        </div>
+                        <div class="position-relative">
+                            <input type="text" id="quickProductSearch" class="form-control form-control-dark ps-5"
+                                   placeholder="Escribí el nombre, marca o categoría del producto (ej: Remera, Nike)..."
+                                   autocomplete="off">
+                            <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"></i>
+                        </div>
+
+                        {{-- Live Search Results dropdown list --}}
+                        <div id="searchResultsList" class="mt-2 rounded-3 overflow-hidden shadow-lg"
+                             style="display: none; max-height: 280px; overflow-y: auto; background: rgba(15, 20, 40, 0.95); border: 1px solid var(--cy-gold);">
+                            {{-- Results populated via JS --}}
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Tabla de Productos Seleccionados en la Venta --}}
                 <div class="card-glass">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h5 class="mb-0" style="font-weight: 700;">
-                                <i class="bi bi-bag-fill me-2" style="color: var(--cy-gold);"></i>
-                                Productos de la Venta
+                            <h5 class="mb-0 fw-bold">
+                                <i class="bi bi-bag-check-fill me-2" style="color: var(--cy-gold);"></i>
+                                Items en esta Venta
                             </h5>
                             <button type="button" class="btn btn-gold btn-sm" id="btnAgregarItem">
-                                <i class="bi bi-plus-lg me-1"></i>Agregar Producto
+                                <i class="bi bi-plus-circle-fill me-1"></i>Agregar Fila Manual
                             </button>
                         </div>
 
                         <div id="itemsContainer">
-                            {{-- Item rows will be added here --}}
+                            {{-- Dynamic rows will be inserted here --}}
                         </div>
 
-                        <div id="emptyMessage" class="text-center py-4">
-                            <i class="bi bi-cart-x" style="font-size: 2.5rem; color: var(--cy-text-muted);"></i>
-                            <p class="text-muted mt-2 mb-0">Agregá productos a la venta usando el botón de arriba.</p>
+                        <div id="emptyMessage" class="text-center py-5">
+                            <i class="bi bi-cart-x text-muted" style="font-size: 3rem; opacity: 0.5;"></i>
+                            <h6 class="text-muted mt-3 mb-1">No hay productos agregados a la venta</h6>
+                            <p class="text-muted small">Buscá un producto arriba o tocá en <strong>"Agregar Fila Manual"</strong> para comenzar.</p>
                         </div>
                     </div>
                 </div>
             </div>
 
-            {{-- Summary --}}
+            {{-- Right Column: Resumen y Confirmación --}}
             <div class="col-lg-4">
-                <div class="card-glass" style="position: sticky; top: 80px;">
+                <div class="card-glass" style="position: sticky; top: 90px;">
                     <div class="card-body">
-                        <h5 class="mb-3" style="font-weight: 700;">
-                            <i class="bi bi-receipt me-2" style="color: var(--cy-gold);"></i>
-                            Resumen
+                        <h5 class="mb-3 fw-bold">
+                            <i class="bi bi-receipt-cutoff me-2" style="color: var(--cy-gold);"></i>
+                            Resumen de Venta
                         </h5>
 
                         <div class="d-flex justify-content-between mb-2" style="font-size: 0.9rem;">
-                            <span class="text-muted">Productos:</span>
+                            <span class="text-muted">Variedad de Productos:</span>
                             <span id="totalItems" class="fw-bold">0</span>
                         </div>
-                        <div class="d-flex justify-content-between mb-2" style="font-size: 0.9rem;">
-                            <span class="text-muted">Unidades:</span>
-                            <span id="totalUnidades" class="fw-bold">0</span>
+                        <div class="d-flex justify-content-between mb-3" style="font-size: 0.9rem;">
+                            <span class="text-muted">Total de Unidades:</span>
+                            <span id="totalUnidades" class="fw-bold text-info">0</span>
                         </div>
 
-                        <hr style="border-color: var(--cy-border);">
-
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span style="font-size: 1.1rem; font-weight: 600;">Total:</span>
-                            <span id="totalMonto" style="font-size: 1.6rem; font-weight: 800; color: var(--cy-gold);">$0</span>
+                        <div class="mb-3">
+                            <label for="tipo_pago" class="form-label">Forma de Pago *</label>
+                            <select name="tipo_pago" id="tipo_pago" class="form-select form-select-dark @error('tipo_pago') is-invalid @enderror" required style="font-weight: 600;">
+                                <option value="efectivo" {{ old('tipo_pago') == 'efectivo' ? 'selected' : '' }}>💵 Efectivo</option>
+                                <option value="tarjeta" {{ old('tipo_pago') == 'tarjeta' ? 'selected' : '' }}>💳 Tarjeta</option>
+                                <option value="factura" {{ old('tipo_pago') == 'factura' ? 'selected' : '' }}>📄 Factura</option>
+                            </select>
+                            @error('tipo_pago')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
 
-                        <hr style="border-color: var(--cy-border);">
+                        <hr style="border-color: var(--cy-border); margin: 1.2rem 0;">
 
-                        <button type="submit" class="btn btn-accent w-100 py-2" id="btnRegistrar" disabled>
-                            <i class="bi bi-check-circle-fill me-2"></i>Registrar Venta
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span style="font-size: 1.1rem; font-weight: 600;">Total a Cobrar:</span>
+                            <span id="totalMonto" style="font-size: 1.8rem; font-weight: 800; color: var(--cy-gold);">$0</span>
+                        </div>
+
+                        <button type="submit" class="btn btn-accent w-100 py-2.5 text-uppercase fw-bold" id="btnRegistrar" disabled style="letter-spacing: 0.5px;">
+                            <i class="bi bi-check-circle-fill me-2"></i>Confirmar Venta
                         </button>
-                        <a href="{{ route('ventas.index') }}" class="btn btn-glass w-100 mt-2">
-                            <i class="bi bi-x-lg me-1"></i>Cancelar
+                        <a href="{{ route('ventas.index') }}" class="btn btn-glass w-100 mt-2 text-muted">
+                            Cancelar
                         </a>
                     </div>
                 </div>
@@ -85,20 +128,22 @@
     </form>
 </div>
 
-{{-- Item Row Template --}}
+{{-- Plantilla de Fila de Producto --}}
 <template id="itemTemplate">
-    <div class="item-row mb-3 p-3" style="background: rgba(255,255,255,0.02); border: 1px solid var(--cy-border); border-radius: 12px;">
+    <div class="item-row mb-3 p-3 rounded-3 fade-in" style="background: rgba(255,255,255,0.03); border: 1px solid var(--cy-border);">
         <div class="row g-3 align-items-end">
             <div class="col-md-5">
-                <label class="form-label">Producto</label>
+                <label class="form-label">Seleccionar Producto</label>
                 <select class="form-select form-select-dark item-producto" name="items[__INDEX__][producto_id]" required>
-                    <option value="">Seleccionar producto...</option>
+                    <option value="">Buscar o seleccionar...</option>
                     @foreach($productos as $prod)
                         <option value="{{ $prod->id }}"
                                 data-precio="{{ $prod->precio_venta }}"
                                 data-stock="{{ $prod->stock }}"
-                                data-nombre="{{ $prod->nombre }}">
-                            {{ $prod->nombre }} — ${{ number_format($prod->precio_venta, 0, ',', '.') }} (Stock: {{ $prod->stock }})
+                                data-nombre="{{ $prod->nombre }}"
+                                data-marca="{{ $prod->marca }}"
+                                data-categoria="{{ $prod->categoria->nombre ?? '' }}">
+                            {{ $prod->nombre }} ({{ $prod->marca }}) — ${{ number_format($prod->precio_venta, 0, ',', '.') }} [Stock: {{ $prod->stock }}]
                         </option>
                     @endforeach
                 </select>
@@ -110,23 +155,24 @@
             </div>
             <div class="col-md-2">
                 <label class="form-label">Precio Unit.</label>
-                <input type="text" class="form-control form-control-dark item-precio" readonly
+                <input type="text" class="form-control form-control-dark item-precio text-end" readonly
                        style="color: var(--cy-gold); font-weight: 600;">
             </div>
             <div class="col-md-2">
                 <label class="form-label">Subtotal</label>
-                <input type="text" class="form-control form-control-dark item-subtotal" readonly
-                       style="color: var(--cy-gold); font-weight: 700;">
+                <input type="text" class="form-control form-control-dark item-subtotal text-end" readonly
+                       style="color: var(--cy-gold); font-weight: 700; font-size: 1.05rem;">
             </div>
             <div class="col-md-1 text-center">
-                <button type="button" class="btn btn-sm btn-remove-item"
+                <button type="button" class="btn btn-sm btn-remove-item" title="Quitar item"
                         style="background: rgba(231,76,60,0.15); border: 1px solid rgba(231,76,60,0.3); color: #e74c3c; border-radius: 8px; padding: 0.45rem 0.65rem;">
                     <i class="bi bi-trash"></i>
                 </button>
             </div>
         </div>
-        <div class="item-stock-info mt-2" style="font-size: 0.78rem; color: var(--cy-text-muted); display: none;">
-            <i class="bi bi-info-circle me-1"></i>Stock disponible: <span class="item-stock-display">0</span>
+        <div class="item-stock-info mt-2 d-flex justify-content-between align-items-center" style="font-size: 0.78rem; color: var(--cy-text-muted); display: none;">
+            <span><i class="bi bi-info-circle me-1"></i>Stock disponible: <strong class="item-stock-display text-light">0</strong></span>
+            <span class="item-categoria-display text-gold-light"></span>
         </div>
     </div>
 </template>
@@ -134,18 +180,126 @@
 @push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // Datos de productos para el buscador inteligente
+        const productosData = [
+            @foreach($productos as $prod)
+            {
+                id: {{ $prod->id }},
+                nombre: @json($prod->nombre),
+                marca: @json($prod->marca),
+                categoria: @json($prod->categoria->nombre ?? ''),
+                precio: {{ $prod->precio_venta }},
+                stock: {{ $prod->stock }}
+            },
+            @endforeach
+        ];
+
         let itemIndex = 0;
         const container = document.getElementById('itemsContainer');
         const template = document.getElementById('itemTemplate');
         const emptyMessage = document.getElementById('emptyMessage');
         const btnRegistrar = document.getElementById('btnRegistrar');
+        const quickSearch = document.getElementById('quickProductSearch');
+        const resultsList = document.getElementById('searchResultsList');
 
-        // Add first item
-        addItem();
+        // Evento para agregar fila vacía
+        document.getElementById('btnAgregarItem').addEventListener('click', () => addItem());
 
-        document.getElementById('btnAgregarItem').addEventListener('click', addItem);
+        // Buscador Inteligente en Tiempo Real
+        quickSearch.addEventListener('input', function() {
+            const query = this.value.trim().toLowerCase();
+            if (query.length < 1) {
+                resultsList.style.display = 'none';
+                resultsList.innerHTML = '';
+                return;
+            }
 
-        function addItem() {
+            const matches = productosData.filter(p =>
+                p.nombre.toLowerCase().includes(query) ||
+                p.marca.toLowerCase().includes(query) ||
+                p.categoria.toLowerCase().includes(query)
+            );
+
+            if (matches.length === 0) {
+                resultsList.innerHTML = `
+                    <div class="p-3 text-center text-muted">
+                        <i class="bi bi-search me-1"></i>No se encontraron productos con "${query}"
+                    </div>
+                `;
+                resultsList.style.display = 'block';
+                return;
+            }
+
+            resultsList.innerHTML = matches.map(p => `
+                <div class="search-item-result p-2 px-3 border-bottom border-secondary d-flex justify-content-between align-items-center"
+                     style="cursor: pointer; transition: background 0.2s;"
+                     data-id="${p.id}"
+                     onmouseover="this.style.background='rgba(212, 165, 116, 0.15)'"
+                     onmouseout="this.style.background='transparent'">
+                    <div>
+                        <strong class="text-light">${p.nombre}</strong>
+                        <div class="small text-muted">${p.marca} · <span class="text-info">${p.categoria}</span></div>
+                    </div>
+                    <div class="text-end ms-3">
+                        <div class="fw-bold" style="color: var(--cy-gold);">$${p.precio.toLocaleString('es-AR')}</div>
+                        <span class="badge bg-secondary" style="font-size: 0.7rem;">Stock: ${p.stock}</span>
+                        <button type="button" class="btn btn-gold btn-sm ms-2 py-0 px-2 btn-add-fast" style="font-size: 0.75rem;">
+                            <i class="bi bi-plus-lg"></i> Agregar
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+
+            resultsList.style.display = 'block';
+        });
+
+        // Click handler para agregar desde los resultados de búsqueda
+        resultsList.addEventListener('click', function(e) {
+            const row = e.target.closest('.search-item-result');
+            if (row) {
+                const prodId = parseInt(row.dataset.id);
+                addProductToCart(prodId);
+                quickSearch.value = '';
+                resultsList.style.display = 'none';
+                quickSearch.focus();
+            }
+        });
+
+        // Ocultar la lista de resultados al hacer click afuera
+        document.addEventListener('click', function(e) {
+            if (!quickSearch.contains(e.target) && !resultsList.contains(e.target)) {
+                resultsList.style.display = 'none';
+            }
+        });
+
+        // Agregar un producto directamente seleccionándolo por ID
+        function addProductToCart(productId) {
+            // Verificar si el producto ya existe en la lista de items
+            let existingRow = null;
+            container.querySelectorAll('.item-row').forEach(r => {
+                const select = r.querySelector('.item-producto');
+                if (parseInt(select.value) === productId) {
+                    existingRow = r;
+                }
+            });
+
+            if (existingRow) {
+                // Incrementar cantidad
+                const cantInput = existingRow.querySelector('.item-cantidad');
+                const maxStock = parseInt(existingRow.querySelector('.item-producto').options[existingRow.querySelector('.item-producto').selectedIndex].dataset.stock);
+                let currentVal = parseInt(cantInput.value) || 0;
+                if (currentVal < maxStock) {
+                    cantInput.value = currentVal + 1;
+                    updateItemRow(existingRow);
+                    updateTotal();
+                }
+            } else {
+                // Crear nueva fila con el producto pre-seleccionado
+                const newRow = addItem(productId);
+            }
+        }
+
+        function addItem(selectedProductId = null) {
             const html = template.innerHTML.replace(/__INDEX__/g, itemIndex);
             const div = document.createElement('div');
             div.innerHTML = html;
@@ -155,10 +309,14 @@
 
             emptyMessage.style.display = 'none';
 
-            // Event listeners
             const select = row.querySelector('.item-producto');
             const cantidad = row.querySelector('.item-cantidad');
             const removeBtn = row.querySelector('.btn-remove-item');
+
+            if (selectedProductId) {
+                select.value = selectedProductId;
+                updateItemRow(row);
+            }
 
             select.addEventListener('change', function() {
                 updateItemRow(row);
@@ -189,6 +347,7 @@
             });
 
             updateTotal();
+            return row;
         }
 
         function updateItemRow(row) {
@@ -198,6 +357,7 @@
             const subtotalInput = row.querySelector('.item-subtotal');
             const stockInfo = row.querySelector('.item-stock-info');
             const stockDisplay = row.querySelector('.item-stock-display');
+            const catDisplay = row.querySelector('.item-categoria-display');
 
             const selected = select.options[select.selectedIndex];
 
@@ -205,12 +365,14 @@
                 const precio = parseFloat(selected.dataset.precio);
                 const stock = parseInt(selected.dataset.stock);
                 const cant = parseInt(cantidad.value) || 1;
+                const cat = selected.dataset.categoria;
 
                 cantidad.max = stock;
                 precioInput.value = '$' + precio.toLocaleString('es-AR');
                 subtotalInput.value = '$' + (precio * cant).toLocaleString('es-AR');
-                stockInfo.style.display = 'block';
+                stockInfo.style.display = 'flex';
                 stockDisplay.textContent = stock;
+                if (catDisplay) catDisplay.textContent = cat;
             } else {
                 precioInput.value = '';
                 subtotalInput.value = '';

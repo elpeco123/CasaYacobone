@@ -29,6 +29,7 @@
                             <th>Fecha</th>
                             <th>Hora</th>
                             <th>Vendedor</th>
+                            <th class="text-center">Forma de Pago</th>
                             <th class="text-end">Total</th>
                             <th class="text-center">Acción</th>
                         </tr>
@@ -42,6 +43,21 @@
                             <td>
                                 <i class="bi bi-person-fill me-1" style="color: var(--cy-text-muted);"></i>
                                 {{ $venta->user->name }}
+                            </td>
+                            <td class="text-center">
+                                @if(($venta->tipo_pago ?? 'efectivo') === 'tarjeta')
+                                    <span class="badge" style="background: rgba(155, 89, 182, 0.2); color: #af7ac5; border: 1px solid rgba(155, 89, 182, 0.4);">
+                                        💳 Tarjeta
+                                    </span>
+                                @elseif(($venta->tipo_pago ?? 'efectivo') === 'factura')
+                                    <span class="badge" style="background: rgba(52, 152, 219, 0.2); color: #5adeff; border: 1px solid rgba(52, 152, 219, 0.4);">
+                                        📄 Factura
+                                    </span>
+                                @else
+                                    <span class="badge" style="background: rgba(46, 204, 113, 0.2); color: #2ecc71; border: 1px solid rgba(46, 204, 113, 0.4);">
+                                        💵 Efectivo
+                                    </span>
+                                @endif
                             </td>
                             <td class="text-end fw-bold" style="font-size: 1.05rem; color: var(--cy-gold);">
                                 ${{ number_format($venta->total, 0, ',', '.') }}

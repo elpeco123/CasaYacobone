@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\VentaRequest;
 use App\Models\Producto;
 use App\Models\Venta;
-use App\Models\VentaItem;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -56,7 +55,7 @@ class VentaController extends Controller
                     // Validate stock availability
                     if ($producto->stock < $item['cantidad']) {
                         throw new \Exception(
-                            "Stock insuficiente para \"{$producto->nombre}\". " .
+                            "Stock insuficiente para \"{$producto->nombre}\". ".
                             "Disponible: {$producto->stock}, Solicitado: {$item['cantidad']}."
                         );
                     }
@@ -79,6 +78,7 @@ class VentaController extends Controller
                 // Create the venta
                 $venta = Venta::create([
                     'user_id' => Auth::id(),
+                    'tipo_pago' => $validated['tipo_pago'],
                     'total' => $total,
                 ]);
 
@@ -91,7 +91,7 @@ class VentaController extends Controller
             });
 
             return redirect()->route('ventas.show', $venta)
-                ->with('success', 'Venta registrada correctamente. Total: $' . number_format($venta->total, 2, ',', '.'));
+                ->with('success', 'Venta registrada correctamente. Total: $'.number_format($venta->total, 2, ',', '.'));
 
         } catch (\Exception $e) {
             return back()
@@ -106,6 +106,7 @@ class VentaController extends Controller
     public function show(Venta $venta): View
     {
         $venta->load(['user', 'items.producto.categoria']);
+
         return view('ventas.show', compact('venta'));
     }
 }

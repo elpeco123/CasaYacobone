@@ -104,6 +104,59 @@
                     @endif
                 </div>
             </div>
+
+            {{-- Ranking de Proveedores por Compras (Últimos 12 Meses) --}}
+            <div class="card-glass mt-4">
+                <div class="card-body">
+                    <h5 class="mb-3" style="font-weight: 700;">
+                        <i class="bi bi-truck me-2" style="color: var(--cy-gold);"></i>
+                        Ranking de Proveedores — Compras (Últimos 12 Meses)
+                    </h5>
+                    @if($rankingProveedores->isEmpty())
+                        <div class="text-center py-4">
+                            <i class="bi bi-box-seam" style="font-size: 2.5rem; color: var(--cy-text-muted);"></i>
+                            <p class="text-muted mt-2 mb-0">No se registran compras/productos asociados a proveedores en los últimos 12 meses.</p>
+                        </div>
+                    @else
+                        <div class="table-responsive">
+                            <table class="table table-dark-custom table-hover mb-0">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 50px;" class="text-center">#</th>
+                                        <th>Proveedor</th>
+                                        <th class="text-center">Productos</th>
+                                        <th class="text-center">Unidades Compradas</th>
+                                        <th class="text-end">Inversión Total (Costo)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($rankingProveedores as $index => $proveedor)
+                                    <tr>
+                                        <td class="text-center fw-bold">
+                                            @if($index == 0)
+                                                <span class="badge bg-warning text-dark"><i class="bi bi-award-fill"></i> 1</span>
+                                            @elseif($index == 1)
+                                                <span class="badge bg-secondary"><i class="bi bi-award-fill"></i> 2</span>
+                                            @elseif($index == 2)
+                                                <span class="badge" style="background: #cd7f32; color: white;"><i class="bi bi-award-fill"></i> 3</span>
+                                            @else
+                                                <span class="text-muted">{{ $index + 1 }}</span>
+                                            @endif
+                                        </td>
+                                        <td class="fw-bold">{{ $proveedor->nombre }}</td>
+                                        <td class="text-center">{{ number_format($proveedor->total_productos) }}</td>
+                                        <td class="text-center fw-bold text-info">{{ number_format($proveedor->total_unidades) }}</td>
+                                        <td class="text-end fw-bold" style="color: var(--cy-gold);">
+                                            ${{ number_format($proveedor->total_inversion, 0, ',', '.') }}
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    @endif
+                </div>
+            </div>
         </div>
 
         {{-- Últimas Ventas --}}
@@ -139,6 +192,60 @@
                         </div>
                         @endforeach
                     @endif
+                </div>
+            </div>
+
+            {{-- Ventas por Forma de Pago --}}
+            <div class="card-glass mt-4">
+                <div class="card-body">
+                    <h5 class="mb-3" style="font-weight: 700;">
+                        <i class="bi bi-wallet2 me-2" style="color: var(--cy-gold);"></i>
+                        Total Vendido por Forma de Pago
+                    </h5>
+
+                    <div class="p-3 mb-3" style="background: rgba(255,255,255,0.02); border-radius: 12px; border: 1px solid var(--cy-border);">
+                        <div class="text-muted mb-2" style="font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">
+                            Ventas del Día
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center mb-1" style="font-size: 0.88rem;">
+                            <span>💵 Efectivo:</span>
+                            <span class="fw-bold text-success">${{ number_format($ventasHoyPorForma['efectivo'], 0, ',', '.') }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center mb-1" style="font-size: 0.88rem;">
+                            <span>💳 Tarjeta:</span>
+                            <span class="fw-bold" style="color: #af7ac5;">${{ number_format($ventasHoyPorForma['tarjeta'], 0, ',', '.') }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center mb-1" style="font-size: 0.88rem;">
+                            <span>📄 Factura:</span>
+                            <span class="fw-bold text-info">${{ number_format($ventasHoyPorForma['factura'], 0, ',', '.') }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center pt-2 mt-2" style="border-top: 1px dashed var(--cy-border); font-size: 0.95rem; font-weight: 700;">
+                            <span>Total del Día:</span>
+                            <span style="color: var(--cy-gold);">${{ number_format($ventasHoy, 0, ',', '.') }}</span>
+                        </div>
+                    </div>
+
+                    <div class="p-3" style="background: rgba(255,255,255,0.02); border-radius: 12px; border: 1px solid var(--cy-border);">
+                        <div class="text-muted mb-2" style="font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">
+                            Acumulado Histórico Total
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center mb-1" style="font-size: 0.88rem;">
+                            <span>💵 Efectivo:</span>
+                            <span class="fw-bold text-success">${{ number_format($ventasTotalesPorForma['efectivo'], 0, ',', '.') }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center mb-1" style="font-size: 0.88rem;">
+                            <span>💳 Tarjeta:</span>
+                            <span class="fw-bold" style="color: #af7ac5;">${{ number_format($ventasTotalesPorForma['tarjeta'], 0, ',', '.') }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center mb-1" style="font-size: 0.88rem;">
+                            <span>📄 Factura:</span>
+                            <span class="fw-bold text-info">${{ number_format($ventasTotalesPorForma['factura'], 0, ',', '.') }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center pt-2 mt-2" style="border-top: 1px dashed var(--cy-border); font-size: 1rem; font-weight: 800;">
+                            <span>Total General Acumulado:</span>
+                            <span style="color: var(--cy-gold); font-size: 1.15rem;">${{ number_format($ventasTotalesPorForma['total'], 0, ',', '.') }}</span>
+                        </div>
+                    </div>
                 </div>
             </div>
 
