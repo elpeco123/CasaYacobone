@@ -49,6 +49,7 @@ Route::middleware('auth')->group(function () {
 
     // CRUD de Proveedores (Solo Administrador)
     Route::resource('proveedores', ProveedorController::class)
+        ->parameters(['proveedores' => 'proveedor'])
         ->except(['show'])
         ->middleware('role:admin');
 

@@ -26,6 +26,10 @@
                                 <span class="fw-bold" style="font-size: 1.05rem;">{{ $producto->categoria->nombre }}</span>
                             </div>
                             <div class="mb-3">
+                                <span class="form-label d-block">Proveedor</span>
+                                <span class="fw-bold" style="font-size: 1.05rem;">{{ $producto->proveedor->nombre ?? 'N/A' }}</span>
+                            </div>
+                            <div class="mb-3">
                                 <span class="form-label d-block">Marca</span>
                                 <span class="fw-bold" style="font-size: 1.05rem;">{{ $producto->marca }}</span>
                             </div>
