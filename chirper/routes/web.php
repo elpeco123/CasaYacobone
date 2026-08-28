@@ -2,8 +2,10 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProductoController;
+use App\Http\Controllers\ProveedorController;
 use App\Http\Controllers\ReporteController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VentaController;
@@ -44,6 +46,16 @@ Route::middleware('auth')->group(function () {
 
     // CRUD de Usuarios (Solo Administrador)
     Route::resource('users', UserController::class)->middleware('role:admin');
+
+    // CRUD de Proveedores (Solo Administrador)
+    Route::resource('proveedores', ProveedorController::class)
+        ->except(['show'])
+        ->middleware('role:admin');
+
+    // CRUD de Categorías (Solo Administrador)
+    Route::resource('categorias', CategoriaController::class)
+        ->except(['show'])
+        ->middleware('role:admin');
 
     // Productos CRUD
     Route::resource('productos', ProductoController::class);

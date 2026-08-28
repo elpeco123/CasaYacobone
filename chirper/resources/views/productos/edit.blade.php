@@ -49,6 +49,22 @@
                             </div>
 
                             <div class="col-md-4">
+                                <label for="proveedor_id" class="form-label">Proveedor *</label>
+                                <select class="form-select form-select-dark @error('proveedor_id') is-invalid @enderror"
+                                        id="proveedor_id" name="proveedor_id" required>
+                                    <option value="">Seleccionar...</option>
+                                    @foreach($proveedores as $prov)
+                                        <option value="{{ $prov->id }}" {{ old('proveedor_id', $producto->proveedor_id) == $prov->id ? 'selected' : '' }}>
+                                            {{ $prov->nombre }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('proveedor_id')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="col-md-4">
                                 <label for="marca" class="form-label">Marca *</label>
                                 <input type="text" class="form-control form-control-dark @error('marca') is-invalid @enderror"
                                        id="marca" name="marca" value="{{ old('marca', $producto->marca) }}" required>

@@ -106,6 +106,7 @@
                             <th style="width: 35px;">#</th>
                             <th>Producto</th>
                             <th>Categoría</th>
+                            <th>Proveedor</th>
                             <th>Talle</th>
                             <th>Marca</th>
                             <th class="text-end text-nowrap">P. Compra</th>
@@ -123,6 +124,7 @@
                             <td class="text-muted">{{ $producto->id }}</td>
                             <td class="fw-bold">{{ $producto->nombre }}</td>
                             <td>{{ $producto->categoria->nombre }}</td>
+                            <td>{{ $producto->proveedor->nombre ?? '—' }}</td>
                             <td>{{ $producto->talle ?? '—' }}</td>
                             <td>{{ $producto->marca }}</td>
                             <td class="text-end text-nowrap">${{ number_format($producto->precio_compra, 0, ',', '.') }}</td>
@@ -164,7 +166,7 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="12" class="text-center py-4">
+                            <td colspan="13" class="text-center py-4">
                                 <i class="bi bi-inbox" style="font-size: 2rem; color: var(--cy-text-muted);"></i>
                                 <p class="text-muted mt-2 mb-0">No se encontraron productos.</p>
                             </td>
@@ -174,7 +176,7 @@
                     @if($productos->count() > 0)
                     <tfoot>
                         <tr style="border-top: 2px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.03);">
-                            <td colspan="7" class="fw-bold text-end">Totales Generales:</td>
+                            <td colspan="8" class="fw-bold text-end">Totales Generales:</td>
                             <td class="text-center fw-bold text-nowrap text-warning">{{ number_format($totalStockUnidades) }}</td>
                             <td class="text-end fw-bold text-nowrap" style="color: var(--cy-gold);">${{ number_format($valorTotalStockCompra, 0, ',', '.') }}</td>
                             <td colspan="3"></td>

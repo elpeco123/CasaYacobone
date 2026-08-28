@@ -24,6 +24,7 @@ class ProductoRequest extends FormRequest
         return [
             'nombre' => ['required', 'string', 'max:255'],
             'categoria_id' => ['required', 'exists:categorias,id'],
+            'proveedor_id' => ['required', 'exists:proveedores,id'],
             'talle' => ['nullable', 'string', 'max:10'],
             'marca' => ['required', 'string', 'max:255'],
             'precio_compra' => ['required', 'numeric', 'min:0'],
@@ -44,6 +45,8 @@ class ProductoRequest extends FormRequest
             'nombre.required' => 'El nombre del producto es obligatorio.',
             'categoria_id.required' => 'Seleccioná una categoría.',
             'categoria_id.exists' => 'La categoría seleccionada no existe.',
+            'proveedor_id.required' => 'Seleccioná un proveedor.',
+            'proveedor_id.exists' => 'El proveedor seleccionado no existe.',
             'marca.required' => 'La marca es obligatoria.',
             'precio_compra.required' => 'El precio de compra es obligatorio.',
             'precio_compra.min' => 'El precio de compra no puede ser negativo.',

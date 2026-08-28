@@ -562,11 +562,31 @@
                         </ul>
                     </li>
                     @if(Auth::user()->isAdmin())
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('users.*') ? 'active' : '' }}"
-                           href="{{ route('users.index') }}">
-                            <i class="bi bi-people-fill me-1"></i> Usuarios
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle {{ request()->routeIs('users.*') || request()->routeIs('proveedores.*') || request()->routeIs('categorias.*') ? 'active' : '' }}"
+                           href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-gear-fill me-1"></i> Configuración
                         </a>
+                        <ul class="dropdown-menu" style="background: rgba(22,33,62,0.95); border: 1px solid var(--cy-border); border-radius: 12px;">
+                            <li>
+                                <a class="dropdown-item text-light" href="{{ route('users.index') }}"
+                                   style="font-size: 0.88rem;">
+                                    <i class="bi bi-people-fill me-2"></i>Usuarios
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item text-light" href="{{ route('proveedores.index') }}"
+                                   style="font-size: 0.88rem;">
+                                    <i class="bi bi-truck me-2"></i>Proveedores
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item text-light" href="{{ route('categorias.index') }}"
+                                   style="font-size: 0.88rem;">
+                                    <i class="bi bi-tags-fill me-2"></i>Categorías
+                                </a>
+                            </li>
+                        </ul>
                     </li>
                     @endif
                 </ul>

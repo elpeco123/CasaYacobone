@@ -21,6 +21,7 @@ class Producto extends Model
     protected $fillable = [
         'nombre',
         'categoria_id',
+        'proveedor_id',
         'talle',
         'marca',
         'precio_compra',
@@ -50,6 +51,14 @@ class Producto extends Model
     public function categoria(): BelongsTo
     {
         return $this->belongsTo(Categoria::class);
+    }
+
+    /**
+     * Get the proveedor that owns the producto.
+     */
+    public function proveedor(): BelongsTo
+    {
+        return $this->belongsTo(Proveedor::class);
     }
 
     /**

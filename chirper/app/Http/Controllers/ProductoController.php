@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ProductoRequest;
 use App\Models\Categoria;
 use App\Models\Producto;
+use App\Models\Proveedor;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -16,7 +17,7 @@ class ProductoController extends Controller
      */
     public function index(Request $request): View
     {
-        $query = Producto::with('categoria');
+        $query = Producto::with('categoria', 'proveedor');
 
         // Búsqueda
         if ($request->filled('buscar')) {
@@ -61,7 +62,9 @@ class ProductoController extends Controller
     public function create(): View
     {
         $categorias = Categoria::orderBy('nombre')->get();
-        return view('productos.create', compact('categorias'));
+        $proveedores = Proveedor::orderBy('nombre')->get();
+
+        return view('productos.create', compact('categorias', 'proveedores'));
     }
 
     /**
@@ -80,7 +83,8 @@ class ProductoController extends Controller
      */
     public function show(Producto $producto): View
     {
-        $producto->load('categoria');
+        $producto->load('categoria', 'proveedor');
+
         return view('productos.show', compact('producto'));
     }
 
@@ -90,7 +94,9 @@ class ProductoController extends Controller
     public function edit(Producto $producto): View
     {
         $categorias = Categoria::orderBy('nombre')->get();
-        return view('productos.edit', compact('producto', 'categorias'));
+        $proveedores = Proveedor::orderBy('nombre')->get();
+
+        return view('productos.edit', compact('producto', 'categorias', 'proveedores'));
     }
 
     /**
