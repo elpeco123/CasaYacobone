@@ -23,6 +23,12 @@ class DashboardController extends Controller
         // Valor total del stock (precio_compra * stock)
         $valorStock = Producto::selectRaw('SUM(precio_compra * stock) as total')->value('total') ?? 0;
 
+        // Ventas acumuladas del mes actual
+        $ventasMesActual = Venta::where('created_at', '>=', Carbon::now()->startOfMonth())->sum('total');
+
+        // Ventas acumuladas del año actual
+        $ventasAnoActual = Venta::where('created_at', '>=', Carbon::now()->startOfYear())->sum('total');
+
         // Ventas del día
         $ventasHoy = Venta::whereDate('created_at', $hoy)->sum('total');
         $cantidadVentasHoy = Venta::whereDate('created_at', $hoy)->count();
@@ -69,10 +75,11 @@ class DashboardController extends Controller
             ->get();
 
         return view('dashboard', compact(
-            'totalProductos',
             'valorStock',
             'ventasHoy',
             'cantidadVentasHoy',
+            'ventasMesActual',
+            'ventasAnoActual',
             'ventasHoyPorForma',
             'ventasTotalesPorForma',
             'productosBajoStock',

@@ -19,32 +19,25 @@
 
     {{-- KPI Cards --}}
     <div class="row g-4 mb-4">
-        <div class="col-md-6 col-lg-3">
-            <div class="kpi-card kpi-blue">
-                <div class="kpi-icon"><i class="bi bi-box-seam-fill"></i></div>
-                <div class="kpi-value">{{ number_format($totalProductos) }}</div>
-                <div class="kpi-label">Productos Registrados</div>
-            </div>
-        </div>
-        <div class="col-md-6 col-lg-3">
-            <div class="kpi-card kpi-gold">
-                <div class="kpi-icon"><i class="bi bi-currency-dollar"></i></div>
-                <div class="kpi-value">${{ number_format($valorStock, 0, ',', '.') }}</div>
-                <div class="kpi-label">Valor Total del Stock</div>
-            </div>
-        </div>
-        <div class="col-md-6 col-lg-3">
+        <div class="col-md-4">
             <div class="kpi-card kpi-green">
                 <div class="kpi-icon"><i class="bi bi-cart-check-fill"></i></div>
                 <div class="kpi-value">${{ number_format($ventasHoy, 0, ',', '.') }}</div>
                 <div class="kpi-label">Ventas del Día ({{ $cantidadVentasHoy }})</div>
             </div>
         </div>
-        <div class="col-md-6 col-lg-3">
-            <div class="kpi-card kpi-red">
-                <div class="kpi-icon"><i class="bi bi-exclamation-triangle-fill"></i></div>
-                <div class="kpi-value">{{ $productosBajoStock->count() }}</div>
-                <div class="kpi-label">Productos Stock Bajo</div>
+        <div class="col-md-4">
+            <div class="kpi-card kpi-blue">
+                <div class="kpi-icon"><i class="bi bi-calendar-month-fill"></i></div>
+                <div class="kpi-value">${{ number_format($ventasMesActual, 0, ',', '.') }}</div>
+                <div class="kpi-label">Ventas del Mes ({{ ucfirst(now()->locale('es')->monthName) }})</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="kpi-card kpi-purple" style="background: linear-gradient(135deg, rgba(155, 89, 182, 0.15), rgba(142, 68, 173, 0.25)); border: 1px solid rgba(155, 89, 182, 0.3);">
+                <div class="kpi-icon" style="color: #af7ac5;"><i class="bi bi-graph-up-arrow"></i></div>
+                <div class="kpi-value" style="color: #d7bde2;">${{ number_format($ventasAnoActual, 0, ',', '.') }}</div>
+                <div class="kpi-label">Total Vendido Anual ({{ now()->year }})</div>
             </div>
         </div>
     </div>
