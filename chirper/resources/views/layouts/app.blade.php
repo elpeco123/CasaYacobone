@@ -535,7 +535,7 @@
     <nav class="navbar navbar-expand-lg navbar-custom sticky-top">
         <div class="container">
             <a class="navbar-brand" href="{{ route('dashboard') }}">
-                <span class="brand-icon"><i class="bi bi-shop"></i></span>
+                <span class="brand-icon"><i class="bi bi-house-door-fill"></i></span>
                 Casa Yacobone
             </a>
 
