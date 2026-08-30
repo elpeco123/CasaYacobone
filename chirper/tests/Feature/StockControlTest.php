@@ -2,6 +2,7 @@
 
 use App\Models\Categoria;
 use App\Models\Producto;
+use App\Models\Proveedor;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -10,10 +11,12 @@ uses(RefreshDatabase::class);
 test('updating product purchase price updates individual and total stock value', function () {
     $user = User::factory()->create(['role' => 'admin']);
     $categoria = Categoria::create(['nombre' => 'Test Categoria']);
+    $proveedor = Proveedor::create(['nombre' => 'Test Proveedor']);
 
     $producto = Producto::create([
         'nombre' => 'Producto Test',
         'categoria_id' => $categoria->id,
+        'proveedor_id' => $proveedor->id,
         'marca' => 'Test Marca',
         'precio_compra' => 100.00,
         'precio_venta' => 200.00,
@@ -28,6 +31,7 @@ test('updating product purchase price updates individual and total stock value',
     $response = $this->actingAs($user)->put(route('productos.update', $producto), [
         'nombre' => 'Producto Test',
         'categoria_id' => $categoria->id,
+        'proveedor_id' => $proveedor->id,
         'marca' => 'Test Marca',
         'precio_compra' => 150.00,
         'precio_venta' => 200.00,
@@ -57,10 +61,12 @@ test('updating product purchase price updates individual and total stock value',
 test('deleting a product updates total inventory stock value immediately', function () {
     $user = User::factory()->create(['role' => 'admin']);
     $categoria = Categoria::create(['nombre' => 'Test Categoria']);
+    $proveedor = Proveedor::create(['nombre' => 'Test Proveedor']);
 
     $prod1 = Producto::create([
         'nombre' => 'Producto 1',
         'categoria_id' => $categoria->id,
+        'proveedor_id' => $proveedor->id,
         'marca' => 'Marca 1',
         'precio_compra' => 100.00,
         'precio_venta' => 200.00,
@@ -71,6 +77,7 @@ test('deleting a product updates total inventory stock value immediately', funct
     $prod2 = Producto::create([
         'nombre' => 'Producto 2',
         'categoria_id' => $categoria->id,
+        'proveedor_id' => $proveedor->id,
         'marca' => 'Marca 2',
         'precio_compra' => 50.00,
         'precio_venta' => 100.00,

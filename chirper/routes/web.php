@@ -58,19 +58,14 @@ Route::middleware('auth')->group(function () {
         ->except(['show'])
         ->middleware('role:admin');
 
-    // Productos CRUD
-    Route::resource('productos', ProductoController::class);
+    // Productos CRUD (Solo Administrador)
+    Route::resource('productos', ProductoController::class)->middleware('role:admin');
 
-    // Eliminar producto solo para admin
-    Route::delete('/productos/{producto}', [ProductoController::class, 'destroy'])
-        ->middleware('role:admin')
-        ->name('productos.destroy');
-
-    // Ventas
+    // Ventas (Vendedores y Administradores)
     Route::resource('ventas', VentaController::class)->only(['index', 'create', 'store', 'show']);
 
-    // Reportes
-    Route::prefix('reportes')->name('reportes.')->group(function () {
+    // Reportes (Solo Administrador)
+    Route::prefix('reportes')->name('reportes.')->middleware('role:admin')->group(function () {
         Route::get('/diario', [ReporteController::class, 'diario'])->name('diario');
         Route::get('/semanal', [ReporteController::class, 'semanal'])->name('semanal');
     });

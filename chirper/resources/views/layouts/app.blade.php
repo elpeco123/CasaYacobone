@@ -551,18 +551,21 @@
                             <i class="bi bi-grid-1x2-fill me-1"></i> Dashboard
                         </a>
                     </li>
+                    @if(Auth::user()->isAdmin())
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs('productos.*') ? 'active' : '' }}"
                            href="{{ route('productos.index') }}">
                             <i class="bi bi-box-seam-fill me-1"></i> Productos
                         </a>
                     </li>
+                    @endif
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs('ventas.*') ? 'active' : '' }}"
                            href="{{ route('ventas.index') }}">
                             <i class="bi bi-cart-fill me-1"></i> Ventas
                         </a>
                     </li>
+                    @if(Auth::user()->isAdmin())
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle {{ request()->routeIs('reportes.*') ? 'active' : '' }}"
                            href="#" role="button" data-bs-toggle="dropdown">
@@ -583,7 +586,6 @@
                             </li>
                         </ul>
                     </li>
-                    @if(Auth::user()->isAdmin())
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle {{ request()->routeIs('users.*') || request()->routeIs('proveedores.*') || request()->routeIs('categorias.*') ? 'active' : '' }}"
                            href="#" role="button" data-bs-toggle="dropdown">

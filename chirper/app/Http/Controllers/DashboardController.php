@@ -6,6 +6,7 @@ use App\Models\Producto;
 use App\Models\Proveedor;
 use App\Models\Venta;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class DashboardController extends Controller
@@ -17,14 +18,42 @@ class DashboardController extends Controller
     {
         $hoy = Carbon::today();
 
+        // Ventas del día
+        $ventasHoy = Venta::whereDate('created_at', $hoy)->sum('total');
+        $cantidadVentasHoy = Venta::whereDate('created_at', $hoy)->count();
+
+        // Desglose de ventas del día por tipo de pago
+        $ventasHoyPorForma = [
+            'efectivo' => Venta::whereDate('created_at', $hoy)->where('tipo_pago', 'efectivo')->sum('total'),
+            'tarjeta' => Venta::whereDate('created_at', $hoy)->where('tipo_pago', 'tarjeta')->sum('total'),
+            'factura' => Venta::whereDate('created_at', $hoy)->where('tipo_pago', 'factura')->sum('total'),
+        ];
+
+        // Si el usuario es vendedor, mostrar vista específica de vendedor
+        if (Auth::user()?->isVendedor()) {
+            $ventasHoyLista = Venta::with('user')
+                ->whereDate('created_at', $hoy)
+                ->latest()
+                ->get();
+
+            return view('dashboard-vendedor', compact(
+                'ventasHoy',
+                'cantidadVentasHoy',
+                'ventasHoyPorForma',
+                'ventasHoyLista'
+            ));
+        }
+
         // Total de productos distintos
         $totalProductos = Producto::count();
 
         // Valor total del stock (precio_compra * stock)
-        $valorStock = Producto::selectRaw('SUM(precio_compra * stock) as total')->value('total') ?? 0;
+        $valorStock = (float) (Producto::selectRaw('SUM(precio_compra * stock) as total')->value('total') ?? 0);
+
+        $inicioMes = Carbon::now()->startOfMonth();
 
         // Ventas acumuladas del mes actual
-        $ventasMesActual = Venta::where('created_at', '>=', Carbon::now()->startOfMonth())->sum('total');
+        $ventasMesActual = Venta::where('created_at', '>=', $inicioMes)->sum('total');
 
         // Ventas acumuladas del año actual
         $ventasAnoActual = Venta::where('created_at', '>=', Carbon::now()->startOfYear())->sum('total');
@@ -40,12 +69,12 @@ class DashboardController extends Controller
             'factura' => Venta::whereDate('created_at', $hoy)->where('tipo_pago', 'factura')->sum('total'),
         ];
 
-        // Desglose acumulado total por tipo de pago
-        $ventasTotalesPorForma = [
-            'efectivo' => Venta::where('tipo_pago', 'efectivo')->sum('total'),
-            'tarjeta' => Venta::where('tipo_pago', 'tarjeta')->sum('total'),
-            'factura' => Venta::where('tipo_pago', 'factura')->sum('total'),
-            'total' => Venta::sum('total'),
+        // Desglose de ventas del mes actual por tipo de pago
+        $ventasMesPorForma = [
+            'efectivo' => Venta::where('created_at', '>=', $inicioMes)->where('tipo_pago', 'efectivo')->sum('total'),
+            'tarjeta' => Venta::where('created_at', '>=', $inicioMes)->where('tipo_pago', 'tarjeta')->sum('total'),
+            'factura' => Venta::where('created_at', '>=', $inicioMes)->where('tipo_pago', 'factura')->sum('total'),
+            'total' => $ventasMesActual,
         ];
 
         // Productos con stock bajo
@@ -81,7 +110,7 @@ class DashboardController extends Controller
             'ventasMesActual',
             'ventasAnoActual',
             'ventasHoyPorForma',
-            'ventasTotalesPorForma',
+            'ventasMesPorForma',
             'productosBajoStock',
             'ultimasVentas',
             'rankingProveedores'

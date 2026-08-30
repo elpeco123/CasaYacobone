@@ -220,23 +220,23 @@
 
                     <div class="p-3" style="background: rgba(255,255,255,0.02); border-radius: 12px; border: 1px solid var(--cy-border);">
                         <div class="text-muted mb-2" style="font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">
-                            Acumulado Histórico Total
+                            Ventas del Mes Actual
                         </div>
                         <div class="d-flex justify-content-between align-items-center mb-1" style="font-size: 0.88rem;">
                             <span>💵 Efectivo:</span>
-                            <span class="fw-bold text-success">${{ number_format($ventasTotalesPorForma['efectivo'], 0, ',', '.') }}</span>
+                            <span class="fw-bold text-success">${{ number_format($ventasMesPorForma['efectivo'], 0, ',', '.') }}</span>
                         </div>
                         <div class="d-flex justify-content-between align-items-center mb-1" style="font-size: 0.88rem;">
                             <span>💳 Tarjeta:</span>
-                            <span class="fw-bold" style="color: #af7ac5;">${{ number_format($ventasTotalesPorForma['tarjeta'], 0, ',', '.') }}</span>
+                            <span class="fw-bold" style="color: #af7ac5;">${{ number_format($ventasMesPorForma['tarjeta'], 0, ',', '.') }}</span>
                         </div>
                         <div class="d-flex justify-content-between align-items-center mb-1" style="font-size: 0.88rem;">
                             <span>📄 Factura:</span>
-                            <span class="fw-bold text-info">${{ number_format($ventasTotalesPorForma['factura'], 0, ',', '.') }}</span>
+                            <span class="fw-bold text-info">${{ number_format($ventasMesPorForma['factura'], 0, ',', '.') }}</span>
                         </div>
                         <div class="d-flex justify-content-between align-items-center pt-2 mt-2" style="border-top: 1px dashed var(--cy-border); font-size: 1rem; font-weight: 800;">
-                            <span>Total General Acumulado:</span>
-                            <span style="color: var(--cy-gold); font-size: 1.15rem;">${{ number_format($ventasTotalesPorForma['total'], 0, ',', '.') }}</span>
+                            <span>Total del Mes:</span>
+                            <span style="color: var(--cy-gold); font-size: 1.15rem;">${{ number_format($ventasMesPorForma['total'], 0, ',', '.') }}</span>
                         </div>
                     </div>
                 </div>
