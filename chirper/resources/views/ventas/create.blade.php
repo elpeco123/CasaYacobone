@@ -108,7 +108,32 @@
                             @enderror
                         </div>
 
+                        <div class="mb-3">
+                            <label for="descuento_porcentaje" class="form-label d-flex justify-content-between">
+                                <span>Descuento (%)</span>
+                                <span class="text-warning small fw-bold" id="descuentoTag">0%</span>
+                            </label>
+                            <div class="input-group">
+                                <input type="number" name="descuento_porcentaje" id="descuento_porcentaje"
+                                       class="form-control form-control-dark @error('descuento_porcentaje') is-invalid @enderror"
+                                       min="0" max="100" step="any" value="{{ old('descuento_porcentaje', 0) }}" placeholder="Ej: 5, 10, 15, 20">
+                                <span class="input-group-text bg-dark text-warning border-secondary fw-bold">%</span>
+                            </div>
+                            @error('descuento_porcentaje')
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                            @enderror
+                        </div>
+
                         <hr style="border-color: var(--cy-border); margin: 1.2rem 0;">
+
+                        <div class="d-flex justify-content-between align-items-center mb-2" style="font-size: 0.95rem;">
+                            <span class="text-muted">Subtotal:</span>
+                            <span id="subtotalMonto" class="fw-bold text-light">$0</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center mb-3" style="font-size: 0.95rem;">
+                            <span class="text-muted">Descuento Aplicado:</span>
+                            <span id="descuentoMonto" class="fw-bold text-danger">-$0</span>
+                        </div>
 
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <span style="font-size: 1.1rem; font-weight: 600;">Total a Cobrar:</span>
@@ -380,8 +405,17 @@
             }
         }
 
+        const descuentoInput = document.getElementById('descuento_porcentaje');
+        if (descuentoInput) {
+            descuentoInput.addEventListener('input', function() {
+                if (parseFloat(this.value) > 100) this.value = 100;
+                if (parseFloat(this.value) < 0) this.value = 0;
+                updateTotal();
+            });
+        }
+
         function updateTotal() {
-            let totalMonto = 0;
+            let subtotalSum = 0;
             let totalItems = 0;
             let totalUnidades = 0;
 
@@ -393,15 +427,25 @@
                 if (selected && selected.value) {
                     const precio = parseFloat(selected.dataset.precio);
                     const cant = parseInt(cantidad.value) || 0;
-                    totalMonto += precio * cant;
+                    subtotalSum += precio * cant;
                     totalItems++;
                     totalUnidades += cant;
                 }
             });
 
+            let descPorcentaje = parseFloat(descuentoInput ? descuentoInput.value : 0) || 0;
+            if (descPorcentaje < 0) descPorcentaje = 0;
+            if (descPorcentaje > 100) descPorcentaje = 100;
+
+            const descMonto = Math.round((subtotalSum * (descPorcentaje / 100)) * 100) / 100;
+            const totalMonto = Math.max(0, Math.round((subtotalSum - descMonto) * 100) / 100);
+
             document.getElementById('totalItems').textContent = totalItems;
             document.getElementById('totalUnidades').textContent = totalUnidades;
-            document.getElementById('totalMonto').textContent = '$' + totalMonto.toLocaleString('es-AR');
+            document.getElementById('subtotalMonto').textContent = '$' + subtotalSum.toLocaleString('es-AR', {minimumFractionDigits: 0, maximumFractionDigits: 2});
+            document.getElementById('descuentoTag').textContent = descPorcentaje + '%';
+            document.getElementById('descuentoMonto').textContent = '-$' + descMonto.toLocaleString('es-AR', {minimumFractionDigits: 0, maximumFractionDigits: 2});
+            document.getElementById('totalMonto').textContent = '$' + totalMonto.toLocaleString('es-AR', {minimumFractionDigits: 0, maximumFractionDigits: 2});
             btnRegistrar.disabled = totalItems === 0;
         }
     });

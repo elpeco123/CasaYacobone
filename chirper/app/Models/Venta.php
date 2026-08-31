@@ -19,6 +19,9 @@ class Venta extends Model
     protected $fillable = [
         'user_id',
         'tipo_pago',
+        'subtotal',
+        'descuento_porcentaje',
+        'monto_descuento',
         'total',
     ];
 
@@ -30,6 +33,9 @@ class Venta extends Model
     protected function casts(): array
     {
         return [
+            'subtotal' => 'decimal:2',
+            'descuento_porcentaje' => 'decimal:2',
+            'monto_descuento' => 'decimal:2',
             'total' => 'decimal:2',
         ];
     }

@@ -46,7 +46,7 @@ class VentaController extends Controller
 
         try {
             $venta = DB::transaction(function () use ($validated) {
-                $total = 0;
+                $subtotalSum = 0;
                 $itemsData = [];
 
                 foreach ($validated['items'] as $item) {
@@ -60,25 +60,33 @@ class VentaController extends Controller
                         );
                     }
 
-                    $subtotal = $producto->precio_venta * $item['cantidad'];
-                    $total += $subtotal;
+                    $itemSubtotal = $producto->precio_venta * $item['cantidad'];
+                    $subtotalSum += $itemSubtotal;
 
                     $itemsData[] = [
                         'producto_id' => $producto->id,
                         'cantidad' => $item['cantidad'],
                         'precio_compra' => $producto->precio_compra,
                         'precio_unitario' => $producto->precio_venta,
-                        'subtotal' => $subtotal,
+                        'subtotal' => $itemSubtotal,
                     ];
 
                     // Discount stock
                     $producto->decrement('stock', $item['cantidad']);
                 }
 
+                $descuentoPorcentaje = floatval($validated['descuento_porcentaje'] ?? 0);
+                $descuentoPorcentaje = max(0, min(100, $descuentoPorcentaje));
+                $montoDescuento = round($subtotalSum * ($descuentoPorcentaje / 100), 2);
+                $total = max(0, round($subtotalSum - $montoDescuento, 2));
+
                 // Create the venta
                 $venta = Venta::create([
                     'user_id' => Auth::id(),
                     'tipo_pago' => $validated['tipo_pago'],
+                    'subtotal' => $subtotalSum,
+                    'descuento_porcentaje' => $descuentoPorcentaje,
+                    'monto_descuento' => $montoDescuento,
                     'total' => $total,
                 ]);
 

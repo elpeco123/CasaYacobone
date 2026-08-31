@@ -24,6 +24,7 @@ class VentaRequest extends FormRequest
     {
         return [
             'tipo_pago' => ['required', 'string', 'in:efectivo,tarjeta,factura'],
+            'descuento_porcentaje' => ['nullable', 'numeric', 'min:0', 'max:100'],
             'items' => ['required', 'array', 'min:1'],
             'items.*.producto_id' => ['required', 'exists:productos,id'],
             'items.*.cantidad' => ['required', 'integer', 'min:1'],
@@ -38,6 +39,9 @@ class VentaRequest extends FormRequest
     public function messages(): array
     {
         return [
+            'descuento_porcentaje.numeric' => 'El descuento debe ser un valor numérico.',
+            'descuento_porcentaje.min' => 'El descuento no puede ser menor a 0%.',
+            'descuento_porcentaje.max' => 'El descuento no puede superar el 100%.',
             'items.required' => 'Debés agregar al menos un producto a la venta.',
             'items.min' => 'Debés agregar al menos un producto a la venta.',
             'items.*.producto_id.required' => 'Seleccioná un producto.',

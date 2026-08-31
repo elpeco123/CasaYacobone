@@ -52,9 +52,27 @@
                                 @endforeach
                             </tbody>
                             <tfoot>
+                                @if(($venta->monto_descuento ?? 0) > 0)
+                                    <tr>
+                                        <td colspan="4" class="text-end text-muted" style="font-size: 0.95rem; font-weight: 600;">
+                                            Subtotal:
+                                        </td>
+                                        <td class="text-end text-light" style="font-size: 1rem; font-weight: 700;">
+                                            ${{ number_format($venta->subtotal ?? $venta->total, 0, ',', '.') }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="4" class="text-end text-danger" style="font-size: 0.95rem; font-weight: 600;">
+                                            Descuento ({{ number_format($venta->descuento_porcentaje, 0) }}%):
+                                        </td>
+                                        <td class="text-end text-danger" style="font-size: 1rem; font-weight: 700;">
+                                            -${{ number_format($venta->monto_descuento, 0, ',', '.') }}
+                                        </td>
+                                    </tr>
+                                @endif
                                 <tr>
                                     <td colspan="4" class="text-end" style="font-size: 1.1rem; font-weight: 700;">
-                                        TOTAL:
+                                        TOTAL COBRADO:
                                     </td>
                                     <td class="text-end" style="font-size: 1.3rem; font-weight: 800; color: var(--cy-gold);">
                                         ${{ number_format($venta->total, 0, ',', '.') }}
