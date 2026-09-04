@@ -22,6 +22,10 @@
             "dest": "/public/robots.txt"
         },
         {
+            "src": "/images/(.*)",
+            "dest": "/public/images/$1"
+        },
+        {
             "src": "/(.*)",
             "dest": "/api/index.php"
         }

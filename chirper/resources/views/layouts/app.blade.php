@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Casa Yacobone') — Control de Stock</title>
-    <link rel="icon" type="image/jpeg" href="{{ asset('images/logo.jpeg') }}">
+    <link rel="icon" type="image/jpeg" href="/images/logo.jpeg">
 
     {{-- Bootstrap 5 CSS --}}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -71,17 +71,13 @@
             transform: scale(1.03);
         }
 
-        .navbar-brand .brand-icon {
+        .navbar-brand .brand-logo {
             width: 36px;
             height: 36px;
-            background: linear-gradient(135deg, var(--cy-gold), var(--cy-accent));
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.1rem;
-            color: white;
-            box-shadow: 0 4px 15px rgba(233, 69, 96, 0.3);
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid rgba(212, 165, 116, 0.5);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
         }
 
         .nav-link {
@@ -540,7 +536,7 @@
     <nav class="navbar navbar-expand-lg navbar-custom sticky-top">
         <div class="container">
             <a class="navbar-brand" href="{{ route('dashboard') }}">
-                <span class="brand-icon"><i class="bi bi-house-door-fill"></i></span>
+                <img src="/images/logo.jpeg" alt="Logo" class="brand-logo">
                 Casa Yacobone
             </a>
 

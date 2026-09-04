@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Iniciar Sesión — Casa Yacobone</title>
-    <link rel="icon" type="image/jpeg" href="{{ asset('images/logo.jpeg') }}">
+    <link rel="icon" type="image/jpeg" href="/images/logo.jpeg">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -126,7 +126,7 @@
 <body>
     <div class="login-card">
         <div class="login-brand">
-            <img src="{{ asset('images/logologin.jpeg') }}" alt="Casa Yacobone" class="logo-img">
+            <img src="/images/logologin.jpeg" alt="Casa Yacobone" class="logo-img">
             <h1>Casa Yacobone</h1>
             <p>Sistema de Control de Stock</p>
         </div>
