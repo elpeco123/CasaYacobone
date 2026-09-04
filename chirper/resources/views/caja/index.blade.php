@@ -184,6 +184,7 @@
         </div>
     </div>
 
+    @if(Auth::user()->isAdmin())
     {{-- Historial de Cajas Anteriores --}}
     <div class="card-glass mt-4">
         <div class="card-body p-4">
@@ -240,6 +241,7 @@
             </div>
         </div>
     </div>
+    @endif
 </div>
 
 @push('scripts')

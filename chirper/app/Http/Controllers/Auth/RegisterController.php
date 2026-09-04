@@ -37,7 +37,6 @@ class RegisterController extends Controller
         Auth::login($user);
         $request->session()->regenerate();
 
-        return redirect()->route('dashboard')
-            ->with('success', '¡Registro exitoso! Bienvenido a Casa Yacobone, ' . $user->name . '.');
+        return redirect()->route('dashboard');
     }
 }

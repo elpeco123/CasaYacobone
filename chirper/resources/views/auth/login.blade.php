@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Iniciar Sesión — Casa Yacobone</title>
+    <link rel="icon" type="image/jpeg" href="{{ asset('images/logo.jpeg') }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -36,18 +37,14 @@
             text-align: center;
             margin-bottom: 2rem;
         }
-        .login-brand .icon {
-            width: 70px;
-            height: 70px;
-            background: linear-gradient(135deg, #d4a574, #e94560);
-            border-radius: 20px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            color: white;
+        .login-brand .logo-img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
             margin-bottom: 1rem;
             box-shadow: 0 8px 30px rgba(233, 69, 96, 0.4);
+            border: 3px solid rgba(212, 165, 116, 0.4);
         }
         .login-brand h1 {
             font-size: 1.6rem;
@@ -129,7 +126,7 @@
 <body>
     <div class="login-card">
         <div class="login-brand">
-            <div class="icon"><i class="bi bi-shop"></i></div>
+            <img src="{{ asset('images/logologin.jpeg') }}" alt="Casa Yacobone" class="logo-img">
             <h1>Casa Yacobone</h1>
             <p>Sistema de Control de Stock</p>
         </div>

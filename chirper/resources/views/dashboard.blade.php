@@ -42,6 +42,83 @@
         </div>
     </div>
 
+    {{-- Descuentos Otorgados (Dinero Perdido) --}}
+    <div class="card-glass mb-4" style="border: 1px solid rgba(231, 76, 60, 0.3);">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="mb-0" style="font-weight: 700; color: #ffffff;">
+                    <i class="bi bi-percent me-2" style="color: var(--cy-accent);"></i>
+                    Dinero Perdido por Descuentos
+                </h5>
+                <span class="badge" style="background: rgba(231, 76, 60, 0.15); color: #e74c3c; border: 1px solid rgba(231, 76, 60, 0.3); font-size: 0.78rem; padding: 0.4rem 0.8rem;">
+                    <i class="bi bi-arrow-down-circle-fill me-1"></i>Resumen de Pérdidas
+                </span>
+            </div>
+
+            <div class="row g-3">
+                {{-- Descuentos Hoy --}}
+                <div class="col-md-4">
+                    <div class="p-3 rounded-3" style="background: rgba(231, 76, 60, 0.08); border: 1px solid rgba(231, 76, 60, 0.2); transition: all 0.3s ease;">
+                        <div class="d-flex align-items-center mb-2">
+                            <div class="me-2" style="width: 38px; height: 38px; background: rgba(231, 76, 60, 0.15); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                                <i class="bi bi-calendar-day" style="color: #e74c3c; font-size: 1.1rem;"></i>
+                            </div>
+                            <div>
+                                <div style="font-size: 0.75rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">Hoy</div>
+                            </div>
+                        </div>
+                        <div class="fw-bold" style="font-size: 1.5rem; color: #ff6b6b; letter-spacing: -0.5px;">
+                            -${{ number_format($descuentosHoy, 0, ',', '.') }}
+                        </div>
+                        <div style="font-size: 0.78rem; color: #94a3b8;">
+                            {{ $cantidadDescuentosHoy }} {{ $cantidadDescuentosHoy == 1 ? 'venta con descuento' : 'ventas con descuento' }}
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Descuentos del Mes --}}
+                <div class="col-md-4">
+                    <div class="p-3 rounded-3" style="background: rgba(243, 156, 18, 0.08); border: 1px solid rgba(243, 156, 18, 0.2); transition: all 0.3s ease;">
+                        <div class="d-flex align-items-center mb-2">
+                            <div class="me-2" style="width: 38px; height: 38px; background: rgba(243, 156, 18, 0.15); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                                <i class="bi bi-calendar-month" style="color: #f39c12; font-size: 1.1rem;"></i>
+                            </div>
+                            <div>
+                                <div style="font-size: 0.75rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">{{ ucfirst(now()->locale('es')->monthName) }}</div>
+                            </div>
+                        </div>
+                        <div class="fw-bold" style="font-size: 1.5rem; color: #fbbf24; letter-spacing: -0.5px;">
+                            -${{ number_format($descuentosMes, 0, ',', '.') }}
+                        </div>
+                        <div style="font-size: 0.78rem; color: #94a3b8;">
+                            {{ $cantidadDescuentosMes }} {{ $cantidadDescuentosMes == 1 ? 'venta con descuento' : 'ventas con descuento' }}
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Descuentos del Año --}}
+                <div class="col-md-4">
+                    <div class="p-3 rounded-3" style="background: rgba(155, 89, 182, 0.08); border: 1px solid rgba(155, 89, 182, 0.2); transition: all 0.3s ease;">
+                        <div class="d-flex align-items-center mb-2">
+                            <div class="me-2" style="width: 38px; height: 38px; background: rgba(155, 89, 182, 0.15); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                                <i class="bi bi-calendar-range" style="color: #af7ac5; font-size: 1.1rem;"></i>
+                            </div>
+                            <div>
+                                <div style="font-size: 0.75rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">Año {{ now()->year }}</div>
+                            </div>
+                        </div>
+                        <div class="fw-bold" style="font-size: 1.5rem; color: #d7bde2; letter-spacing: -0.5px;">
+                            -${{ number_format($descuentosAno, 0, ',', '.') }}
+                        </div>
+                        <div style="font-size: 0.78rem; color: #94a3b8;">
+                            {{ $cantidadDescuentosAno }} {{ $cantidadDescuentosAno == 1 ? 'venta con descuento' : 'ventas con descuento' }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="row g-4">
         {{-- Productos con Stock Bajo --}}
         <div class="col-lg-7">
@@ -203,7 +280,7 @@
 
                     <div class="p-3 mb-3" style="background: rgba(15, 23, 42, 0.6); border-radius: 12px; border: 1px solid var(--cy-border);">
                         <div class="text-muted mb-2" style="font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">
-                            Caja y Cobros de Hoy
+                            Total Vendido Hoy
                         </div>
                         <div class="d-flex justify-content-between align-items-center mb-1.5" style="font-size: 0.88rem;">
                             <span style="color: #cbd5e1;">🪙 Cambio Inicial (Apertura):</span>
@@ -265,9 +342,6 @@
                     <div class="d-grid gap-2">
                         <a href="{{ route('ventas.create') }}" class="btn btn-accent text-uppercase fw-bold py-2">
                             <i class="bi bi-cart-plus-fill me-1"></i>Registrar Venta
-                        </a>
-                        <a href="{{ route('caja.index') }}" class="btn btn-gold text-uppercase fw-bold py-2">
-                            <i class="bi bi-safe2-fill me-1"></i>Abrir / Gestionar Caja
                         </a>
                         <a href="{{ route('productos.create') }}" class="btn btn-glass py-2">
                             <i class="bi bi-plus-circle me-1"></i>Nuevo Producto

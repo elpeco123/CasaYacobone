@@ -107,6 +107,28 @@ class DashboardController extends Controller
             ->take(10)
             ->get();
 
+        // Descuentos otorgados (dinero perdido por descuentos)
+        $descuentosHoy = Venta::whereDate('created_at', $hoy)
+            ->where('monto_descuento', '>', 0)
+            ->sum('monto_descuento');
+        $cantidadDescuentosHoy = Venta::whereDate('created_at', $hoy)
+            ->where('monto_descuento', '>', 0)
+            ->count();
+
+        $descuentosMes = Venta::where('created_at', '>=', $inicioMes)
+            ->where('monto_descuento', '>', 0)
+            ->sum('monto_descuento');
+        $cantidadDescuentosMes = Venta::where('created_at', '>=', $inicioMes)
+            ->where('monto_descuento', '>', 0)
+            ->count();
+
+        $descuentosAno = Venta::where('created_at', '>=', Carbon::now()->startOfYear())
+            ->where('monto_descuento', '>', 0)
+            ->sum('monto_descuento');
+        $cantidadDescuentosAno = Venta::where('created_at', '>=', Carbon::now()->startOfYear())
+            ->where('monto_descuento', '>', 0)
+            ->count();
+
         return view('dashboard', compact(
             'cajaHoy',
             'montoInicialCaja',
@@ -121,7 +143,13 @@ class DashboardController extends Controller
             'totalCierreGeneral',
             'productosBajoStock',
             'ultimasVentas',
-            'rankingProveedores'
+            'rankingProveedores',
+            'descuentosHoy',
+            'cantidadDescuentosHoy',
+            'descuentosMes',
+            'cantidadDescuentosMes',
+            'descuentosAno',
+            'cantidadDescuentosAno'
         ));
     }
 }
