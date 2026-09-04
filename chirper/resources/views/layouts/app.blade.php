@@ -590,6 +590,8 @@
                             </li>
                         </ul>
                     </li>
+                    @endif
+
                     {{-- Menú Configuración (Admin y Vendedor) --}}
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle {{ request()->routeIs('caja.*') || request()->routeIs('users.*') || request()->routeIs('proveedores.*') || request()->routeIs('categorias.*') ? 'active' : '' }}"
