@@ -7,12 +7,6 @@
     <div class="page-header d-flex justify-content-between align-items-center flex-wrap gap-2">
         <div>
             <h1><i class="bi bi-calendar-week me-2" style="color: var(--cy-gold);"></i>Reporte Semanal de Faltantes</h1>
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb mb-0">
-                    <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Reporte Semanal</li>
-                </ol>
-            </nav>
         </div>
         <div class="text-muted" style="font-size: 0.9rem;">
             Período: <strong>{{ $fechaInicio->format('d/m/Y') }}</strong> al <strong>{{ $fechaFin->format('d/m/Y') }}</strong>

@@ -6,13 +6,6 @@
 <div class="fade-in">
     <div class="page-header">
         <h1><i class="bi bi-box-seam-fill me-2" style="color: var(--cy-gold);"></i>{{ $producto->nombre }}</h1>
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb mb-0">
-                <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('productos.index') }}">Productos</a></li>
-                <li class="breadcrumb-item active">{{ $producto->nombre }}</li>
-            </ol>
-        </nav>
     </div>
 
     <div class="row justify-content-center">

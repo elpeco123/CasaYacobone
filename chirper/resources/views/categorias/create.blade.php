@@ -6,13 +6,6 @@
 <div class="fade-in">
     <div class="page-header">
         <h1><i class="bi bi-plus-circle-fill me-2" style="color: var(--cy-gold);"></i>Nueva Categoría</h1>
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb mb-0">
-                <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('categorias.index') }}">Categorías</a></li>
-                <li class="breadcrumb-item active">Nueva</li>
-            </ol>
-        </nav>
     </div>
 
     <div class="row justify-content-center">

@@ -2,18 +2,37 @@
 
 @section('title', 'Nueva Venta')
 
+@push('styles')
+<style>
+    .custom-search-results {
+        max-height: 280px !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        scrollbar-width: thin;
+        scrollbar-color: var(--cy-gold) rgba(15, 23, 42, 0.8);
+    }
+    .custom-search-results::-webkit-scrollbar {
+        width: 8px;
+    }
+    .custom-search-results::-webkit-scrollbar-track {
+        background: rgba(15, 23, 42, 0.8);
+        border-radius: 4px;
+    }
+    .custom-search-results::-webkit-scrollbar-thumb {
+        background: var(--cy-gold);
+        border-radius: 4px;
+    }
+    .custom-search-results::-webkit-scrollbar-thumb:hover {
+        background: var(--cy-gold-light);
+    }
+</style>
+@endpush
+
 @section('content')
 <div class="fade-in">
     <div class="page-header d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
         <div>
             <h1><i class="bi bi-cart-plus-fill me-2" style="color: var(--cy-accent);"></i>Registrar Nueva Venta</h1>
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb mb-0">
-                    <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item"><a href="{{ route('ventas.index') }}">Ventas</a></li>
-                    <li class="breadcrumb-item active">Nueva Venta</li>
-                </ol>
-            </nav>
         </div>
         <a href="{{ route('ventas.index') }}" class="btn btn-glass">
             <i class="bi bi-arrow-left me-1"></i>Volver a Ventas
@@ -45,8 +64,8 @@
                         </div>
 
                         {{-- Live Search Results dropdown list --}}
-                        <div id="searchResultsList" class="mt-2 rounded-3 overflow-hidden shadow-lg"
-                             style="display: none; max-height: 280px; overflow-y: auto; background: rgba(15, 20, 40, 0.95); border: 1px solid var(--cy-gold);">
+                        <div id="searchResultsList" class="mt-2 rounded-3 shadow-lg custom-search-results"
+                             style="display: none; background: rgba(15, 20, 40, 0.98); border: 1px solid var(--cy-gold);">
                             {{-- Results populated via JS --}}
                         </div>
                     </div>
@@ -70,9 +89,9 @@
                         </div>
 
                         <div id="emptyMessage" class="text-center py-5">
-                            <i class="bi bi-cart-x text-muted" style="font-size: 3rem; opacity: 0.5;"></i>
-                            <h6 class="text-muted mt-3 mb-1">No hay productos agregados a la venta</h6>
-                            <p class="text-muted small">Buscá un producto arriba o tocá en <strong>"Agregar Fila Manual"</strong> para comenzar.</p>
+                            <i class="bi bi-cart-x" style="font-size: 3rem; color: #94a3b8; opacity: 0.7;"></i>
+                            <h6 class="text-white mt-3 mb-1 fw-bold">No hay productos agregados a la venta</h6>
+                            <p class="small" style="color: #cbd5e1;">Buscá un producto arriba o tocá en <strong class="text-white">"Agregar Fila Manual"</strong> para comenzar.</p>
                         </div>
                     </div>
                 </div>
@@ -80,24 +99,24 @@
 
             {{-- Right Column: Resumen y Confirmación --}}
             <div class="col-lg-4">
-                <div class="card-glass" style="position: sticky; top: 90px;">
+                <div class="card-glass" style="position: sticky; top: 90px; background: rgba(22, 33, 62, 0.85); border: 1px solid rgba(212, 165, 116, 0.25);">
                     <div class="card-body">
-                        <h5 class="mb-3 fw-bold">
+                        <h5 class="mb-3 fw-bold text-white">
                             <i class="bi bi-receipt-cutoff me-2" style="color: var(--cy-gold);"></i>
                             Resumen de Venta
                         </h5>
 
-                        <div class="d-flex justify-content-between mb-2" style="font-size: 0.9rem;">
-                            <span class="text-muted">Variedad de Productos:</span>
-                            <span id="totalItems" class="fw-bold">0</span>
+                        <div class="d-flex justify-content-between align-items-center mb-2" style="font-size: 0.95rem;">
+                            <span style="color: #e2e8f0; font-weight: 500;">Variedad de Productos:</span>
+                            <span id="totalItems" class="fw-bold text-white px-2 py-0.5 rounded" style="background: rgba(255,255,255,0.1); min-width: 28px; text-align: center;">0</span>
                         </div>
-                        <div class="d-flex justify-content-between mb-3" style="font-size: 0.9rem;">
-                            <span class="text-muted">Total de Unidades:</span>
-                            <span id="totalUnidades" class="fw-bold text-info">0</span>
+                        <div class="d-flex justify-content-between align-items-center mb-3" style="font-size: 0.95rem;">
+                            <span style="color: #e2e8f0; font-weight: 500;">Total de Unidades:</span>
+                            <span id="totalUnidades" class="fw-bold px-2 py-0.5 rounded" style="background: rgba(56, 189, 248, 0.2); color: #38bdf8; min-width: 28px; text-align: center;">0</span>
                         </div>
 
                         <div class="mb-3">
-                            <label for="tipo_pago" class="form-label">Forma de Pago *</label>
+                            <label for="tipo_pago" class="form-label text-light fw-semibold" style="color: #e2e8f0 !important;">Forma de Pago *</label>
                             <select name="tipo_pago" id="tipo_pago" class="form-select form-select-dark @error('tipo_pago') is-invalid @enderror" required style="font-weight: 600;">
                                 <option value="efectivo" {{ old('tipo_pago') == 'efectivo' ? 'selected' : '' }}>💵 Efectivo</option>
                                 <option value="tarjeta" {{ old('tipo_pago') == 'tarjeta' ? 'selected' : '' }}>💳 Tarjeta</option>
@@ -109,9 +128,9 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="descuento_porcentaje" class="form-label d-flex justify-content-between">
+                            <label for="descuento_porcentaje" class="form-label d-flex justify-content-between align-items-center fw-semibold" style="color: #e2e8f0 !important;">
                                 <span>Descuento (%)</span>
-                                <span class="text-warning small fw-bold" id="descuentoTag">0%</span>
+                                <span class="badge bg-warning text-dark fw-bold" id="descuentoTag" style="font-size: 0.8rem;">0%</span>
                             </label>
                             <div class="input-group">
                                 <input type="number" name="descuento_porcentaje" id="descuento_porcentaje"
@@ -124,26 +143,26 @@
                             @enderror
                         </div>
 
-                        <hr style="border-color: var(--cy-border); margin: 1.2rem 0;">
+                        <hr style="border-color: rgba(255,255,255,0.15); margin: 1.2rem 0;">
 
                         <div class="d-flex justify-content-between align-items-center mb-2" style="font-size: 0.95rem;">
-                            <span class="text-muted">Subtotal:</span>
-                            <span id="subtotalMonto" class="fw-bold text-light">$0</span>
+                            <span style="color: #e2e8f0; font-weight: 600;">Subtotal:</span>
+                            <span id="subtotalMonto" class="fw-bold text-white fs-6">$0</span>
                         </div>
                         <div class="d-flex justify-content-between align-items-center mb-3" style="font-size: 0.95rem;">
-                            <span class="text-muted">Descuento Aplicado:</span>
-                            <span id="descuentoMonto" class="fw-bold text-danger">-$0</span>
+                            <span style="color: #e2e8f0; font-weight: 600;">Descuento Aplicado:</span>
+                            <span id="descuentoMonto" class="fw-bold fs-6" style="color: #ff6b6b;">-$0</span>
                         </div>
 
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <span style="font-size: 1.1rem; font-weight: 600;">Total a Cobrar:</span>
-                            <span id="totalMonto" style="font-size: 1.8rem; font-weight: 800; color: var(--cy-gold);">$0</span>
+                        <div class="d-flex justify-content-between align-items-center mb-3 p-3 rounded-3" style="background: rgba(212, 165, 116, 0.12); border: 1px solid rgba(212, 165, 116, 0.3);">
+                            <span class="text-white" style="font-size: 1.15rem; font-weight: 700;">Total a Cobrar:</span>
+                            <span id="totalMonto" style="font-size: 1.85rem; font-weight: 800; color: var(--cy-gold); text-shadow: 0 0 14px rgba(212,165,116,0.35);">$0</span>
                         </div>
 
                         <button type="submit" class="btn btn-accent w-100 py-2.5 text-uppercase fw-bold" id="btnRegistrar" disabled style="letter-spacing: 0.5px;">
                             <i class="bi bi-check-circle-fill me-2"></i>Confirmar Venta
                         </button>
-                        <a href="{{ route('ventas.index') }}" class="btn btn-glass w-100 mt-2 text-muted">
+                        <a href="{{ route('ventas.index') }}" class="btn btn-glass w-100 mt-2 text-light">
                             Cancelar
                         </a>
                     </div>
@@ -155,10 +174,10 @@
 
 {{-- Plantilla de Fila de Producto --}}
 <template id="itemTemplate">
-    <div class="item-row mb-3 p-3 rounded-3 fade-in" style="background: rgba(255,255,255,0.03); border: 1px solid var(--cy-border);">
+    <div class="item-row mb-3 p-3 rounded-3 fade-in" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12);">
         <div class="row g-3 align-items-end">
             <div class="col-md-5">
-                <label class="form-label">Seleccionar Producto</label>
+                <label class="form-label text-light fw-medium" style="color: #e2e8f0 !important;">Seleccionar Producto</label>
                 <select class="form-select form-select-dark item-producto" name="items[__INDEX__][producto_id]" required>
                     <option value="">Buscar o seleccionar...</option>
                     @foreach($productos as $prod)
@@ -174,30 +193,30 @@
                 </select>
             </div>
             <div class="col-md-2">
-                <label class="form-label">Cantidad</label>
+                <label class="form-label text-light fw-medium" style="color: #e2e8f0 !important;">Cantidad</label>
                 <input type="number" class="form-control form-control-dark item-cantidad"
                        name="items[__INDEX__][cantidad]" min="1" value="1" required>
             </div>
             <div class="col-md-2">
-                <label class="form-label">Precio Unit.</label>
-                <input type="text" class="form-control form-control-dark item-precio text-end" readonly
-                       style="color: var(--cy-gold); font-weight: 600;">
+                <label class="form-label text-light fw-medium" style="color: #e2e8f0 !important;">Precio Unit.</label>
+                <input type="text" class="form-control form-control-dark item-precio text-end fw-bold" readonly
+                       style="color: var(--cy-gold);">
             </div>
             <div class="col-md-2">
-                <label class="form-label">Subtotal</label>
+                <label class="form-label text-light fw-medium" style="color: #e2e8f0 !important;">Subtotal</label>
                 <input type="text" class="form-control form-control-dark item-subtotal text-end" readonly
-                       style="color: var(--cy-gold); font-weight: 700; font-size: 1.05rem;">
+                       style="color: var(--cy-gold-light); font-weight: 700; font-size: 1.05rem;">
             </div>
             <div class="col-md-1 text-center">
                 <button type="button" class="btn btn-sm btn-remove-item" title="Quitar item"
-                        style="background: rgba(231,76,60,0.15); border: 1px solid rgba(231,76,60,0.3); color: #e74c3c; border-radius: 8px; padding: 0.45rem 0.65rem;">
+                        style="background: rgba(231,76,60,0.18); border: 1px solid rgba(231,76,60,0.35); color: #ff6b6b; border-radius: 8px; padding: 0.45rem 0.65rem;">
                     <i class="bi bi-trash"></i>
                 </button>
             </div>
         </div>
-        <div class="item-stock-info mt-2 d-flex justify-content-between align-items-center" style="font-size: 0.78rem; color: var(--cy-text-muted); display: none;">
-            <span><i class="bi bi-info-circle me-1"></i>Stock disponible: <strong class="item-stock-display text-light">0</strong></span>
-            <span class="item-categoria-display text-gold-light"></span>
+        <div class="item-stock-info mt-2 d-flex justify-content-between align-items-center" style="font-size: 0.82rem; color: #cbd5e1; display: none;">
+            <span><i class="bi bi-info-circle me-1 text-info"></i>Stock disponible: <strong class="item-stock-display text-white">0</strong></span>
+            <span class="item-categoria-display text-gold-light fw-semibold"></span>
         </div>
     </div>
 </template>
@@ -247,7 +266,7 @@
 
             if (matches.length === 0) {
                 resultsList.innerHTML = `
-                    <div class="p-3 text-center text-muted">
+                    <div class="p-3 text-center" style="color: #cbd5e1;">
                         <i class="bi bi-search me-1"></i>No se encontraron productos con "${query}"
                     </div>
                 `;
@@ -262,12 +281,12 @@
                      onmouseover="this.style.background='rgba(212, 165, 116, 0.15)'"
                      onmouseout="this.style.background='transparent'">
                     <div>
-                        <strong class="text-light">${p.nombre}</strong>
-                        <div class="small text-muted">${p.marca} · <span class="text-info">${p.categoria}</span></div>
+                        <strong class="text-white">${p.nombre}</strong>
+                        <div class="small" style="color: #cbd5e1;">${p.marca} · <span class="text-info">${p.categoria}</span></div>
                     </div>
                     <div class="text-end ms-3">
-                        <div class="fw-bold" style="color: var(--cy-gold);">$${p.precio.toLocaleString('es-AR')}</div>
-                        <span class="badge bg-secondary" style="font-size: 0.7rem;">Stock: ${p.stock}</span>
+                        <div class="fw-bold" style="color: var(--cy-gold); font-size: 1rem;">$${p.precio.toLocaleString('es-AR')}</div>
+                        <span class="badge bg-secondary text-white" style="font-size: 0.72rem;">Stock: ${p.stock}</span>
                         <button type="button" class="btn btn-gold btn-sm ms-2 py-0 px-2 btn-add-fast" style="font-size: 0.75rem;">
                             <i class="bi bi-plus-lg"></i> Agregar
                         </button>

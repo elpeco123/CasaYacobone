@@ -8,12 +8,6 @@
     <div class="page-header d-flex justify-content-between align-items-center flex-wrap gap-2">
         <div>
             <h1><i class="bi bi-tags-fill me-2" style="color: var(--cy-gold);"></i>Categorías</h1>
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb mb-0">
-                    <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Categorías</li>
-                </ol>
-            </nav>
         </div>
         <a href="{{ route('categorias.create') }}" class="btn btn-gold">
             <i class="bi bi-plus-circle-fill me-1"></i>Nueva Categoría

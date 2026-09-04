@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Caja;
 use App\Models\Producto;
 use App\Models\Proveedor;
 use App\Models\Venta;
@@ -18,6 +19,10 @@ class DashboardController extends Controller
     {
         $hoy = Carbon::today();
 
+        // Caja del día y cambio inicial
+        $cajaHoy = Caja::with('user')->whereDate('fecha', $hoy)->latest()->first();
+        $montoInicialCaja = $cajaHoy ? (float) $cajaHoy->monto_inicial : 0.0;
+
         // Ventas del día
         $ventasHoy = Venta::whereDate('created_at', $hoy)->sum('total');
         $cantidadVentasHoy = Venta::whereDate('created_at', $hoy)->count();
@@ -29,6 +34,12 @@ class DashboardController extends Controller
             'factura' => Venta::whereDate('created_at', $hoy)->where('tipo_pago', 'factura')->sum('total'),
         ];
 
+        // Total físico de efectivo en caja (Cambio Inicial + Ventas en efectivo)
+        $totalEfectivoEnCaja = $montoInicialCaja + $ventasHoyPorForma['efectivo'];
+
+        // Total Cierre de Caja General
+        $totalCierreGeneral = $totalEfectivoEnCaja + $ventasHoyPorForma['tarjeta'] + $ventasHoyPorForma['factura'];
+
         // Si el usuario es vendedor, mostrar vista específica de vendedor
         if (Auth::user()?->isVendedor()) {
             $ventasHoyLista = Venta::with('user')
@@ -37,9 +48,13 @@ class DashboardController extends Controller
                 ->get();
 
             return view('dashboard-vendedor', compact(
+                'cajaHoy',
+                'montoInicialCaja',
                 'ventasHoy',
                 'cantidadVentasHoy',
                 'ventasHoyPorForma',
+                'totalEfectivoEnCaja',
+                'totalCierreGeneral',
                 'ventasHoyLista'
             ));
         }
@@ -57,17 +72,6 @@ class DashboardController extends Controller
 
         // Ventas acumuladas del año actual
         $ventasAnoActual = Venta::where('created_at', '>=', Carbon::now()->startOfYear())->sum('total');
-
-        // Ventas del día
-        $ventasHoy = Venta::whereDate('created_at', $hoy)->sum('total');
-        $cantidadVentasHoy = Venta::whereDate('created_at', $hoy)->count();
-
-        // Desglose de ventas del día por tipo de pago
-        $ventasHoyPorForma = [
-            'efectivo' => Venta::whereDate('created_at', $hoy)->where('tipo_pago', 'efectivo')->sum('total'),
-            'tarjeta' => Venta::whereDate('created_at', $hoy)->where('tipo_pago', 'tarjeta')->sum('total'),
-            'factura' => Venta::whereDate('created_at', $hoy)->where('tipo_pago', 'factura')->sum('total'),
-        ];
 
         // Desglose de ventas del mes actual por tipo de pago
         $ventasMesPorForma = [
@@ -104,6 +108,8 @@ class DashboardController extends Controller
             ->get();
 
         return view('dashboard', compact(
+            'cajaHoy',
+            'montoInicialCaja',
             'valorStock',
             'ventasHoy',
             'cantidadVentasHoy',
@@ -111,6 +117,8 @@ class DashboardController extends Controller
             'ventasAnoActual',
             'ventasHoyPorForma',
             'ventasMesPorForma',
+            'totalEfectivoEnCaja',
+            'totalCierreGeneral',
             'productosBajoStock',
             'ultimasVentas',
             'rankingProveedores'

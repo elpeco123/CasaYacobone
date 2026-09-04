@@ -188,33 +188,46 @@
                 </div>
             </div>
 
-            {{-- Ventas por Forma de Pago --}}
+            {{-- Ventas por Forma de Pago & Caja --}}
             <div class="card-glass mt-4">
                 <div class="card-body">
-                    <h5 class="mb-3" style="font-weight: 700;">
-                        <i class="bi bi-wallet2 me-2" style="color: var(--cy-gold);"></i>
-                        Total Vendido por Forma de Pago
-                    </h5>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="mb-0" style="font-weight: 700; color: #ffffff;">
+                            <i class="bi bi-wallet2 me-2" style="color: var(--cy-gold);"></i>
+                            Cobros del Día & Efectivo en Caja
+                        </h5>
+                        <a href="{{ route('caja.index') }}" class="btn btn-gold btn-sm py-1 px-2.5 fw-bold" style="font-size: 0.78rem;">
+                            <i class="bi bi-cash-stack me-1"></i>{{ $cajaHoy ? 'Editar Cambio' : 'Abrir Caja' }}
+                        </a>
+                    </div>
 
-                    <div class="p-3 mb-3" style="background: rgba(255,255,255,0.02); border-radius: 12px; border: 1px solid var(--cy-border);">
+                    <div class="p-3 mb-3" style="background: rgba(15, 23, 42, 0.6); border-radius: 12px; border: 1px solid var(--cy-border);">
                         <div class="text-muted mb-2" style="font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">
-                            Ventas del Día
+                            Caja y Cobros de Hoy
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center mb-1.5" style="font-size: 0.88rem;">
+                            <span style="color: #cbd5e1;">🪙 Cambio Inicial (Apertura):</span>
+                            <span class="fw-bold" style="color: var(--cy-gold);">${{ number_format($montoInicialCaja, 0, ',', '.') }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center mb-1.5" style="font-size: 0.88rem;">
+                            <span style="color: #cbd5e1;">💵 Ventas en Efectivo:</span>
+                            <span class="fw-bold text-success">+${{ number_format($ventasHoyPorForma['efectivo'], 0, ',', '.') }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center py-2 px-2 my-1.5 rounded-2" style="background: rgba(212, 165, 116, 0.15); border: 1px solid rgba(212, 165, 116, 0.35); font-size: 0.92rem;">
+                            <span style="color: #ffffff; font-weight: 700;">💰 Total Efectivo en Caja:</span>
+                            <span class="fw-extrabold" style="color: #f6c078; font-size: 1.15rem;">${{ number_format($totalEfectivoEnCaja, 0, ',', '.') }}</span>
                         </div>
                         <div class="d-flex justify-content-between align-items-center mb-1" style="font-size: 0.88rem;">
-                            <span>💵 Efectivo:</span>
-                            <span class="fw-bold text-success">${{ number_format($ventasHoyPorForma['efectivo'], 0, ',', '.') }}</span>
+                            <span style="color: #cbd5e1;">💳 Tarjeta:</span>
+                            <span class="fw-bold" style="color: #c084fc;">${{ number_format($ventasHoyPorForma['tarjeta'], 0, ',', '.') }}</span>
                         </div>
                         <div class="d-flex justify-content-between align-items-center mb-1" style="font-size: 0.88rem;">
-                            <span>💳 Tarjeta:</span>
-                            <span class="fw-bold" style="color: #af7ac5;">${{ number_format($ventasHoyPorForma['tarjeta'], 0, ',', '.') }}</span>
-                        </div>
-                        <div class="d-flex justify-content-between align-items-center mb-1" style="font-size: 0.88rem;">
-                            <span>📄 Factura:</span>
-                            <span class="fw-bold text-info">${{ number_format($ventasHoyPorForma['factura'], 0, ',', '.') }}</span>
+                            <span style="color: #cbd5e1;">📄 Factura:</span>
+                            <span class="fw-bold" style="color: #38bdf8;">${{ number_format($ventasHoyPorForma['factura'], 0, ',', '.') }}</span>
                         </div>
                         <div class="d-flex justify-content-between align-items-center pt-2 mt-2" style="border-top: 1px dashed var(--cy-border); font-size: 0.95rem; font-weight: 700;">
-                            <span>Total del Día:</span>
-                            <span style="color: var(--cy-gold);">${{ number_format($ventasHoy, 0, ',', '.') }}</span>
+                            <span style="color: #ffffff;">Total Ventas del Día:</span>
+                            <span style="color: var(--cy-gold); font-size: 1.1rem;">${{ number_format($ventasHoy, 0, ',', '.') }}</span>
                         </div>
                     </div>
 
@@ -250,11 +263,14 @@
                         Acciones Rápidas
                     </h5>
                     <div class="d-grid gap-2">
-                        <a href="{{ route('ventas.create') }}" class="btn btn-accent">
-                            <i class="bi bi-cart-plus-fill me-2"></i>Nueva Venta
+                        <a href="{{ route('ventas.create') }}" class="btn btn-accent text-uppercase fw-bold py-2">
+                            <i class="bi bi-cart-plus-fill me-1"></i>Registrar Venta
                         </a>
-                        <a href="{{ route('productos.create') }}" class="btn btn-gold">
-                            <i class="bi bi-plus-circle-fill me-2"></i>Nuevo Producto
+                        <a href="{{ route('caja.index') }}" class="btn btn-gold text-uppercase fw-bold py-2">
+                            <i class="bi bi-safe2-fill me-1"></i>Abrir / Gestionar Caja
+                        </a>
+                        <a href="{{ route('productos.create') }}" class="btn btn-glass py-2">
+                            <i class="bi bi-plus-circle me-1"></i>Nuevo Producto
                         </a>
                         <a href="{{ route('reportes.diario') }}" class="btn btn-glass">
                             <i class="bi bi-file-bar-graph me-2"></i>Ver Reporte Diario

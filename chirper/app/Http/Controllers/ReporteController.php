@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Caja;
 use App\Models\Producto;
 use App\Models\Venta;
 use App\Models\VentaItem;
@@ -24,6 +25,18 @@ class ReporteController extends Controller
         $ventasDelDia = Venta::with(['items.producto', 'user'])
             ->whereDate('created_at', $fecha)
             ->get();
+
+        // Caja y cambio inicial de la fecha
+        $cajaDia = Caja::with('user')->whereDate('fecha', $fecha)->latest()->first();
+        $montoInicialCaja = $cajaDia ? (float) $cajaDia->monto_inicial : 0.0;
+
+        // Desglose por forma de pago
+        $ventasEfectivoDia = $ventasDelDia->where('tipo_pago', 'efectivo')->sum('total');
+        $ventasTarjetaDia = $ventasDelDia->where('tipo_pago', 'tarjeta')->sum('total');
+        $ventasFacturaDia = $ventasDelDia->where('tipo_pago', 'factura')->sum('total');
+
+        // Total físico de efectivo en caja
+        $totalEfectivoEnCaja = $montoInicialCaja + $ventasEfectivoDia;
 
         // Total vendido
         $totalVendido = $ventasDelDia->sum('total');
@@ -49,6 +62,12 @@ class ReporteController extends Controller
 
         return view('reportes.diario', compact(
             'fecha',
+            'cajaDia',
+            'montoInicialCaja',
+            'ventasEfectivoDia',
+            'ventasTarjetaDia',
+            'ventasFacturaDia',
+            'totalEfectivoEnCaja',
             'ventasDelDia',
             'totalVendido',
             'cantidadVendida',

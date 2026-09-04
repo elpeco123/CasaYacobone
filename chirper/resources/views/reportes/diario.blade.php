@@ -7,12 +7,6 @@
     <div class="page-header d-flex justify-content-between align-items-center flex-wrap gap-2">
         <div>
             <h1><i class="bi bi-calendar-day me-2" style="color: var(--cy-gold);"></i>Reporte Diario</h1>
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb mb-0">
-                    <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Reporte Diario</li>
-                </ol>
-            </nav>
         </div>
         <form method="GET" action="{{ route('reportes.diario') }}" class="d-flex gap-2 align-items-center">
             <input type="date" name="fecha" class="form-control form-control-dark" value="{{ $fecha->format('Y-m-d') }}">
@@ -26,7 +20,14 @@
             <div class="kpi-card kpi-green">
                 <div class="kpi-icon"><i class="bi bi-cash-stack"></i></div>
                 <div class="kpi-value">${{ number_format($totalVendido, 0, ',', '.') }}</div>
-                <div class="kpi-label">Total Vendido hoy</div>
+                <div class="kpi-label">Total Vendido en el Día</div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <div class="kpi-card kpi-gold">
+                <div class="kpi-icon"><i class="bi bi-safe2-fill"></i></div>
+                <div class="kpi-value">${{ number_format($totalEfectivoEnCaja, 0, ',', '.') }}</div>
+                <div class="kpi-label">Total Efectivo en Caja</div>
             </div>
         </div>
         <div class="col-md-6 col-lg-3">
@@ -37,17 +38,42 @@
             </div>
         </div>
         <div class="col-md-6 col-lg-3">
-            <div class="kpi-card kpi-gold">
+            <div class="kpi-card kpi-red">
                 <div class="kpi-icon"><i class="bi bi-boxes"></i></div>
                 <div class="kpi-value">${{ number_format($valorStockRestante, 0, ',', '.') }}</div>
                 <div class="kpi-label">Valor Stock Restante</div>
             </div>
         </div>
-        <div class="col-md-6 col-lg-3">
-            <div class="kpi-card kpi-red">
-                <div class="kpi-icon"><i class="bi bi-arrow-left-right"></i></div>
-                <div class="kpi-value">${{ number_format($diferencia, 0, ',', '.') }}</div>
-                <div class="kpi-label">Variación vs Stock Inicial</div>
+    </div>
+
+    {{-- Desglose de Caja y Formas de Pago --}}
+    <div class="card-glass mb-4" style="background: rgba(15, 52, 96, 0.35); border: 1px solid rgba(212, 165, 116, 0.25);">
+        <div class="card-body p-3">
+            <div class="row g-3 align-items-center">
+                <div class="col-md-3">
+                    <div class="p-2.5 rounded-3" style="background: rgba(212, 165, 116, 0.12); border: 1px solid rgba(212, 165, 116, 0.25);">
+                        <span class="d-block small" style="color: #cbd5e1;">🪙 Cambio Inicial:</span>
+                        <strong class="fs-6" style="color: var(--cy-gold);">${{ number_format($montoInicialCaja, 0, ',', '.') }}</strong>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="p-2.5 rounded-3" style="background: rgba(74, 222, 128, 0.1); border: 1px solid rgba(74, 222, 128, 0.25);">
+                        <span class="d-block small" style="color: #cbd5e1;">💵 Ventas Efectivo:</span>
+                        <strong class="fs-6 text-success">+${{ number_format($ventasEfectivoDia, 0, ',', '.') }}</strong>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="p-2.5 rounded-3" style="background: rgba(192, 132, 252, 0.1); border: 1px solid rgba(192, 132, 252, 0.25);">
+                        <span class="d-block small" style="color: #cbd5e1;">💳 Ventas Tarjeta:</span>
+                        <strong class="fs-6" style="color: #c084fc;">${{ number_format($ventasTarjetaDia, 0, ',', '.') }}</strong>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="p-2.5 rounded-3" style="background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.25);">
+                        <span class="d-block small" style="color: #cbd5e1;">📄 Ventas Factura:</span>
+                        <strong class="fs-6" style="color: #38bdf8;">${{ number_format($ventasFacturaDia, 0, ',', '.') }}</strong>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

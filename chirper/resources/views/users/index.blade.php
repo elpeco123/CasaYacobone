@@ -7,12 +7,6 @@
     <div class="page-header d-flex justify-content-between align-items-center flex-wrap gap-2">
         <div>
             <h1><i class="bi bi-people-fill me-2" style="color: var(--cy-gold);"></i>Gestión de Usuarios</h1>
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb mb-0">
-                    <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Usuarios</li>
-                </ol>
-            </nav>
         </div>
         <a href="{{ route('users.create') }}" class="btn btn-gold">
             <i class="bi bi-person-plus-fill me-1"></i>Nuevo Usuario

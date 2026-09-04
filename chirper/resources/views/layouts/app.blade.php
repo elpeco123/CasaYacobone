@@ -23,8 +23,8 @@
             --cy-gold: #d4a574;
             --cy-gold-light: #e8c9a0;
             --cy-surface: #0f3460;
-            --cy-text: #eaeaea;
-            --cy-text-muted: #a0a0b0;
+            --cy-text: #f8fafc;
+            --cy-text-muted: #cbd5e1;
             --cy-success: #2ecc71;
             --cy-warning: #f39c12;
             --cy-danger: #e74c3c;
@@ -39,6 +39,10 @@
             background: linear-gradient(135deg, var(--cy-primary) 0%, var(--cy-secondary) 50%, #0a0a1a 100%);
             min-height: 100vh;
             color: var(--cy-text);
+        }
+
+        .text-muted {
+            color: #cbd5e1 !important;
         }
 
         /* ===== NAVBAR ===== */
@@ -586,43 +590,56 @@
                             </li>
                         </ul>
                     </li>
+                    {{-- Menú Configuración (Admin y Vendedor) --}}
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle {{ request()->routeIs('users.*') || request()->routeIs('proveedores.*') || request()->routeIs('categorias.*') ? 'active' : '' }}"
+                        <a class="nav-link dropdown-toggle {{ request()->routeIs('caja.*') || request()->routeIs('users.*') || request()->routeIs('proveedores.*') || request()->routeIs('categorias.*') ? 'active' : '' }}"
                            href="#" role="button" data-bs-toggle="dropdown">
                             <i class="bi bi-gear-fill me-1"></i> Configuración
                         </a>
-                        <ul class="dropdown-menu" style="background: rgba(22,33,62,0.95); border: 1px solid var(--cy-border); border-radius: 12px;">
+                        <ul class="dropdown-menu shadow-lg" style="background: rgba(22,33,62,0.98); border: 1px solid rgba(212,165,116,0.25); border-radius: 12px; min-width: 230px;">
                             <li>
-                                <a class="dropdown-item text-light" href="{{ route('users.index') }}"
+                                <a class="dropdown-item text-light d-flex align-items-center py-2" href="{{ route('caja.index') }}"
+                                   style="font-size: 0.88rem; font-weight: 600;">
+                                    <i class="bi bi-safe2-fill me-2" style="color: var(--cy-gold); font-size: 1.05rem;"></i>Abrir Caja (Cambio Inicial)
+                                </a>
+                            </li>
+                            @if(Auth::user()->isAdmin())
+                            <li><hr class="dropdown-divider my-1" style="border-color: rgba(255,255,255,0.12);"></li>
+                            <li>
+                                <a class="dropdown-item text-light py-1.5" href="{{ route('users.index') }}"
                                    style="font-size: 0.88rem;">
-                                    <i class="bi bi-people-fill me-2"></i>Usuarios
+                                    <i class="bi bi-people-fill me-2" style="color: #cbd5e1;"></i>Usuarios
                                 </a>
                             </li>
                             <li>
-                                <a class="dropdown-item text-light" href="{{ route('proveedores.index') }}"
+                                <a class="dropdown-item text-light py-1.5" href="{{ route('proveedores.index') }}"
                                    style="font-size: 0.88rem;">
-                                    <i class="bi bi-truck me-2"></i>Proveedores
+                                    <i class="bi bi-truck me-2" style="color: #cbd5e1;"></i>Proveedores
                                 </a>
                             </li>
                             <li>
-                                <a class="dropdown-item text-light" href="{{ route('categorias.index') }}"
+                                <a class="dropdown-item text-light py-1.5" href="{{ route('categorias.index') }}"
                                    style="font-size: 0.88rem;">
-                                    <i class="bi bi-tags-fill me-2"></i>Categorías
+                                    <i class="bi bi-tags-fill me-2" style="color: #cbd5e1;"></i>Categorías
                                 </a>
                             </li>
+                            @endif
                         </ul>
                     </li>
-                    @endif
                 </ul>
 
                 <div class="d-flex align-items-center gap-2">
+                    <a href="{{ route('caja.index') }}" class="btn btn-glass btn-sm d-none d-md-inline-flex align-items-center text-light" title="Apertura y Cambio en Caja" style="border-color: rgba(212,165,116,0.3);">
+                        <i class="bi bi-cash-coin me-1" style="color: var(--cy-gold);"></i>
+                        <span>Caja</span>
+                    </a>
                     <span class="user-badge">
                         <i class="bi bi-person-fill me-1"></i>{{ Auth::user()->name }}
                         <span class="role-tag">{{ Auth::user()->role }}</span>
                     </span>
                     <form action="{{ route('logout') }}" method="POST" class="d-inline">
                         @csrf
-                        <button type="submit" class="btn btn-logout btn-sm">
+                        <button type="submit" class="btn btn-logout btn-sm" title="Cerrar Sesión">
                             <i class="bi bi-box-arrow-right"></i>
                         </button>
                     </form>

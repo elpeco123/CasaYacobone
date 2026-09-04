@@ -6,13 +6,6 @@
 <div class="fade-in">
     <div class="page-header">
         <h1><i class="bi bi-person-plus-fill me-2" style="color: var(--cy-gold);"></i>Nuevo Usuario</h1>
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb mb-0">
-                <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('users.index') }}">Usuarios</a></li>
-                <li class="breadcrumb-item active">Nuevo</li>
-            </ol>
-        </nav>
     </div>
 
     <div class="row justify-content-center">

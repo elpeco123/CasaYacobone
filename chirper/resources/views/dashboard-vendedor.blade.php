@@ -82,50 +82,74 @@
                                 <i class="bi bi-wallet2 me-2" style="color: var(--cy-gold);"></i>
                                 Cierre de Caja del Día
                             </h5>
+                            <a href="{{ route('caja.index') }}" class="btn btn-gold btn-sm py-1 px-2.5 fw-bold" style="font-size: 0.78rem;">
+                                <i class="bi bi-cash-stack me-1"></i>{{ $cajaHoy ? 'Editar Cambio' : 'Abrir Caja' }}
+                            </a>
                         </div>
                         <p class="mb-3" style="font-size: 0.85rem; color: #cbd5e1;">
-                            Resumen acumulado por forma de pago correspondiente a la jornada de hoy.
+                            Resumen detallado de efectivo físico en caja y cobros electrónicos del día.
                         </p>
 
                         <div class="p-3 mb-3" style="background: rgba(15, 23, 42, 0.6); border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1);">
-                            <div class="d-flex justify-content-between align-items-center py-2" style="border-bottom: 1px dashed rgba(255, 255, 255, 0.1); font-size: 0.95rem;">
-                                <span style="color: #f8f9fa; font-weight: 600;">💵 Efectivo:</span>
-                                <span class="fw-bold" style="font-size: 1.1rem; color: #4ade80;">${{ number_format($ventasHoyPorForma['efectivo'], 0, ',', '.') }}</span>
+                            {{-- Cambio Inicial --}}
+                            <div class="d-flex justify-content-between align-items-center py-1.5" style="border-bottom: 1px dashed rgba(255, 255, 255, 0.1); font-size: 0.92rem;">
+                                <span style="color: #cbd5e1; font-weight: 500;">🪙 Cambio Inicial (Apertura):</span>
+                                <span class="fw-bold" style="color: var(--cy-gold); font-size: 1.05rem;">${{ number_format($montoInicialCaja, 0, ',', '.') }}</span>
                             </div>
-                            <div class="d-flex justify-content-between align-items-center py-2" style="border-bottom: 1px dashed rgba(255, 255, 255, 0.1); font-size: 0.95rem;">
-                                <span style="color: #f8f9fa; font-weight: 600;">💳 Tarjeta:</span>
-                                <span class="fw-bold" style="font-size: 1.1rem; color: #c084fc;">${{ number_format($ventasHoyPorForma['tarjeta'], 0, ',', '.') }}</span>
+
+                            {{-- Ventas en Efectivo --}}
+                            <div class="d-flex justify-content-between align-items-center py-1.5" style="border-bottom: 1px dashed rgba(255, 255, 255, 0.1); font-size: 0.92rem;">
+                                <span style="color: #cbd5e1; font-weight: 500;">💵 Ventas en Efectivo:</span>
+                                <span class="fw-bold" style="color: #4ade80; font-size: 1.05rem;">+${{ number_format($ventasHoyPorForma['efectivo'], 0, ',', '.') }}</span>
                             </div>
-                            <div class="d-flex justify-content-between align-items-center py-2" style="font-size: 0.95rem;">
-                                <span style="color: #f8f9fa; font-weight: 600;">📄 Factura:</span>
-                                <span class="fw-bold" style="font-size: 1.1rem; color: #38bdf8;">${{ number_format($ventasHoyPorForma['factura'], 0, ',', '.') }}</span>
+
+                            {{-- TOTAL EFECTIVO FÍSICO EN CAJA --}}
+                            <div class="d-flex justify-content-between align-items-center py-2 px-2 my-1.5 rounded-2" style="background: rgba(212, 165, 116, 0.15); border: 1px solid rgba(212, 165, 116, 0.35); font-size: 0.95rem;">
+                                <span style="color: #ffffff; font-weight: 700;">💰 Total Efectivo en Caja:</span>
+                                <span class="fw-extrabold" style="color: #f6c078; font-size: 1.25rem;">${{ number_format($totalEfectivoEnCaja, 0, ',', '.') }}</span>
+                            </div>
+
+                            {{-- Tarjeta y Factura --}}
+                            <div class="d-flex justify-content-between align-items-center py-1.5" style="border-bottom: 1px dashed rgba(255, 255, 255, 0.1); font-size: 0.92rem;">
+                                <span style="color: #cbd5e1; font-weight: 500;">💳 Tarjeta:</span>
+                                <span class="fw-bold" style="font-size: 1.05rem; color: #c084fc;">${{ number_format($ventasHoyPorForma['tarjeta'], 0, ',', '.') }}</span>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center py-1.5" style="font-size: 0.92rem;">
+                                <span style="color: #cbd5e1; font-weight: 500;">📄 Factura:</span>
+                                <span class="fw-bold" style="font-size: 1.05rem; color: #38bdf8;">${{ number_format($ventasHoyPorForma['factura'], 0, ',', '.') }}</span>
                             </div>
                         </div>
 
                         <div class="p-3" style="background: rgba(212, 165, 116, 0.12); border-radius: 12px; border: 1px solid rgba(212, 165, 116, 0.35);">
                             <div class="mb-1" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.6px; font-weight: 700; color: #e2e8f0;">
-                                Total Acumulado para Cierre
+                                Total General del Día (Efectivo en Caja + Digital)
                             </div>
                             <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-2">
                                 <div>
                                     <div class="fw-bold cierre-total-amount" style="font-size: 1.5rem; color: var(--cy-gold); text-shadow: 0 0 10px rgba(212, 165, 116, 0.2);">
-                                        ${{ number_format($ventasHoy, 0, ',', '.') }}
+                                        ${{ number_format($totalCierreGeneral, 0, ',', '.') }}
                                     </div>
                                     <div style="font-size: 0.82rem; color: #cbd5e1; font-weight: 500;">
-                                        {{ $cantidadVentasHoy }} {{ $cantidadVentasHoy === 1 ? 'operación' : 'operaciones' }} hoy
+                                        {{ $cantidadVentasHoy }} {{ $cantidadVentasHoy === 1 ? 'operación' : 'operaciones' }} hoy · Ventas: ${{ number_format($ventasHoy, 0, ',', '.') }}
                                     </div>
                                 </div>
                                 <div>
-                                    <span class="badge bg-success bg-opacity-25 text-success border border-success px-3 py-2" style="font-size: 0.82rem; font-weight: 700; color: #4ade80 !important;">
-                                        <i class="bi bi-check-circle-fill me-1"></i>Caja Activa
-                                    </span>
+                                    @if($cajaHoy)
+                                        <span class="badge bg-success bg-opacity-25 text-success border border-success px-3 py-2" style="font-size: 0.82rem; font-weight: 700; color: #4ade80 !important;">
+                                            <i class="bi bi-check-circle-fill me-1"></i>Caja Abierta
+                                        </span>
+                                    @else
+                                        <a href="{{ route('caja.index') }}" class="badge bg-warning bg-opacity-25 text-warning border border-warning px-3 py-2 text-decoration-none" style="font-size: 0.82rem; font-weight: 700; color: #fbbf24 !important;">
+                                            <i class="bi bi-exclamation-circle-fill me-1"></i>Abrir Caja
+                                        </a>
+                                    @endif
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <div class="mt-3 pt-2 text-center" style="font-size: 0.8rem; color: #94a3b8;">
-                        <i class="bi bi-info-circle me-1" style="color: var(--cy-gold);"></i>Utilice este total para el arqueo de caja al finalizar la jornada.
+                        <i class="bi bi-info-circle me-1" style="color: var(--cy-gold);"></i>El <strong>Total Efectivo en Caja (${{ number_format($totalEfectivoEnCaja, 0, ',', '.') }})</strong> es el monto físico que debe contarse en el arqueo al cerrar el día.
                     </div>
                 </div>
             </div>

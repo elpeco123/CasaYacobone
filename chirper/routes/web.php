@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\CajaController;
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProductoController;
@@ -63,6 +64,10 @@ Route::middleware('auth')->group(function () {
 
     // Ventas (Vendedores y Administradores)
     Route::resource('ventas', VentaController::class)->only(['index', 'create', 'store', 'show']);
+
+    // Apertura de Caja / Cambio Inicial (Vendedores y Administradores)
+    Route::get('/caja', [CajaController::class, 'index'])->name('caja.index');
+    Route::post('/caja', [CajaController::class, 'store'])->name('caja.store');
 
     // Reportes (Solo Administrador)
     Route::prefix('reportes')->name('reportes.')->middleware('role:admin')->group(function () {
