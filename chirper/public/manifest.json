@@ -16,13 +16,13 @@
   "icons": [
     {
       "src": "/images/logopag.png",
-      "sizes": "any",
+      "sizes": "1254x1254",
       "type": "image/png",
       "purpose": "any"
     },
     {
       "src": "/images/logopag.png",
-      "sizes": "any",
+      "sizes": "1254x1254",
       "type": "image/png",
       "purpose": "maskable"
     }

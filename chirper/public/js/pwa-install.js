@@ -7,10 +7,12 @@
  * Responsabilidades:
  *  1. Registrar el Service Worker (/service-worker.js).
  *  2. Capturar `beforeinstallprompt` (Android / Chromium) y mostrar el
- *     banner personalizado de instalación.
+ *     banner personalizado de instalación. Si el evento no llega
+ *     (HTTP, webviews, navegador no compatible), muestra guía manual.
  *  3. Detectar iOS/Safari (sin `beforeinstallprompt`) y mostrar la guía
  *     manual "Compartir → Añadir a pantalla de inicio".
  *  4. Avisar cuando hay una nueva versión del SW lista para activarse.
+ *  5. Exponer `CasaYacobonePWA.debug()` para diagnóstico en consola.
  * ========================================================================== */
 (() => {
   'use strict';
@@ -20,6 +22,7 @@
   const DISMISS_KEY = 'cy-pwa-banner-dismissed-at';
   const DISMISS_DAYS = 7; // No volver a molestar durante 7 días si lo cierra.
   const SHOW_DELAY_MS = 2500; // Espera antes de mostrar el banner (UX menos invasiva).
+  const MANUAL_FALLBACK_MS = 6000; // Si el navegador no ofrece instalación, muestra guía manual.
 
   // --- Utilidades ----------------------------------------------------------
   const $ = (id) => document.getElementById(id);
@@ -120,11 +123,14 @@
 
   // --- 2. Prompt de instalación (Android / Chromium) ------------------------
   let deferredPrompt = null;
+  let promptFired = false; // true si el navegador disparó `beforeinstallprompt`.
 
   window.addEventListener('beforeinstallprompt', (event) => {
     // Evita el mini-banner automático del navegador: usamos el nuestro.
     event.preventDefault();
     deferredPrompt = event;
+    promptFired = true;
+    console.info('[PWA] beforeinstallprompt recibido: instalación disponible.');
 
     if (!isStandalone() && !recentlyDismissed()) {
       setTimeout(() => showBanner('android'), SHOW_DELAY_MS);
@@ -151,21 +157,36 @@
     console.info('[PWA] App instalada correctamente.');
   });
 
-  // --- 3. Banner personalizado + guía iOS -----------------------------------
+  // --- 3. Banner personalizado + guías manuales --------------------------------
   function showBanner(mode) {
     const banner = $('cy-pwa-banner');
     const iosGuide = $('cy-pwa-ios-guide');
+    const manualGuide = $('cy-pwa-manual-guide');
+    const installBtn = $('cy-pwa-install-btn');
     if (!banner) {
       return;
+    }
+
+    // Resetea el contenido según el modo.
+    if (iosGuide) {
+      iosGuide.hidden = true;
+    }
+    if (manualGuide) {
+      manualGuide.hidden = true;
+    }
+    if (installBtn) {
+      installBtn.hidden = mode !== 'android';
     }
 
     if (mode === 'ios' && iosGuide) {
       // En iOS mostramos la guía paso a paso en lugar del botón instalar.
       iosGuide.hidden = false;
-      const installBtn = $('cy-pwa-install-btn');
-      if (installBtn) {
-        installBtn.hidden = true;
-      }
+    }
+
+    if (mode === 'manual' && manualGuide) {
+      // Fallback: el navegador no disparó `beforeinstallprompt`
+      // (HTTP sin HTTPS, webview de WhatsApp/Instagram, etc.).
+      manualGuide.hidden = false;
     }
 
     banner.hidden = false;
@@ -200,6 +221,39 @@
     // instalada y no se descartó hace poco → muestra la guía manual.
     if (isIOS() && !isStandalone() && !recentlyDismissed()) {
       setTimeout(() => showBanner('ios'), SHOW_DELAY_MS);
+      return;
+    }
+
+    // Fallback Android/Chromium: si tras unos segundos el navegador NO
+    // ofreció instalación (típico en HTTP sin HTTPS, webviews de
+    // WhatsApp/Instagram/Facebook o navegador no compatible), muestra
+    // igual el banner pero con instrucciones manuales paso a paso.
+    if (!isIOS() && !isStandalone() && !recentlyDismissed()) {
+      setTimeout(() => {
+        if (!promptFired && !deferredPrompt) {
+          console.info('[PWA] Sin beforeinstallprompt: muestro guía manual.');
+          showBanner('manual');
+        }
+      }, MANUAL_FALLBACK_MS);
     }
   });
+
+  // --- Diagnóstico remoto --------------------------------------------------
+  // Desde la consola del celular (chrome://inspect) o DevTools ejecutar:
+  //   CasaYacobonePWA.debug()
+  window.CasaYacobonePWA = {
+    debug() {
+      return {
+        standalone: isStandalone(),
+        ios: isIOS(),
+        serviceWorkerSoportado: 'serviceWorker' in navigator,
+        protocolo: window.location.protocol,
+        host: window.location.host,
+        contextoSeguro: window.isSecureContext,
+        promptRecibido: promptFired,
+        bannerDescartado: recentlyDismissed(),
+        userAgent: window.navigator.userAgent,
+      };
+    },
+  };
 })();

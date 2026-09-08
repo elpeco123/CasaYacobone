@@ -6,7 +6,8 @@
 
   Los IDs usados aquí los controla public/js/pwa-install.js:
       #cy-pwa-banner, #cy-pwa-install-btn, #cy-pwa-close-btn,
-      #cy-pwa-ios-guide, #cy-pwa-update, #cy-pwa-update-btn
+      #cy-pwa-ios-guide, #cy-pwa-manual-guide,
+      #cy-pwa-update, #cy-pwa-update-btn
   ================================================================== --}}
 
 <style>
@@ -94,6 +95,13 @@
             <li><i class="bi bi-share"></i> Tocá <strong>&nbsp;Compartir&nbsp;</strong> en Safari</li>
             <li><i class="bi bi-plus-square"></i> Elegí <strong>&nbsp;"Añadir a pantalla de inicio"&nbsp;</strong></li>
             <li><i class="bi bi-check-circle"></i> Confirmá con <strong>&nbsp;Añadir</strong></li>
+        </ol>
+
+        {{-- Guía manual Android/Chrome cuando no hay prompt nativo (HTTP, webviews, etc.) --}}
+        <ol id="cy-pwa-manual-guide" class="cy-pwa-ios-steps" hidden>
+            <li><i class="bi bi-three-dots-vertical"></i> Abrí el menú <strong>&nbsp;⋮&nbsp;</strong> de Chrome</li>
+            <li><i class="bi bi-plus-square"></i> Tocá <strong>&nbsp;"Instalar app" / "Añadir a pantalla de inicio"</strong></li>
+            <li><i class="bi bi-check-circle"></i> Confirmá con <strong>&nbsp;Instalar</strong></li>
         </ol>
     </div>
     <div class="cy-pwa-actions">

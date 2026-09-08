@@ -26,6 +26,18 @@
             "dest": "/public/images/$1"
         },
         {
+            "src": "/manifest.json",
+            "dest": "/public/manifest.json"
+        },
+        {
+            "src": "/service-worker.js",
+            "dest": "/public/service-worker.js"
+        },
+        {
+            "src": "/js/(.*)",
+            "dest": "/public/js/$1"
+        },
+        {
             "src": "/(.*)",
             "dest": "/api/index.php"
         }
