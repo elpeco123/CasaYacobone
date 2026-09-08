@@ -7,6 +7,20 @@
     <title>@yield('title', 'Casa Yacobone') — Control de Stock</title>
     <link rel="icon" type="image/png" href="/images/logopag.png">
 
+    {{-- ===== PWA: manifest + colores + compatibilidad iOS ===== --}}
+    <link rel="manifest" href="{{ asset('manifest.json') }}">
+    <meta name="description" content="Casa Yacobone — Sistema de control de stock, ventas y reportes. Instalable en tu celular.">
+    <meta name="theme-color" content="#1a1a2e">
+    {{-- Estándar moderno (Chrome/Edge/Firefox) --}}
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Casa Yacobone">
+    {{-- Compatibilidad Safari iOS --}}
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Casa Yacobone">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="{{ asset('images/logopag.png') }}">
+    <link rel="preload" href="{{ asset('images/logopag.png') }}" as="image" type="image/png">
+
     {{-- Bootstrap 5 CSS --}}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     {{-- Bootstrap Icons --}}
@@ -685,6 +699,9 @@
 
     {{-- Bootstrap JS --}}
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    {{-- PWA: banner de instalación + registro del Service Worker (ver public/js/pwa-install.js) --}}
+    <script src="{{ asset('js/pwa-install.js') }}" defer></script>
+    @include('partials.pwa-install')
     @stack('scripts')
 </body>
 </html>

@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json.schemastore.org/web-manifest-combined.json",
+  "id": "/?source=pwa",
+  "name": "Casa Yacobone — Control de Stock",
+  "short_name": "Casa Yacobone",
+  "description": "Sistema de control de stock, ventas y reportes de Casa Yacobone. Instalable y con soporte offline.",
+  "lang": "es",
+  "dir": "ltr",
+  "categories": ["business", "productivity"],
+  "start_url": "/?source=pwa",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#1a1a2e",
+  "background_color": "#1a1a2e",
+  "icons": [
+    {
+      "src": "/images/logopag.png",
+      "sizes": "any",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/images/logopag.png",
+      "sizes": "any",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

@@ -21,6 +21,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// Página offline de la PWA (pública: el Service Worker la sirve sin red).
+Route::view('/offline', 'offline')->name('offline');
+
 // Redirect root to dashboard or login
 Route::get('/', function () {
     return redirect()->route('login');
