@@ -75,6 +75,6 @@ Route::middleware('auth')->group(function () {
     // Reportes (Solo Administrador)
     Route::prefix('reportes')->name('reportes.')->middleware('role:admin')->group(function () {
         Route::get('/diario', [ReporteController::class, 'diario'])->name('diario');
-        Route::get('/semanal', [ReporteController::class, 'semanal'])->name('semanal');
+        Route::get('/rendimiento', [ReporteController::class, 'rendimiento'])->name('rendimiento');
     });
 });

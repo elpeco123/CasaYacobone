@@ -136,16 +136,20 @@
             font-weight: 500;
         }
 
-        .user-badge .role-tag {
-            background: var(--cy-accent);
-            color: white;
-            padding: 0.15rem 0.5rem;
-            border-radius: 6px;
-            font-size: 0.7rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-left: 0.4rem;
+        /* ===== NAVBAR TOGGLER (hamburguesa visible en fondo oscuro) ===== */
+        .navbar-toggler {
+            border: 1px solid rgba(212, 165, 116, 0.4) !important;
+            background: rgba(212, 165, 116, 0.12);
+            border-radius: 10px;
+            padding: 0.45rem 0.6rem;
+        }
+
+        .navbar-toggler:focus {
+            box-shadow: 0 0 0 3px rgba(212, 165, 116, 0.2);
+        }
+
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(232, 201, 160, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2.5' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
         }
 
         .user-avatar {
@@ -608,9 +612,9 @@
                                 </a>
                             </li>
                             <li>
-                                <a class="dropdown-item text-light" href="{{ route('reportes.semanal') }}"
+                                <a class="dropdown-item text-light" href="{{ route('reportes.rendimiento') }}"
                                    style="font-size: 0.88rem;">
-                                    <i class="bi bi-calendar-week me-2"></i>Reporte Semanal
+                                    <i class="bi bi-bar-chart-line-fill me-2"></i>Rendimiento
                                 </a>
                             </li>
                         </ul>
@@ -660,9 +664,8 @@
                         <i class="bi bi-cash-coin me-1" style="color: var(--cy-gold);"></i>
                         <span>Caja</span>
                     </a>
-                    <span class="user-badge" title="{{ Auth::user()->name }}">
+                    <span class="user-badge" title="{{ Auth::user()->name }} ({{ Auth::user()->role }})">
                         <span class="user-avatar">{{ mb_strtoupper(mb_substr(Auth::user()->name, 0, 1)) }}</span>
-                        <span class="role-tag">{{ Auth::user()->role }}</span>
                     </span>
                     <form action="{{ route('logout') }}" method="POST" class="d-inline">
                         @csrf

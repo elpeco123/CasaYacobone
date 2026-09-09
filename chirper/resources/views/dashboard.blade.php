@@ -10,7 +10,7 @@
             <h1><i class="bi bi-grid-1x2-fill me-2" style="color: var(--cy-gold);"></i>Dashboard</h1>
             <p class="text-muted mb-0" style="font-size: 0.9rem;">Resumen general de Casa Yacobone</p>
         </div>
-        <div>
+        <div class="d-none d-md-block">
             <span class="text-muted" style="font-size: 0.85rem;">
                 <i class="bi bi-calendar3 me-1"></i>{{ now()->locale('es')->isoFormat('dddd, D [de] MMMM [de] YYYY') }}
             </span>
@@ -120,9 +120,9 @@
     </div>
 
     <div class="row g-4">
-        {{-- Productos con Stock Bajo --}}
+        {{-- Productos con Stock Bajo (solo PC: tabla oculta en celular) --}}
         <div class="col-lg-7">
-            <div class="card-glass">
+            <div class="card-glass d-none d-md-block">
                 <div class="card-body">
                     <h5 class="mb-3" style="font-weight: 700;">
                         <i class="bi bi-exclamation-triangle-fill text-warning me-2"></i>
@@ -175,8 +175,8 @@
                 </div>
             </div>
 
-            {{-- Ranking de Proveedores por Compras (Últimos 12 Meses) --}}
-            <div class="card-glass mt-4">
+            {{-- Ranking de Proveedores por Compras (solo PC: tabla oculta en celular) --}}
+            <div class="card-glass mt-4 d-none d-md-block">
                 <div class="card-body">
                     <h5 class="mb-3" style="font-weight: 700;">
                         <i class="bi bi-truck me-2" style="color: var(--cy-gold);"></i>
