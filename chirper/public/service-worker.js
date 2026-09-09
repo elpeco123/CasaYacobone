@@ -11,7 +11,7 @@
  * ========================================================================== */
 
 // Cambiar este valor en cada despliegue para forzar la actualización del caché.
-const VERSION = 'v1.0.0';
+const VERSION = 'v1.0.1';
 const STATIC_CACHE = `casayacobone-static-${VERSION}`;
 const RUNTIME_CACHE = `casayacobone-runtime-${VERSION}`;
 
@@ -22,6 +22,8 @@ const PRECACHE_URLS = [
   '/manifest.json',
   '/images/logopag.png',
   '/images/logo.jpeg',
+  '/icons/icon-192.png',
+  '/icons/maskable-192.png',
 ];
 
 /* ---------- Instalación: precachea el app-shell y toma control rápido ---------- */
@@ -140,6 +142,7 @@ function isCacheableAsset(pathname) {
   return (
     pathname.startsWith('/build/') ||
     pathname.startsWith('/images/') ||
+    pathname.startsWith('/icons/') ||
     pathname.startsWith('/fonts/') ||
     pathname === '/favicon.ico' ||
     pathname === '/manifest.json' ||

@@ -17,11 +17,17 @@ class VentaController extends Controller
      */
     public function index(): View
     {
-        $ventas = Venta::with('user')
-            ->latest()
-            ->paginate(15);
+        $query = Venta::with('user')->latest();
 
-        return view('ventas.index', compact('ventas'));
+        // Los vendedores solo ven las ventas del día; el admin ve el historial completo.
+        $soloHoy = ! Auth::user()->isAdmin();
+        if ($soloHoy) {
+            $query->whereDate('created_at', today());
+        }
+
+        $ventas = $query->paginate(15);
+
+        return view('ventas.index', compact('ventas', 'soloHoy'));
     }
 
     /**

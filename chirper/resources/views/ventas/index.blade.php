@@ -7,6 +7,11 @@
     <div class="page-header d-flex justify-content-between align-items-center flex-wrap gap-2">
         <div>
             <h1><i class="bi bi-cart-fill me-2" style="color: var(--cy-gold);"></i>Ventas</h1>
+            @if(!empty($soloHoy))
+                <span class="badge" style="background: rgba(212,165,116,0.15); color: var(--cy-gold-light); border: 1px solid rgba(212,165,116,0.3); font-weight: 500;">
+                    <i class="bi bi-calendar-day me-1"></i>Ventas de hoy · {{ now()->locale('es')->isoFormat('D [de] MMMM') }}
+                </span>
+            @endif
         </div>
         <a href="{{ route('ventas.create') }}" class="btn btn-accent">
             <i class="bi bi-cart-plus-fill me-1"></i>Nueva Venta

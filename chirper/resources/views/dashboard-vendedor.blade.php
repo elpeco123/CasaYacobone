@@ -41,9 +41,6 @@
             <h1 class="vendedor-header-title mb-1" style="color: #ffffff; font-weight: 800;">
                 <i class="bi bi-person-badge-fill me-2" style="color: var(--cy-gold);"></i>Panel de Vendedor
             </h1>
-            <p class="mb-0" style="font-size: 0.92rem; color: #cbd5e1;">
-                Bienvenido/a, <strong style="color: #f8f9fa;">{{ Auth::user()->name }}</strong> · Casa Yacobone
-            </p>
         </div>
         <div>
             <span class="badge px-3 py-2" style="font-size: 0.85rem; color: #f8f9fa; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); font-weight: 500;">

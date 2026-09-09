@@ -18,7 +18,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="Casa Yacobone">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="apple-touch-icon" href="{{ asset('images/logopag.png') }}">
+    <link rel="apple-touch-icon" href="{{ asset('icons/apple-touch-icon.png') }}">
     <link rel="preload" href="{{ asset('images/logopag.png') }}" as="image" type="image/png">
 
     {{-- Bootstrap 5 CSS --}}
@@ -146,6 +146,20 @@
             text-transform: uppercase;
             letter-spacing: 0.5px;
             margin-left: 0.4rem;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--cy-gold), #c4955e);
+            color: var(--cy-primary);
+            font-weight: 800;
+            font-size: 0.95rem;
+            flex-shrink: 0;
         }
 
         .btn-logout {
@@ -646,8 +660,8 @@
                         <i class="bi bi-cash-coin me-1" style="color: var(--cy-gold);"></i>
                         <span>Caja</span>
                     </a>
-                    <span class="user-badge">
-                        <i class="bi bi-person-fill me-1"></i>{{ Auth::user()->name }}
+                    <span class="user-badge" title="{{ Auth::user()->name }}">
+                        <span class="user-avatar">{{ mb_strtoupper(mb_substr(Auth::user()->name, 0, 1)) }}</span>
                         <span class="role-tag">{{ Auth::user()->role }}</span>
                     </span>
                     <form action="{{ route('logout') }}" method="POST" class="d-inline">

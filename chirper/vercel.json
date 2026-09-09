@@ -26,6 +26,10 @@
             "dest": "/public/images/$1"
         },
         {
+            "src": "/icons/(.*)",
+            "dest": "/public/icons/$1"
+        },
+        {
             "src": "/manifest.json",
             "dest": "/public/manifest.json"
         },
