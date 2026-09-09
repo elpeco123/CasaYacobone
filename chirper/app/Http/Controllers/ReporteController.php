@@ -69,6 +69,9 @@ class ReporteController extends Controller
         // Ventas del período (una sola consulta, se agrega en PHP).
         $ventas = Venta::whereBetween('created_at', [$inicio, $fin])->get(['id', 'total', 'tipo_pago', 'created_at']);
 
+        // Índice por ID para búsqueda O(1) dentro de los loops (evita timeouts con miles de registros).
+        $ventasPorId = $ventas->keyBy('id');
+
         // Items del período con producto y categoría (base de categorías, top 10 y ganancia).
         $items = VentaItem::whereHas('venta', fn ($q) => $q->whereBetween('created_at', [$inicio, $fin]))
             ->with('producto.categoria')
@@ -92,7 +95,7 @@ class ReporteController extends Controller
 
         if ($conCostos) {
             foreach ($items as $item) {
-                $venta = $ventas->firstWhere('id', $item->venta_id);
+                $venta = $ventasPorId->get($item->venta_id);
                 if (! $venta) {
                     continue;
                 }
