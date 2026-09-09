@@ -97,6 +97,12 @@ return [
             'prefix_indexes' => true,
             'search_path' => 'public',
             'sslmode' => env('DB_SSLMODE', 'prefer'),
+            // El pooler de Supabase (modo transacción) no soporta prepared
+            // statements nativos entre consultas ("prepared statement does
+            // not exist"). Emularlos evita el error SQLSTATE[26000].
+            'options' => [
+                PDO::ATTR_EMULATE_PREPARES => true,
+            ],
         ],
 
         'sqlsrv' => [
