@@ -443,7 +443,7 @@
 
     var SERIES = @json($series);
     var CATEGORIAS = @json($categorias);
-    var TOP_FACT = @json(array_values(array_map(fn($p) => ['producto' => $p['producto'], 'total' => $p['total'], 'unidades' => $p['unidades']], $topFacturacion)));
+    var TOP_FACT = @json($topFacturacionChart);
     var PAGOS = @json($pagos);
     var YOY = @json($comparacionAnual);
     var CON_COSTOS = @json($conCostos);

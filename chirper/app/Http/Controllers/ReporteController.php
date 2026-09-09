@@ -264,6 +264,11 @@ class ReporteController extends Controller
             ],
             'topUnidades' => $topUnidades,
             'topFacturacion' => $topFacturacion,
+            'topFacturacionChart' => array_map(fn ($p) => [
+                'producto' => $p['producto'],
+                'total' => $p['total'],
+                'unidades' => $p['unidades'],
+            ], $topFacturacion),
             'conCostos' => $conCostos,
             'coberturaCosto' => round($coberturaCosto * 100, 1),
             'rentabilidad' => $rentabilidad,
