@@ -33,14 +33,15 @@ class ReporteController extends Controller
         $tipo = $filtros['tipo'] ?? 'mensual';
         $ordenTop = $filtros['orden'] ?? 'unidades';
 
-        // Años con ventas registradas (para el selector) + año actual como fallback.
-        $aniosDisponibles = Venta::selectRaw('EXTRACT(YEAR FROM created_at) as anio')
-            ->distinct()
-            ->orderByDesc('anio')
-            ->pluck('anio')
-            ->map(fn ($a) => (int) $a)
-            ->values()
-            ->all();
+        // Años con ventas registradas (para el selector), calculados en hora
+        // local a partir del rango real de datos + año actual como fallback.
+        $extremos = Venta::selectRaw('MIN(created_at) as min_fecha, MAX(created_at) as max_fecha')->first();
+        $aniosDisponibles = [];
+        if ($extremos?->min_fecha && $extremos?->max_fecha) {
+            $desde = Carbon::parse($extremos->min_fecha)->setTimezone(config('app.timezone'))->year;
+            $hasta = Carbon::parse($extremos->max_fecha)->setTimezone(config('app.timezone'))->year;
+            $aniosDisponibles = range($hasta, $desde);
+        }
         if (! in_array(now()->year, $aniosDisponibles, true)) {
             array_unshift($aniosDisponibles, now()->year);
         }
@@ -66,14 +67,19 @@ class ReporteController extends Controller
             );
         }
 
+        // La BD guarda created_at en UTC: los rangos se convierten a UTC para
+        // consultar, pero las etiquetas y agrupaciones usan hora local.
+        $inicioUtc = $inicio->copy()->setTimezone('UTC');
+        $finUtc = $fin->copy()->setTimezone('UTC');
+
         // Ventas del período (una sola consulta, se agrega en PHP).
-        $ventas = Venta::whereBetween('created_at', [$inicio, $fin])->get(['id', 'total', 'tipo_pago', 'created_at']);
+        $ventas = Venta::whereBetween('created_at', [$inicioUtc, $finUtc])->get(['id', 'total', 'tipo_pago', 'created_at']);
 
         // Índice por ID para búsqueda O(1) dentro de los loops (evita timeouts con miles de registros).
         $ventasPorId = $ventas->keyBy('id');
 
         // Items del período con producto y categoría (base de categorías, top 10 y ganancia).
-        $items = VentaItem::whereHas('venta', fn ($q) => $q->whereBetween('created_at', [$inicio, $fin]))
+        $items = VentaItem::whereHas('venta', fn ($q) => $q->whereBetween('created_at', [$inicioUtc, $finUtc]))
             ->with('producto.categoria')
             ->get(['id', 'venta_id', 'producto_id', 'cantidad', 'precio_compra', 'precio_unitario', 'subtotal']);
 
@@ -201,33 +207,34 @@ class ReporteController extends Controller
         }
 
         // --- 10. Comparación con el año anterior (solo anual y si hay datos) ---
+        // Usa rangos UTC del año/mes previo y agrupa en PHP con hora local.
         $comparacionAnual = null;
         $comparacionMes = null;
         if ($tipo === 'anual') {
-            $previos = Venta::whereYear('created_at', $anio - 1)
-                ->selectRaw('EXTRACT(MONTH FROM created_at) as mes, SUM(total) as total')
-                ->groupBy('mes')
-                ->pluck('total', 'mes');
-            if ($previos->sum() > 0) {
-                $seriePrevia = [];
-                foreach (range(1, 12) as $m) {
-                    $seriePrevia[] = (float) ($previos[(string) $m] ?? $previos[$m] ?? 0);
+            $prevInicioUtc = $inicio->copy()->subYear()->setTimezone('UTC');
+            $prevFinUtc = $fin->copy()->subYear()->setTimezone('UTC');
+            $ventasPrevias = Venta::whereBetween('created_at', [$prevInicioUtc, $prevFinUtc])
+                ->get(['total', 'created_at']);
+            if ($ventasPrevias->isNotEmpty()) {
+                $seriePrevia = array_fill(0, 12, 0.0);
+                foreach ($ventasPrevias as $vp) {
+                    $seriePrevia[(int) $vp->created_at->month - 1] += (float) $vp->total;
                 }
                 $totalPrevio = array_sum($seriePrevia);
                 $totalActual = array_sum(array_values($totales));
                 $comparacionAnual = [
                     'anioPrevio' => $anio - 1,
-                    'seriePrevia' => $seriePrevia,
+                    'seriePrevia' => array_values(array_map(fn ($v) => round($v, 2), $seriePrevia)),
                     'variacion' => $totalPrevio > 0 ? round(($totalActual - $totalPrevio) / $totalPrevio * 100, 1) : null,
                 ];
             }
         } else {
             // En mensual: compara contra el mismo mes del año anterior.
-            $mesPrevioTotal = (float) Venta::whereYear('created_at', $anio - 1)
-                ->whereMonth('created_at', $mes)
+            $prevMesInicioUtc = $inicio->copy()->subYear()->setTimezone('UTC');
+            $prevMesFinUtc = $fin->copy()->subYear()->setTimezone('UTC');
+            $mesPrevioTotal = (float) Venta::whereBetween('created_at', [$prevMesInicioUtc, $prevMesFinUtc])
                 ->sum('total');
-            $mesPrevioCant = Venta::whereYear('created_at', $anio - 1)
-                ->whereMonth('created_at', $mes)
+            $mesPrevioCant = Venta::whereBetween('created_at', [$prevMesInicioUtc, $prevMesFinUtc])
                 ->count();
             if ($mesPrevioTotal > 0) {
                 $comparacionMes = [
