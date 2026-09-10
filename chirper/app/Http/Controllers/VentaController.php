@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\VentaRequest;
+use App\Models\Caja;
 use App\Models\Producto;
 use App\Models\Venta;
 use Illuminate\Http\RedirectResponse;
@@ -14,20 +15,26 @@ class VentaController extends Controller
 {
     /**
      * Display a listing of ventas.
+     *
+     * El vendedor solo ve las ventas de su caja abierta (al cerrarla, el
+     * panel se reinicia para la próxima apertura). El admin ve todo.
      */
     public function index(): View
     {
         $query = Venta::with('user')->latest();
 
-        // Los vendedores solo ven las ventas del día; el admin ve el historial completo.
-        $soloHoy = ! Auth::user()->isAdmin();
-        if ($soloHoy) {
-            $query->whereDate('created_at', today());
+        // Los vendedores solo ven las ventas de su caja abierta; el admin ve el historial completo.
+        $soloHoy = false;
+        $cajaAbierta = null;
+        if (! Auth::user()->isAdmin()) {
+            $cajaAbierta = Caja::abiertaDe(Auth::id());
+            $soloHoy = true;
+            $query->where('caja_id', $cajaAbierta?->id ?? -1);
         }
 
         $ventas = $query->paginate(15);
 
-        return view('ventas.index', compact('ventas', 'soloHoy'));
+        return view('ventas.index', compact('ventas', 'soloHoy', 'cajaAbierta'));
     }
 
     /**
@@ -49,6 +56,13 @@ class VentaController extends Controller
     public function store(VentaRequest $request): RedirectResponse
     {
         $validated = $request->validated();
+
+        // El vendedor solo puede vender con una caja abierta (define el período).
+        $cajaAbierta = Caja::abiertaDe(Auth::id());
+        if (! Auth::user()->isAdmin() && ! $cajaAbierta) {
+            return redirect()->route('caja.index')
+                ->with('error', 'Tenés que abrir una caja antes de registrar ventas.');
+        }
 
         try {
             $venta = DB::transaction(function () use ($validated) {
@@ -89,6 +103,7 @@ class VentaController extends Controller
                 // Create the venta
                 $venta = Venta::create([
                     'user_id' => Auth::id(),
+                    'caja_id' => $cajaAbierta?->id,
                     'tipo_pago' => $validated['tipo_pago'],
                     'subtotal' => $subtotalSum,
                     'descuento_porcentaje' => $descuentoPorcentaje,

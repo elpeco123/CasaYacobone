@@ -18,6 +18,7 @@ class Venta extends Model
      */
     protected $fillable = [
         'user_id',
+        'caja_id',
         'tipo_pago',
         'subtotal',
         'descuento_porcentaje',
@@ -46,6 +47,14 @@ class Venta extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Get the caja (período) this venta belongs to.
+     */
+    public function caja(): BelongsTo
+    {
+        return $this->belongsTo(Caja::class);
     }
 
     /**

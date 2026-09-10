@@ -1,57 +1,152 @@
 <?php
 
 use App\Models\Caja;
-use App\Models\User;
-use App\Models\Venta;
 use App\Models\Categoria;
 use App\Models\Producto;
-use App\Models\Proveedor;
-use Carbon\Carbon;
+use App\Models\Retiro;
+use App\Models\User;
+use App\Models\Venta;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
 
-test('vendedor and admin can access caja page and set initial cash', function () {
+test('vendedor abre caja, vende dentro del período y al cerrar se reinicia', function () {
     $vendedor = User::factory()->create(['role' => 'vendedor']);
 
-    // Vendedor can access caja view
-    $response = $this->actingAs($vendedor)->get(route('caja.index'));
-    $response->assertStatus(200);
-    $response->assertViewIs('caja.index');
-    $response->assertViewHas('montoInicial', 0.0);
+    // Sin caja abierta: la página lo muestra y el panel de ventas está vacío
+    $this->actingAs($vendedor)->get(route('caja.index'))
+        ->assertStatus(200)
+        ->assertViewIs('caja.index')
+        ->assertViewHas('cajaAbierta', null);
 
-    // Vendedor opens caja with $15.000
-    $postResponse = $this->actingAs($vendedor)->post(route('caja.store'), [
+    $this->actingAs($vendedor)->get(route('ventas.index'))
+        ->assertStatus(200);
+
+    // Apertura con $15.000
+    $this->actingAs($vendedor)->post(route('caja.store'), [
         'monto_inicial' => 15000,
-        'observaciones' => 'Cambio inicial del día',
-    ]);
+        'observaciones' => 'Cambio inicial',
+    ])->assertSessionHas('success');
 
-    $postResponse->assertSessionHas('success');
+    $caja = Caja::where('user_id', $vendedor->id)->first();
+    expect($caja)->not->toBeNull()
+        ->and($caja->estado)->toBe(Caja::ESTADO_ABIERTA)
+        ->and($caja->fecha_apertura)->not->toBeNull();
 
-    $this->assertDatabaseHas('cajas', [
+    // No puede abrir otra sin cerrar la actual
+    $this->actingAs($vendedor)->post(route('caja.store'), ['monto_inicial' => 5000])
+        ->assertSessionHas('error');
+    expect(Caja::where('user_id', $vendedor->id)->count())->toBe(1);
+
+    // Ventas dentro del período quedan atadas a la caja
+    $venta = Venta::create([
         'user_id' => $vendedor->id,
-        'monto_inicial' => 15000,
-        'observaciones' => 'Cambio inicial del día',
+        'caja_id' => $caja->id,
+        'tipo_pago' => 'efectivo',
+        'subtotal' => 10000,
+        'descuento_porcentaje' => 0,
+        'monto_descuento' => 0,
+        'total' => 10000,
     ]);
 
-    // Admin can access and update caja
+    $listado = $this->actingAs($vendedor)->get(route('ventas.index'))
+        ->assertStatus(200);
+    expect($listado->viewData('ventas')->pluck('id')->all())->toContain($venta->id);
+    expect($listado->viewData('cajaAbierta')->id)->toBe($caja->id);
+
+    // Dashboard del vendedor refleja la caja abierta
+    $this->actingAs($vendedor)->get(route('dashboard'))
+        ->assertStatus(200)
+        ->assertViewHas('montoInicialCaja', 15000.0)
+        ->assertViewHas('totalEfectivoEnCaja', 25000.0);
+
+    // Cierre: guarda hora y totales por medio de pago
+    $this->actingAs($vendedor)->post(route('caja.cerrar', $caja))
+        ->assertSessionHas('success');
+
+    $caja->refresh();
+    expect($caja->estado)->toBe(Caja::ESTADO_CERRADA)
+        ->and($caja->fecha_cierre)->not->toBeNull()
+        ->and((float) $caja->total_efectivo)->toBe(10000.0)
+        ->and($caja->cantidad_ventas)->toBe(1);
+
+    // Panel reiniciado: ya no ve las ventas de la caja cerrada
+    $reiniciado = $this->actingAs($vendedor)->get(route('ventas.index'))
+        ->assertStatus(200);
+    expect($reiniciado->viewData('ventas')->pluck('id')->all())->not->toContain($venta->id);
+    expect($reiniciado->viewData('cajaAbierta'))->toBeNull();
+
+    // Puede abrir una caja nueva
+    $this->actingAs($vendedor)->post(route('caja.store'), ['monto_inicial' => 8000])
+        ->assertSessionHas('success');
+    expect(Caja::where('user_id', $vendedor->id)->count())->toBe(2);
+});
+
+test('vendedor sin caja abierta no puede registrar ventas', function () {
+    $vendedor = User::factory()->create(['role' => 'vendedor']);
+    $categoria = Categoria::create(['nombre' => 'Test']);
+    $producto = Producto::factory()->create(['stock' => 10, 'categoria_id' => $categoria->id]);
+
+    $this->actingAs($vendedor)->post(route('ventas.store'), [
+        'tipo_pago' => 'efectivo',
+        'items' => [
+            ['producto_id' => $producto->id, 'cantidad' => 1],
+        ],
+    ])->assertRedirect(route('caja.index'))
+        ->assertSessionHas('error');
+
+    expect(Venta::count())->toBe(0);
+});
+
+test('admin ve el historial de cajas en reportes', function () {
     $admin = User::factory()->create(['role' => 'admin']);
-    $updateResponse = $this->actingAs($admin)->post(route('caja.store'), [
-        'monto_inicial' => 20000,
-        'observaciones' => 'Actualizado por admin',
+
+    $this->actingAs($admin)->get(route('reportes.cajas'))
+        ->assertStatus(200)
+        ->assertViewIs('reportes.cajas');
+});
+
+test('vendedor registra un gasto que descuenta del efectivo y se guarda al cerrar', function () {
+    $vendedor = User::factory()->create(['role' => 'vendedor']);
+
+    $this->actingAs($vendedor)->post(route('caja.store'), ['monto_inicial' => 20000])
+        ->assertSessionHas('success');
+    $caja = Caja::where('user_id', $vendedor->id)->first();
+
+    Venta::create([
+        'user_id' => $vendedor->id,
+        'caja_id' => $caja->id,
+        'tipo_pago' => 'efectivo',
+        'subtotal' => 10000,
+        'descuento_porcentaje' => 0,
+        'monto_descuento' => 0,
+        'total' => 10000,
     ]);
 
-    $updateResponse->assertSessionHas('success');
+    // Gasto de $5.000 en yerba
+    $this->actingAs($vendedor)->post(route('caja.retiros.store'), [
+        'monto' => 5000,
+        'concepto' => 'Yerba mate',
+    ])->assertSessionHas('success');
 
-    $this->assertDatabaseHas('cajas', [
-        'user_id' => $admin->id,
-        'monto_inicial' => 20000,
-        'observaciones' => 'Actualizado por admin',
-    ]);
+    expect((float) Retiro::where('caja_id', $caja->id)->sum('monto'))->toBe(5000.0);
 
-    // Check dashboard reflects the cash
-    $dashboardResponse = $this->actingAs($vendedor)->get(route('dashboard'));
-    $dashboardResponse->assertStatus(200);
-    $dashboardResponse->assertViewHas('montoInicialCaja', 20000.0);
-    $dashboardResponse->assertViewHas('totalEfectivoEnCaja', 20000.0);
+    // Físico: 20000 inicial + 10000 efectivo − 5000 gasto = 25000
+    $this->actingAs($vendedor)->get(route('dashboard'))
+        ->assertStatus(200)
+        ->assertViewHas('totalEfectivoEnCaja', 25000.0);
+
+    // Al cerrar queda el snapshot del gasto
+    $this->actingAs($vendedor)->post(route('caja.cerrar', $caja))
+        ->assertSessionHas('success');
+
+    $caja->refresh();
+    expect((float) $caja->total_retiros)->toBe(5000.0)
+        ->and($caja->efectivoFisico())->toBe(25000.0);
+
+    // Eliminar un gasto de caja cerrada está bloqueado
+    $retiro = Retiro::where('caja_id', $caja->id)->first();
+    $this->actingAs($vendedor)->delete(route('caja.retiros.destroy', $retiro))
+        ->assertSessionHas('error');
+    expect(Retiro::where('caja_id', $caja->id)->count())->toBe(1);
 });

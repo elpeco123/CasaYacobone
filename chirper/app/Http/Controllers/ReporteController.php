@@ -13,6 +13,38 @@ use Illuminate\View\View;
 class ReporteController extends Controller
 {
     /**
+     * Historial de cajas: cada apertura/cierre con hora y totales por medio de pago.
+     *
+     * Las cajas cerradas muestran el snapshot guardado al cerrar; las abiertas
+     * calculan los totales en vivo desde sus ventas.
+     */
+    public function cajas(): View
+    {
+        $cajas = Caja::with('user')
+            ->withCount('ventas')
+            ->latest()
+            ->paginate(15);
+
+        // Totales en vivo para las cajas que siguen abiertas.
+        $enVivo = [];
+        foreach ($cajas as $caja) {
+            if (! $caja->estaAbierta()) {
+                continue;
+            }
+            $ventas = $caja->ventas()->get(['tipo_pago', 'total']);
+            $enVivo[$caja->id] = [
+                'efectivo' => (float) $ventas->where('tipo_pago', 'efectivo')->sum('total'),
+                'tarjeta' => (float) $ventas->where('tipo_pago', 'tarjeta')->sum('total'),
+                'factura' => (float) $ventas->where('tipo_pago', 'factura')->sum('total'),
+                'retiros' => (float) $caja->retiros()->sum('monto'),
+                'cantidad' => $ventas->count(),
+            ];
+        }
+
+        return view('reportes.cajas', compact('cajas', 'enVivo'));
+    }
+
+    /**
      * Reporte de rendimiento de la tienda (mensual o anual) con gráficos y tablas.
      *
      * Filtros por query string:

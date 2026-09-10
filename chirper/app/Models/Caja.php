@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Caja extends Model
 {
@@ -13,16 +13,34 @@ class Caja extends Model
 
     protected $table = 'cajas';
 
+    public const ESTADO_ABIERTA = 'abierta';
+
+    public const ESTADO_CERRADA = 'cerrada';
+
     protected $fillable = [
         'user_id',
         'fecha',
+        'fecha_apertura',
+        'fecha_cierre',
+        'estado',
         'monto_inicial',
         'observaciones',
+        'total_efectivo',
+        'total_tarjeta',
+        'total_factura',
+        'total_retiros',
+        'cantidad_ventas',
     ];
 
     protected $casts = [
         'fecha' => 'date',
+        'fecha_apertura' => 'datetime',
+        'fecha_cierre' => 'datetime',
         'monto_inicial' => 'decimal:2',
+        'total_efectivo' => 'decimal:2',
+        'total_tarjeta' => 'decimal:2',
+        'total_factura' => 'decimal:2',
+        'total_retiros' => 'decimal:2',
     ];
 
     /**
@@ -34,27 +52,53 @@ class Caja extends Model
     }
 
     /**
-     * Obtener la caja del día actual (o null si no fue abierta).
+     * Ventas realizadas dentro del período de esta caja.
      */
-    public static function obtenerCajaHoy(): ?self
+    public function ventas(): HasMany
     {
-        return self::whereDate('fecha', Carbon::today())->latest()->first();
+        return $this->hasMany(Venta::class);
     }
 
     /**
-     * Obtener el monto inicial del día de hoy (o 0 si no se abrió).
+     * Retiros (gastos) realizados dentro del período de esta caja.
      */
-    public static function montoInicialHoy(): float
+    public function retiros(): HasMany
     {
-        return (float) (self::whereDate('fecha', Carbon::today())->latest()->value('monto_inicial') ?? 0);
+        return $this->hasMany(Retiro::class);
     }
 
     /**
-     * Obtener el monto inicial para una fecha específica.
+     * Indica si la caja sigue abierta.
      */
-    public static function montoInicialFecha(string|Carbon $fecha): float
+    public function estaAbierta(): bool
     {
-        $date = $fecha instanceof Carbon ? $fecha->format('Y-m-d') : $fecha;
-        return (float) (self::whereDate('fecha', $date)->latest()->value('monto_inicial') ?? 0);
+        return $this->estado === self::ESTADO_ABIERTA;
+    }
+
+    /**
+     * Total general vendido en la caja (snapshot al cierre o cálculo en vivo).
+     */
+    public function totalGeneral(): float
+    {
+        return (float) $this->total_efectivo + (float) $this->total_tarjeta + (float) $this->total_factura;
+    }
+
+    /**
+     * Efectivo físico: cambio inicial + ventas en efectivo − retiros.
+     */
+    public function efectivoFisico(): float
+    {
+        return (float) $this->monto_inicial + (float) $this->total_efectivo - (float) $this->total_retiros;
+    }
+
+    /**
+     * Caja actualmente abierta de un usuario (o null si no tiene).
+     */
+    public static function abiertaDe(int $userId): ?self
+    {
+        return self::where('user_id', $userId)
+            ->where('estado', self::ESTADO_ABIERTA)
+            ->latest()
+            ->first();
     }
 }

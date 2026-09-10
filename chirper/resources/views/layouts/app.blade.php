@@ -617,6 +617,12 @@
                                     <i class="bi bi-bar-chart-line-fill me-2"></i>Rendimiento
                                 </a>
                             </li>
+                            <li>
+                                <a class="dropdown-item text-light" href="{{ route('reportes.cajas') }}"
+                                   style="font-size: 0.88rem;">
+                                    <i class="bi bi-safe2-fill me-2"></i>Cajas
+                                </a>
+                            </li>
                         </ul>
                     </li>
                     @endif

@@ -41,11 +41,36 @@ class DashboardController extends Controller
         $totalCierreGeneral = $totalEfectivoEnCaja + $ventasHoyPorForma['tarjeta'] + $ventasHoyPorForma['factura'];
 
         // Si el usuario es vendedor, mostrar vista específica de vendedor
+        // con los datos de SU caja abierta (período en curso).
         if (Auth::user()?->isVendedor()) {
-            $ventasHoyLista = Venta::with('user')
-                ->whereDate('created_at', $hoy)
-                ->latest()
-                ->get();
+            $cajaHoy = Caja::abiertaDe(Auth::id());
+            $montoInicialCaja = $cajaHoy ? (float) $cajaHoy->monto_inicial : 0.0;
+
+            $ventasCaja = $cajaHoy
+                ? Venta::where('caja_id', $cajaHoy->id)->get()
+                : collect();
+
+            $totalRetirosCaja = $cajaHoy ? (float) $cajaHoy->retiros()->sum('monto') : 0.0;
+
+            $ventasHoy = (float) $ventasCaja->sum('total');
+            $cantidadVentasHoy = $ventasCaja->count();
+
+            // Desglose de ventas de la caja por tipo de pago
+            $ventasHoyPorForma = [
+                'efectivo' => (float) $ventasCaja->where('tipo_pago', 'efectivo')->sum('total'),
+                'tarjeta' => (float) $ventasCaja->where('tipo_pago', 'tarjeta')->sum('total'),
+                'factura' => (float) $ventasCaja->where('tipo_pago', 'factura')->sum('total'),
+            ];
+
+            // Total físico de efectivo en caja (Cambio Inicial + Ventas en efectivo − Retiros)
+            $totalEfectivoEnCaja = $montoInicialCaja + $ventasHoyPorForma['efectivo'] - $totalRetirosCaja;
+
+            // Total Cierre de Caja General
+            $totalCierreGeneral = $totalEfectivoEnCaja + $ventasHoyPorForma['tarjeta'] + $ventasHoyPorForma['factura'];
+
+            $ventasHoyLista = $cajaHoy
+                ? Venta::with('user')->where('caja_id', $cajaHoy->id)->latest()->get()
+                : collect();
 
             return view('dashboard-vendedor', compact(
                 'cajaHoy',
@@ -53,6 +78,7 @@ class DashboardController extends Controller
                 'ventasHoy',
                 'cantidadVentasHoy',
                 'ventasHoyPorForma',
+                'totalRetirosCaja',
                 'totalEfectivoEnCaja',
                 'totalCierreGeneral',
                 'ventasHoyLista'

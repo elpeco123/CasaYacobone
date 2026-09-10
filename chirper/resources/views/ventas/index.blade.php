@@ -8,9 +8,15 @@
         <div>
             <h1><i class="bi bi-cart-fill me-2" style="color: var(--cy-gold);"></i>Ventas</h1>
             @if(!empty($soloHoy))
-                <span class="badge" style="background: rgba(212,165,116,0.15); color: var(--cy-gold-light); border: 1px solid rgba(212,165,116,0.3); font-weight: 500;">
-                    <i class="bi bi-calendar-day me-1"></i>Ventas de hoy · {{ now()->locale('es')->isoFormat('D [de] MMMM') }}
-                </span>
+                @if(!empty($cajaAbierta))
+                    <span class="badge" style="background: rgba(46,204,113,0.15); color: #4ade80; border: 1px solid rgba(46,204,113,0.3); font-weight: 500;">
+                        <i class="bi bi-unlock-fill me-1"></i>Caja #{{ $cajaAbierta->id }} · abierta {{ $cajaAbierta->fecha_apertura?->format('d/m H:i') }}
+                    </span>
+                @else
+                    <a href="{{ route('caja.index') }}" class="badge text-decoration-none" style="background: rgba(243,156,18,0.15); color: #fbbf24; border: 1px solid rgba(243,156,18,0.3); font-weight: 500;">
+                        <i class="bi bi-exclamation-circle-fill me-1"></i>Sin caja abierta · Tocá para abrir una
+                    </a>
+                @endif
             @endif
         </div>
         <a href="{{ route('ventas.create') }}" class="btn btn-accent">

@@ -77,14 +77,14 @@
                         <div class="d-flex justify-content-between align-items-center mb-2">
                             <h5 class="mb-0" style="font-weight: 800; color: #ffffff;">
                                 <i class="bi bi-wallet2 me-2" style="color: var(--cy-gold);"></i>
-                                Cierre de Caja del Día
+                                Caja Actual
                             </h5>
                             <a href="{{ route('caja.index') }}" class="btn btn-gold btn-sm py-1 px-2.5 fw-bold" style="font-size: 0.78rem;">
                                 <i class="bi bi-cash-stack me-1"></i>{{ $cajaHoy ? 'Editar Cambio' : 'Abrir Caja' }}
                             </a>
                         </div>
                         <p class="mb-3" style="font-size: 0.85rem; color: #cbd5e1;">
-                            Resumen detallado de efectivo físico en caja y cobros electrónicos del día.
+                            Resumen del efectivo físico y cobros del período de la caja abierta.
                         </p>
 
                         <div class="p-3 mb-3" style="background: rgba(15, 23, 42, 0.6); border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1);">
@@ -98,6 +98,12 @@
                             <div class="d-flex justify-content-between align-items-center py-1.5" style="border-bottom: 1px dashed rgba(255, 255, 255, 0.1); font-size: 0.92rem;">
                                 <span style="color: #cbd5e1; font-weight: 500;">💵 Ventas en Efectivo:</span>
                                 <span class="fw-bold" style="color: #4ade80; font-size: 1.05rem;">+${{ number_format($ventasHoyPorForma['efectivo'], 0, ',', '.') }}</span>
+                            </div>
+
+                            {{-- Gastos / retiros --}}
+                            <div class="d-flex justify-content-between align-items-center py-1.5" style="border-bottom: 1px dashed rgba(255, 255, 255, 0.1); font-size: 0.92rem;">
+                                <span style="color: #cbd5e1; font-weight: 500;">➖ Gastos de caja:</span>
+                                <span class="fw-bold" style="color: #e74c3c; font-size: 1.05rem;">−${{ number_format($totalRetirosCaja ?? 0, 0, ',', '.') }}</span>
                             </div>
 
                             {{-- TOTAL EFECTIVO FÍSICO EN CAJA --}}
@@ -159,7 +165,7 @@
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h5 class="mb-0" style="font-weight: 800; color: #ffffff;">
                             <i class="bi bi-clock-history me-2" style="color: var(--cy-accent);"></i>
-                            Historial de Ventas del Día
+                            Ventas de la Caja
                         </h5>
                         <span class="badge px-3 py-2" style="font-size: 0.85rem; background: rgba(255, 255, 255, 0.1); color: #f8f9fa; border: 1px solid rgba(255, 255, 255, 0.2); font-weight: 600;">
                             {{ $ventasHoyLista->count() }} registradas
