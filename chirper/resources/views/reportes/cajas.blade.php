@@ -2,6 +2,17 @@
 
 @section('title', 'Historial de Cajas')
 
+@push('styles')
+<style>
+    /* Evita que emojis, fechas y montos se partan en dos líneas */
+    #tabla-cajas th,
+    #tabla-cajas td {
+        white-space: nowrap;
+        vertical-align: middle;
+    }
+</style>
+@endpush
+
 @section('content')
 <div class="fade-in">
     <div class="page-header d-flex justify-content-between align-items-center flex-wrap gap-2">
@@ -14,7 +25,7 @@
     <div class="card-glass">
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-dark-custom table-hover mb-0">
+                <table id="tabla-cajas" class="table table-dark-custom table-hover mb-0">
                     <thead>
                         <tr>
                             <th>#</th>

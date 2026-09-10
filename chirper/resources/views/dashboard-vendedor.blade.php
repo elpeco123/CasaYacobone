@@ -53,12 +53,9 @@
     <div class="card-glass vendedor-hero-card p-4 mb-4" style="background: linear-gradient(135deg, rgba(212, 165, 116, 0.22), rgba(22, 33, 62, 0.9)); border: 1px solid rgba(212, 165, 116, 0.45); border-radius: 16px;">
         <div class="row align-items-center g-3">
             <div class="col-md-8 text-center text-md-start">
-                <h2 class="vendedor-hero-title mb-2" style="font-weight: 800; color: #ffffff;">
+                <h2 class="vendedor-hero-title mb-0" style="font-weight: 800; color: #ffffff;">
                     <i class="bi bi-cart-plus-fill me-2" style="color: var(--cy-gold);"></i>Registrar Nueva Venta
                 </h2>
-                <p class="mb-0" style="font-size: 0.95rem; color: #e2e8f0; font-weight: 400;">
-                    Cobro rápido de productos, selección de forma de pago y emisión de comprobante.
-                </p>
             </div>
             <div class="col-md-4 text-center text-md-end">
                 <a href="{{ route('ventas.create') }}" class="btn btn-gold btn-lg px-4 py-3 fw-bold w-100 shadow d-inline-flex justify-content-center align-items-center" style="font-size: 1.1rem; color: #0f0f1e; background: linear-gradient(135deg, #d4a574, #e8c39e); border: none; border-radius: 12px; min-height: 52px;">
@@ -74,7 +71,7 @@
             <div class="card-glass h-100" style="border-radius: 16px; border: 1px solid var(--cy-border);">
                 <div class="card-body d-flex flex-column justify-content-between p-3 p-md-4">
                     <div>
-                        <div class="d-flex justify-content-between align-items-center mb-2">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
                             <h5 class="mb-0" style="font-weight: 800; color: #ffffff;">
                                 <i class="bi bi-wallet2 me-2" style="color: var(--cy-gold);"></i>
                                 Caja Actual
@@ -83,9 +80,6 @@
                                 <i class="bi bi-cash-stack me-1"></i>{{ $cajaHoy ? 'Editar Cambio' : 'Abrir Caja' }}
                             </a>
                         </div>
-                        <p class="mb-3" style="font-size: 0.85rem; color: #cbd5e1;">
-                            Resumen del efectivo físico y cobros del período de la caja abierta.
-                        </p>
 
                         <div class="p-3 mb-3" style="background: rgba(15, 23, 42, 0.6); border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1);">
                             {{-- Cambio Inicial --}}

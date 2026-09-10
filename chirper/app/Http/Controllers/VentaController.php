@@ -65,7 +65,7 @@ class VentaController extends Controller
         }
 
         try {
-            $venta = DB::transaction(function () use ($validated) {
+            $venta = DB::transaction(function () use ($validated, $cajaAbierta) {
                 $subtotalSum = 0;
                 $itemsData = [];
 
