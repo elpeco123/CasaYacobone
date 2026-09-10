@@ -13,12 +13,11 @@ use Illuminate\View\View;
 class CajaController extends Controller
 {
     /**
-     * Muestra la caja abierta del usuario (o el formulario de apertura).
+     * Muestra la caja abierta (única, compartida) o el formulario de apertura.
      */
     public function index(): View
     {
-        $cajaAbierta = Caja::with('user')->where('user_id', Auth::id())
-            ->where('estado', Caja::ESTADO_ABIERTA)
+        $cajaAbierta = Caja::with('user')->where('estado', Caja::ESTADO_ABIERTA)
             ->latest()
             ->first();
 
@@ -59,7 +58,7 @@ class CajaController extends Controller
     }
 
     /**
-     * Abre una nueva caja (período de ventas). Solo si no hay otra abierta.
+     * Abre la caja (período de ventas). Solo una abierta a la vez, la abra quien la abra.
      */
     public function store(Request $request): RedirectResponse
     {
@@ -72,9 +71,11 @@ class CajaController extends Controller
             'monto_inicial.min' => 'El monto no puede ser negativo.',
         ]);
 
-        if (Caja::abiertaDe(Auth::id())) {
+        if ($abierta = Caja::abierta()) {
+            $quien = $abierta->user?->name ?? 'otro usuario';
+
             return redirect()->route('caja.index')
-                ->with('error', 'Ya tenés una caja abierta. Cerrala antes de abrir una nueva.');
+                ->with('error', 'Ya hay una caja abierta por '.$quien.' (desde las '.$abierta->fecha_apertura?->format('H:i').'). Cerrala antes de abrir una nueva.');
         }
 
         $ahora = Carbon::now();
@@ -92,15 +93,11 @@ class CajaController extends Controller
     }
 
     /**
-     * Cierra la caja abierta: guarda hora de cierre y totales por medio de pago.
+     * Cierra la caja: guarda hora de cierre y totales por medio de pago.
+     * Como la caja es única y compartida, puede cerrarla quien esté de turno.
      */
     public function cerrar(Caja $caja): RedirectResponse
     {
-        // Solo el dueño o un admin puede cerrar la caja.
-        if ($caja->user_id !== Auth::id() && ! Auth::user()->isAdmin()) {
-            abort(403, 'No tenés permiso para cerrar esta caja.');
-        }
-
         if (! $caja->estaAbierta()) {
             return redirect()->route('caja.index')
                 ->with('error', 'La caja #'.$caja->id.' ya está cerrada.');

@@ -39,7 +39,7 @@
                         <div class="p-3 mb-3 rounded-3" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); font-size: 0.88rem; color: #cbd5e1;">
                             <div class="d-flex align-items-center mb-1">
                                 <i class="bi bi-person-check-fill me-2 text-warning"></i>
-                                <span>Responsable: <strong class="text-white">{{ $cajaAbierta->user->name ?? 'Usuario' }}</strong></span>
+                                <span>Abierta por: <strong class="text-white">{{ $cajaAbierta->user->name ?? 'Usuario' }}</strong></span>
                             </div>
                             <div class="d-flex align-items-center mb-1">
                                 <i class="bi bi-clock-history me-2" style="color: var(--cy-gold);"></i>

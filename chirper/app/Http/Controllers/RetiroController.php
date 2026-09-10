@@ -25,7 +25,7 @@ class RetiroController extends Controller
             'concepto.required' => 'Ingresá el nombre de lo comprado.',
         ]);
 
-        $cajaAbierta = Caja::abiertaDe(Auth::id());
+        $cajaAbierta = Caja::abierta();
         if (! $cajaAbierta) {
             return redirect()->route('caja.index')
                 ->with('error', 'No tenés ninguna caja abierta para registrar el gasto.');

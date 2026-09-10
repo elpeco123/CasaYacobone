@@ -92,12 +92,11 @@ class Caja extends Model
     }
 
     /**
-     * Caja actualmente abierta de un usuario (o null si no tiene).
+     * La caja actualmente abierta (hay una sola a la vez, la opere quien la opere).
      */
-    public static function abiertaDe(int $userId): ?self
+    public static function abierta(): ?self
     {
-        return self::where('user_id', $userId)
-            ->where('estado', self::ESTADO_ABIERTA)
+        return self::where('estado', self::ESTADO_ABIERTA)
             ->latest()
             ->first();
     }

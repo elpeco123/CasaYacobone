@@ -43,7 +43,7 @@ class DashboardController extends Controller
         // Si el usuario es vendedor, mostrar vista específica de vendedor
         // con los datos de SU caja abierta (período en curso).
         if (Auth::user()?->isVendedor()) {
-            $cajaHoy = Caja::abiertaDe(Auth::id());
+            $cajaHoy = Caja::abierta();
             $montoInicialCaja = $cajaHoy ? (float) $cajaHoy->monto_inicial : 0.0;
 
             $ventasCaja = $cajaHoy

@@ -33,10 +33,10 @@ test('vendedor abre caja, vende dentro del período y al cerrar se reinicia', fu
         ->and($caja->estado)->toBe(Caja::ESTADO_ABIERTA)
         ->and($caja->fecha_apertura)->not->toBeNull();
 
-    // No puede abrir otra sin cerrar la actual
+    // Nadie puede abrir otra sin cerrar la actual (caja única)
     $this->actingAs($vendedor)->post(route('caja.store'), ['monto_inicial' => 5000])
         ->assertSessionHas('error');
-    expect(Caja::where('user_id', $vendedor->id)->count())->toBe(1);
+    expect(Caja::count())->toBe(1);
 
     // Ventas dentro del período quedan atadas a la caja
     $venta = Venta::create([
@@ -79,7 +79,36 @@ test('vendedor abre caja, vende dentro del período y al cerrar se reinicia', fu
     // Puede abrir una caja nueva
     $this->actingAs($vendedor)->post(route('caja.store'), ['monto_inicial' => 8000])
         ->assertSessionHas('success');
-    expect(Caja::where('user_id', $vendedor->id)->count())->toBe(2);
+    expect(Caja::count())->toBe(2);
+});
+
+test('la caja es única y compartida entre admin y vendedor', function () {
+    $vendedor = User::factory()->create(['role' => 'vendedor']);
+    $admin = User::factory()->create(['role' => 'admin']);
+
+    // El vendedor abre la caja
+    $this->actingAs($vendedor)->post(route('caja.store'), ['monto_inicial' => 10000])
+        ->assertSessionHas('success');
+    $caja = Caja::abierta();
+    expect($caja)->not->toBeNull();
+
+    // El admin no puede abrir otra mientras esté abierta, pero ve la misma
+    $this->actingAs($admin)->post(route('caja.store'), ['monto_inicial' => 5000])
+        ->assertSessionHas('error');
+    expect(Caja::count())->toBe(1);
+
+    $vistaAdmin = $this->actingAs($admin)->get(route('caja.index'))->assertStatus(200);
+    expect($vistaAdmin->viewData('cajaAbierta')->id)->toBe($caja->id);
+
+    // El admin puede cerrarla aunque la haya abierto el vendedor
+    $this->actingAs($admin)->post(route('caja.cerrar', $caja))
+        ->assertSessionHas('success');
+    expect(Caja::abierta())->toBeNull();
+
+    // Recién ahí el vendedor puede abrir el siguiente turno
+    $this->actingAs($vendedor)->post(route('caja.store'), ['monto_inicial' => 7000])
+        ->assertSessionHas('success');
+    expect(Caja::count())->toBe(2);
 });
 
 test('vendedor sin caja abierta no puede registrar ventas', function () {

@@ -27,7 +27,7 @@ class VentaController extends Controller
         $soloHoy = false;
         $cajaAbierta = null;
         if (! Auth::user()->isAdmin()) {
-            $cajaAbierta = Caja::abiertaDe(Auth::id());
+            $cajaAbierta = Caja::abierta();
             $soloHoy = true;
             $query->where('caja_id', $cajaAbierta?->id ?? -1);
         }
@@ -57,8 +57,8 @@ class VentaController extends Controller
     {
         $validated = $request->validated();
 
-        // El vendedor solo puede vender con una caja abierta (define el período).
-        $cajaAbierta = Caja::abiertaDe(Auth::id());
+        // El vendedor solo puede vender con la caja abierta (define el período).
+        $cajaAbierta = Caja::abierta();
         if (! Auth::user()->isAdmin() && ! $cajaAbierta) {
             return redirect()->route('caja.index')
                 ->with('error', 'Tenés que abrir una caja antes de registrar ventas.');
