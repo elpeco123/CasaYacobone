@@ -565,6 +565,9 @@
             </a>
 
             <div class="d-flex align-items-center gap-2 ms-auto order-1 order-lg-2">
+                <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
                 <a href="{{ route('caja.index') }}" class="btn btn-glass btn-sm d-none d-md-inline-flex align-items-center text-light" title="Apertura y Cambio en Caja" style="border-color: rgba(212,165,116,0.3);">
                     <i class="bi bi-cash-coin me-1" style="color: var(--cy-gold);"></i>
                     <span>Caja</span>
@@ -596,6 +599,12 @@
             </div>
 
             <div class="collapse navbar-collapse order-3 order-lg-1" id="navbarNav">
+                {{-- Encabezado centrado solo visible en el menú móvil --}}
+                <div class="d-lg-none text-center pt-3 pb-3 mb-1" style="border-bottom: 1px solid var(--cy-border);">
+                    <img src="/images/logo.jpeg" alt="Casa Yacobone"
+                         style="width: 56px; height: 56px; border-radius: 50%; object-fit: cover; border: 2px solid rgba(212,165,116,0.5); box-shadow: 0 2px 10px rgba(0,0,0,0.3);">
+                    <div class="fw-bold mt-2" style="color: var(--cy-gold); font-size: 1.05rem; letter-spacing: -0.3px;">Casa Yacobone</div>
+                </div>
                 <ul class="navbar-nav me-auto ms-3">
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}"

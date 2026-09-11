@@ -2,8 +2,22 @@
 
 @section('title', 'Ventas')
 
+@push('styles')
+<style>
+    /* Panel de ventas compacto (PC y celular) */
+    .ventas-compact .page-header { margin-bottom: 1rem; }
+    .ventas-compact .page-header h1 { font-size: 1.3rem; margin-bottom: 0.25rem; }
+    .ventas-compact .card-glass .card-body { padding: 0.9rem; }
+    .ventas-compact .table-dark-custom thead th { padding: 0.55rem 0.7rem; font-size: 0.72rem; }
+    .ventas-compact .table-dark-custom td { padding: 0.5rem 0.7rem; font-size: 0.83rem; }
+    .ventas-compact .table-dark-custom .badge { font-size: 0.74rem; padding: 0.25rem 0.55rem; }
+    .ventas-compact .table-dark-custom .btn-sm { padding: 0.25rem 0.55rem; font-size: 0.76rem; }
+    .ventas-compact .venta-total { font-size: 0.95rem !important; }
+</style>
+@endpush
+
 @section('content')
-<div class="fade-in">
+<div class="fade-in ventas-compact">
     <div class="page-header d-flex justify-content-between align-items-center flex-wrap gap-2">
         <div>
             <h1><i class="bi bi-cart-fill me-2" style="color: var(--cy-gold);"></i>Ventas</h1>
@@ -19,7 +33,7 @@
                 @endif
             @endif
         </div>
-        <a href="{{ route('ventas.create') }}" class="btn btn-accent">
+        <a href="{{ route('ventas.create') }}" class="btn btn-accent btn-sm">
             <i class="bi bi-cart-plus-fill me-1"></i>Nueva Venta
         </a>
     </div>
@@ -64,19 +78,19 @@
                                     </span>
                                 @endif
                             </td>
-                            <td class="text-end fw-bold" style="font-size: 1.05rem; color: var(--cy-gold);">
+                            <td class="text-end fw-bold venta-total" style="color: var(--cy-gold);">
                                 ${{ number_format($venta->total, 0, ',', '.') }}
                             </td>
                             <td class="text-center">
                                 <a href="{{ route('ventas.show', $venta) }}" class="btn btn-glass btn-sm text-light">
-                                    <i class="bi bi-eye me-1"></i>Ver Detalle
+                                    <i class="bi bi-eye me-1"></i>Ver
                                 </a>
                             </td>
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="7" class="text-center py-4">
-                                <i class="bi bi-cart-x" style="font-size: 2.2rem; color: #94a3b8;"></i>
+                            <td colspan="7" class="text-center py-3">
+                                <i class="bi bi-cart-x" style="font-size: 1.8rem; color: #94a3b8;"></i>
                                 <p class="mt-2 mb-0" style="color: #cbd5e1;">No hay ventas registradas.</p>
                             </td>
                         </tr>
@@ -86,7 +100,7 @@
             </div>
 
             @if($ventas->hasPages())
-            <div class="d-flex justify-content-center mt-4">
+            <div class="d-flex justify-content-center mt-3">
                 {{ $ventas->links() }}
             </div>
             @endif
