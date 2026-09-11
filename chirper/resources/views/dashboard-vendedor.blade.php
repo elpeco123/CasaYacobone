@@ -146,13 +146,8 @@
                         </div>
                     </div>
 
-                    <div class="mt-3 pt-2 text-center" style="font-size: 0.8rem; color: #94a3b8;">
-                        <span class="d-none d-md-inline">
-                            <i class="bi bi-info-circle me-1" style="color: var(--cy-gold);"></i>El <strong>Total Efectivo en Caja (${{ number_format($totalEfectivoEnCaja, 0, ',', '.') }})</strong> es el monto físico que debe contarse en el arqueo al cerrar el día.
-                        </span>
-                        <span class="d-md-none">
-                            <i class="bi bi-info-circle me-1" style="color: var(--cy-gold);"></i>El <strong>Total Efectivo en Caja</strong> es: cambio inicial + efectivo − gastos.
-                        </span>
+                    <div class="mt-3 pt-2 text-center d-none d-md-block" style="font-size: 0.8rem; color: #94a3b8;">
+                        <i class="bi bi-info-circle me-1" style="color: var(--cy-gold);"></i>El <strong>Total Efectivo en Caja (${{ number_format($totalEfectivoEnCaja, 0, ',', '.') }})</strong> es el monto físico que debe contarse en el arqueo al cerrar el día.
                     </div>
                 </div>
             </div>

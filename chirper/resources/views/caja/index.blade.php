@@ -81,16 +81,16 @@
                         </h5>
 
                         <div class="p-3 mb-4 rounded-3" style="background: linear-gradient(135deg, rgba(22, 33, 62, 0.9), rgba(15, 52, 96, 0.85)); border: 2px solid var(--cy-gold); box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
-                            <div class="d-flex justify-content-between align-items-center mb-1">
-                                <div>
+                            <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-2 mb-1">
+                                <div class="w-100">
                                     <span class="badge bg-gold-light text-dark fw-bold px-2.5 py-1 mb-1" style="font-size: 0.75rem;">
                                         DINERO FÍSICO DISPONIBLE
                                     </span>
                                     <h4 class="mb-0 fw-bold text-white">Total de Efectivo en Caja</h4>
-                                    <small style="color: #cbd5e1;">Cambio inicial (${{ number_format($montoInicial, 0, ',', '.') }}) + Efectivo (${{ number_format($ventasEfectivo, 0, ',', '.') }}) − Gastos (${{ number_format($totalRetiros, 0, ',', '.') }})</small>
+                                    <small style="color: #cbd5e1;">Cambio inicial + Efectivo − Gastos</small>
                                 </div>
-                                <div class="text-end">
-                                    <div class="fw-extrabold" style="font-size: 2rem; color: #f6c078; text-shadow: 0 0 15px rgba(246, 192, 120, 0.4);">
+                                <div class="text-start text-sm-end w-100">
+                                    <div class="fw-extrabold text-break" style="font-size: clamp(1.4rem, 7vw, 2rem); line-height: 1.1; color: #f6c078; text-shadow: 0 0 15px rgba(246, 192, 120, 0.4);">
                                         ${{ number_format($totalEfectivoEnCaja, 0, ',', '.') }}
                                     </div>
                                 </div>
