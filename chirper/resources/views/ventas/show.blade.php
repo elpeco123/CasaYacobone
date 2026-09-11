@@ -104,15 +104,15 @@
                         <span class="form-label d-block" style="color: #cbd5e1 !important; font-weight: 600;">Forma de Pago</span>
                         @if(($venta->tipo_pago ?? 'efectivo') === 'tarjeta')
                             <span class="badge" style="background: rgba(155, 89, 182, 0.25); color: #c084fc; border: 1px solid rgba(155, 89, 182, 0.5); font-size: 0.9rem; font-weight: 600;">
-                                💳 Tarjeta
+                                Tarjeta
                             </span>
                         @elseif(($venta->tipo_pago ?? 'efectivo') === 'factura')
                             <span class="badge" style="background: rgba(52, 152, 219, 0.25); color: #38bdf8; border: 1px solid rgba(52, 152, 219, 0.5); font-size: 0.9rem; font-weight: 600;">
-                                📄 Factura
+                                Factura
                             </span>
                         @else
                             <span class="badge" style="background: rgba(46, 204, 113, 0.25); color: #4ade80; border: 1px solid rgba(46, 204, 113, 0.5); font-size: 0.9rem; font-weight: 600;">
-                                💵 Efectivo
+                                Efectivo
                             </span>
                         @endif
                     </div>

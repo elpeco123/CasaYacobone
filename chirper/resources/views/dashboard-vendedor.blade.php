@@ -84,35 +84,35 @@
                         <div class="p-3 mb-3" style="background: rgba(15, 23, 42, 0.6); border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1);">
                             {{-- Cambio Inicial --}}
                             <div class="d-flex justify-content-between align-items-center py-1.5" style="border-bottom: 1px dashed rgba(255, 255, 255, 0.1); font-size: 0.92rem;">
-                                <span style="color: #cbd5e1; font-weight: 500;">🪙 Cambio Inicial (Apertura):</span>
+                                <span style="color: #cbd5e1; font-weight: 500;">Cambio Inicial (Apertura):</span>
                                 <span class="fw-bold" style="color: var(--cy-gold); font-size: 1.05rem;">${{ number_format($montoInicialCaja, 0, ',', '.') }}</span>
                             </div>
 
                             {{-- Ventas en Efectivo --}}
                             <div class="d-flex justify-content-between align-items-center py-1.5" style="border-bottom: 1px dashed rgba(255, 255, 255, 0.1); font-size: 0.92rem;">
-                                <span style="color: #cbd5e1; font-weight: 500;">💵 Ventas en Efectivo:</span>
+                                <span style="color: #cbd5e1; font-weight: 500;">Ventas en Efectivo:</span>
                                 <span class="fw-bold" style="color: #4ade80; font-size: 1.05rem;">+${{ number_format($ventasHoyPorForma['efectivo'], 0, ',', '.') }}</span>
                             </div>
 
                             {{-- Gastos / retiros --}}
                             <div class="d-flex justify-content-between align-items-center py-1.5" style="border-bottom: 1px dashed rgba(255, 255, 255, 0.1); font-size: 0.92rem;">
-                                <span style="color: #cbd5e1; font-weight: 500;">➖ Gastos de caja:</span>
+                                <span style="color: #cbd5e1; font-weight: 500;">Gastos de caja:</span>
                                 <span class="fw-bold" style="color: #e74c3c; font-size: 1.05rem;">−${{ number_format($totalRetirosCaja ?? 0, 0, ',', '.') }}</span>
                             </div>
 
                             {{-- TOTAL EFECTIVO FÍSICO EN CAJA --}}
                             <div class="d-flex justify-content-between align-items-center py-2 px-2 my-1.5 rounded-2" style="background: rgba(212, 165, 116, 0.15); border: 1px solid rgba(212, 165, 116, 0.35); font-size: 0.95rem;">
-                                <span style="color: #ffffff; font-weight: 700;">💰 Total Efectivo en Caja:</span>
+                                <span style="color: #ffffff; font-weight: 700;">Total Efectivo en Caja:</span>
                                 <span class="fw-extrabold" style="color: #f6c078; font-size: 1.25rem;">${{ number_format($totalEfectivoEnCaja, 0, ',', '.') }}</span>
                             </div>
 
                             {{-- Tarjeta y Factura --}}
                             <div class="d-flex justify-content-between align-items-center py-1.5" style="border-bottom: 1px dashed rgba(255, 255, 255, 0.1); font-size: 0.92rem;">
-                                <span style="color: #cbd5e1; font-weight: 500;">💳 Tarjeta:</span>
+                                <span style="color: #cbd5e1; font-weight: 500;">Tarjeta:</span>
                                 <span class="fw-bold" style="font-size: 1.05rem; color: #c084fc;">${{ number_format($ventasHoyPorForma['tarjeta'], 0, ',', '.') }}</span>
                             </div>
                             <div class="d-flex justify-content-between align-items-center py-1.5" style="font-size: 0.92rem;">
-                                <span style="color: #cbd5e1; font-weight: 500;">📄 Factura:</span>
+                                <span style="color: #cbd5e1; font-weight: 500;">Factura:</span>
                                 <span class="fw-bold" style="font-size: 1.05rem; color: #38bdf8;">${{ number_format($ventasHoyPorForma['factura'], 0, ',', '.') }}</span>
                             </div>
                         </div>
@@ -169,11 +169,7 @@
                     @if($ventasHoyLista->isEmpty())
                         <div class="text-center py-5">
                             <i class="bi bi-receipt" style="font-size: 3rem; color: #64748b;"></i>
-                            <p class="mt-3 mb-1 fw-bold" style="color: #f8f9fa; font-size: 1.05rem;">Aún no hay ventas registradas hoy</p>
-                            <p class="small mb-3" style="color: #cbd5e1;">Presione el botón "Nueva Venta" para realizar la primera transacción.</p>
-                            <a href="{{ route('ventas.create') }}" class="btn btn-gold btn-sm px-3 py-2 fw-bold" style="color: #0f0f1e;">
-                                <i class="bi bi-plus-circle me-1"></i>Registrar Venta
-                            </a>
+                            <p class="mt-3 mb-0 fw-bold" style="color: #f8f9fa; font-size: 1.05rem;">Aún no hay ventas registradas hoy</p>
                         </div>
                     @else
                         {{-- Vista Desktop (Tabla) --}}
@@ -198,15 +194,15 @@
                                         <td>
                                             @if(($venta->tipo_pago ?? 'efectivo') === 'tarjeta')
                                                 <span class="badge px-2 py-1" style="background: rgba(192, 132, 252, 0.25); color: #f5d0fe; border: 1px solid rgba(192, 132, 252, 0.5); font-weight: 700; font-size: 0.82rem;">
-                                                    💳 Tarjeta
+                                                    Tarjeta
                                                 </span>
                                             @elseif(($venta->tipo_pago ?? 'efectivo') === 'factura')
                                                 <span class="badge px-2 py-1" style="background: rgba(56, 189, 248, 0.25); color: #7dd3fc; border: 1px solid rgba(56, 189, 248, 0.5); font-weight: 700; font-size: 0.82rem;">
-                                                    📄 Factura
+                                                    Factura
                                                 </span>
                                             @else
                                                 <span class="badge px-2 py-1" style="background: rgba(74, 222, 128, 0.25); color: #4ade80; border: 1px solid rgba(74, 222, 128, 0.5); font-weight: 700; font-size: 0.82rem;">
-                                                    💵 Efectivo
+                                                    Efectivo
                                                 </span>
                                             @endif
                                         </td>
@@ -238,15 +234,15 @@
                                     <div>
                                         @if(($venta->tipo_pago ?? 'efectivo') === 'tarjeta')
                                             <span class="badge px-2 py-1" style="background: rgba(192, 132, 252, 0.25); color: #f5d0fe; border: 1px solid rgba(192, 132, 252, 0.5); font-weight: 700; font-size: 0.78rem;">
-                                                💳 Tarjeta
+                                                Tarjeta
                                             </span>
                                         @elseif(($venta->tipo_pago ?? 'efectivo') === 'factura')
                                             <span class="badge px-2 py-1" style="background: rgba(56, 189, 248, 0.25); color: #7dd3fc; border: 1px solid rgba(56, 189, 248, 0.5); font-weight: 700; font-size: 0.78rem;">
-                                                📄 Factura
+                                                Factura
                                             </span>
                                         @else
                                             <span class="badge px-2 py-1" style="background: rgba(74, 222, 128, 0.25); color: #4ade80; border: 1px solid rgba(74, 222, 128, 0.5); font-weight: 700; font-size: 0.78rem;">
-                                                💵 Efectivo
+                                                Efectivo
                                             </span>
                                         @endif
                                     </div>

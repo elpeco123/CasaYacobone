@@ -118,9 +118,9 @@
                         <div class="mb-3">
                             <label for="tipo_pago" class="form-label text-light fw-semibold" style="color: #e2e8f0 !important;">Forma de Pago *</label>
                             <select name="tipo_pago" id="tipo_pago" class="form-select form-select-dark @error('tipo_pago') is-invalid @enderror" required style="font-weight: 600;">
-                                <option value="efectivo" {{ old('tipo_pago') == 'efectivo' ? 'selected' : '' }}>💵 Efectivo</option>
-                                <option value="tarjeta" {{ old('tipo_pago') == 'tarjeta' ? 'selected' : '' }}>💳 Tarjeta</option>
-                                <option value="factura" {{ old('tipo_pago') == 'factura' ? 'selected' : '' }}>📄 Factura</option>
+                                <option value="efectivo" {{ old('tipo_pago') == 'efectivo' ? 'selected' : '' }}>Efectivo</option>
+                                <option value="tarjeta" {{ old('tipo_pago') == 'tarjeta' ? 'selected' : '' }}>Tarjeta</option>
+                                <option value="factura" {{ old('tipo_pago') == 'factura' ? 'selected' : '' }}>Factura</option>
                             </select>
                             @error('tipo_pago')
                                 <div class="invalid-feedback">{{ $message }}</div>

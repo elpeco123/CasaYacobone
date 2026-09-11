@@ -52,25 +52,25 @@
             <div class="row g-3 align-items-center">
                 <div class="col-md-3">
                     <div class="p-2.5 rounded-3" style="background: rgba(212, 165, 116, 0.12); border: 1px solid rgba(212, 165, 116, 0.25);">
-                        <span class="d-block small" style="color: #cbd5e1;">🪙 Cambio Inicial:</span>
+                        <span class="d-block small" style="color: #cbd5e1;">Cambio Inicial:</span>
                         <strong class="fs-6" style="color: var(--cy-gold);">${{ number_format($montoInicialCaja, 0, ',', '.') }}</strong>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="p-2.5 rounded-3" style="background: rgba(74, 222, 128, 0.1); border: 1px solid rgba(74, 222, 128, 0.25);">
-                        <span class="d-block small" style="color: #cbd5e1;">💵 Ventas Efectivo:</span>
+                        <span class="d-block small" style="color: #cbd5e1;">Ventas Efectivo:</span>
                         <strong class="fs-6 text-success">+${{ number_format($ventasEfectivoDia, 0, ',', '.') }}</strong>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="p-2.5 rounded-3" style="background: rgba(192, 132, 252, 0.1); border: 1px solid rgba(192, 132, 252, 0.25);">
-                        <span class="d-block small" style="color: #cbd5e1;">💳 Ventas Tarjeta:</span>
+                        <span class="d-block small" style="color: #cbd5e1;">Ventas Tarjeta:</span>
                         <strong class="fs-6" style="color: #c084fc;">${{ number_format($ventasTarjetaDia, 0, ',', '.') }}</strong>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="p-2.5 rounded-3" style="background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.25);">
-                        <span class="d-block small" style="color: #cbd5e1;">📄 Ventas Factura:</span>
+                        <span class="d-block small" style="color: #cbd5e1;">Ventas Factura:</span>
                         <strong class="fs-6" style="color: #38bdf8;">${{ number_format($ventasFacturaDia, 0, ',', '.') }}</strong>
                     </div>
                 </div>

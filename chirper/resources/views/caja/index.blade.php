@@ -102,19 +102,19 @@
                                 Cobros del Período
                             </div>
                             <div class="d-flex justify-content-between align-items-center py-1.5 border-bottom border-secondary border-opacity-50">
-                                <span style="color: #cbd5e1;">💵 Efectivo:</span>
+                                <span style="color: #cbd5e1;">Efectivo:</span>
                                 <span class="fw-bold text-success">+${{ number_format($ventasEfectivo, 0, ',', '.') }}</span>
                             </div>
                             <div class="d-flex justify-content-between align-items-center py-1.5 border-bottom border-secondary border-opacity-50">
-                                <span style="color: #cbd5e1;">➖ Gastos / retiros:</span>
+                                <span style="color: #cbd5e1;">Gastos / retiros:</span>
                                 <span class="fw-bold text-danger">−${{ number_format($totalRetiros, 0, ',', '.') }}</span>
                             </div>
                             <div class="d-flex justify-content-between align-items-center py-1.5 border-bottom border-secondary border-opacity-50">
-                                <span style="color: #cbd5e1;">💳 Tarjeta:</span>
+                                <span style="color: #cbd5e1;">Tarjeta:</span>
                                 <span class="fw-bold" style="color: #c084fc;">${{ number_format($ventasTarjeta, 0, ',', '.') }}</span>
                             </div>
                             <div class="d-flex justify-content-between align-items-center py-1.5 border-bottom border-secondary border-opacity-50">
-                                <span style="color: #cbd5e1;">📄 Factura:</span>
+                                <span style="color: #cbd5e1;">Factura:</span>
                                 <span class="fw-bold" style="color: #38bdf8;">${{ number_format($ventasFactura, 0, ',', '.') }}</span>
                             </div>
                             <div class="d-flex justify-content-between align-items-center pt-2 mt-1">

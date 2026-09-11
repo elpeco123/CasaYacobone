@@ -134,6 +134,16 @@
             font-size: 0.82rem;
             color: var(--cy-gold-light);
             font-weight: 500;
+            cursor: pointer;
+        }
+
+        /* La burbuja de usuario es un botón dropdown: sin caret de Bootstrap */
+        button.user-badge.dropdown-toggle::after {
+            display: none;
+        }
+
+        button.user-badge:hover {
+            border-color: rgba(212, 165, 116, 0.45);
         }
 
         /* ===== NAVBAR TOGGLER (hamburguesa visible en fondo oscuro) ===== */
@@ -164,22 +174,6 @@
             font-weight: 800;
             font-size: 0.95rem;
             flex-shrink: 0;
-        }
-
-        .btn-logout {
-            background: rgba(231, 76, 60, 0.15);
-            border: 1px solid rgba(231, 76, 60, 0.3);
-            color: #e74c3c;
-            font-size: 0.82rem;
-            padding: 0.35rem 0.9rem;
-            border-radius: 8px;
-            transition: all 0.25s ease;
-        }
-
-        .btn-logout:hover {
-            background: rgba(231, 76, 60, 0.25);
-            color: #ff6b6b;
-            transform: translateY(-1px);
         }
 
         /* ===== MAIN CONTENT ===== */
@@ -676,15 +670,27 @@
                         <i class="bi bi-cash-coin me-1" style="color: var(--cy-gold);"></i>
                         <span>Caja</span>
                     </a>
-                    <span class="user-badge" title="{{ Auth::user()->name }} ({{ Auth::user()->role }})">
-                        <span class="user-avatar">{{ mb_strtoupper(mb_substr(Auth::user()->name, 0, 1)) }}</span>
-                    </span>
-                    <form action="{{ route('logout') }}" method="POST" class="d-inline">
-                        @csrf
-                        <button type="submit" class="btn btn-logout btn-sm" title="Cerrar Sesión">
-                            <i class="bi bi-box-arrow-right"></i>
+                    <div class="dropdown">
+                        <button class="user-badge dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"
+                                title="{{ Auth::user()->name }} ({{ Auth::user()->role }})">
+                            <span class="user-avatar">{{ mb_strtoupper(mb_substr(Auth::user()->name, 0, 1)) }}</span>
                         </button>
-                    </form>
+                        <ul class="dropdown-menu dropdown-menu-end shadow-lg" style="background: rgba(22,33,62,0.98); border: 1px solid rgba(212,165,116,0.25); border-radius: 12px; min-width: 220px;">
+                            <li class="px-3 pt-2 pb-1">
+                                <div class="fw-bold text-white" style="font-size: 0.9rem;">{{ Auth::user()->name }}</div>
+                                <div class="text-uppercase" style="font-size: 0.7rem; color: var(--cy-gold-light); letter-spacing: 0.5px;">{{ Auth::user()->role }}</div>
+                            </li>
+                            <li><hr class="dropdown-divider my-1" style="border-color: rgba(255,255,255,0.12);"></li>
+                            <li>
+                                <form action="{{ route('logout') }}" method="POST" class="d-inline">
+                                    @csrf
+                                    <button type="submit" class="dropdown-item text-danger" style="font-size: 0.88rem; font-weight: 500;">
+                                        <i class="bi bi-box-arrow-right me-2"></i>Cerrar Sesión
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>

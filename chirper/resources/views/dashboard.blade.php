@@ -283,23 +283,23 @@
                             Total Vendido Hoy
                         </div>
                         <div class="d-flex justify-content-between align-items-center mb-1.5" style="font-size: 0.88rem;">
-                            <span style="color: #cbd5e1;">🪙 Cambio Inicial (Apertura):</span>
+                            <span style="color: #cbd5e1;">Cambio Inicial (Apertura):</span>
                             <span class="fw-bold" style="color: var(--cy-gold);">${{ number_format($montoInicialCaja, 0, ',', '.') }}</span>
                         </div>
                         <div class="d-flex justify-content-between align-items-center mb-1.5" style="font-size: 0.88rem;">
-                            <span style="color: #cbd5e1;">💵 Ventas en Efectivo:</span>
+                            <span style="color: #cbd5e1;">Ventas en Efectivo:</span>
                             <span class="fw-bold text-success">+${{ number_format($ventasHoyPorForma['efectivo'], 0, ',', '.') }}</span>
                         </div>
                         <div class="d-flex justify-content-between align-items-center py-2 px-2 my-1.5 rounded-2" style="background: rgba(212, 165, 116, 0.15); border: 1px solid rgba(212, 165, 116, 0.35); font-size: 0.92rem;">
-                            <span style="color: #ffffff; font-weight: 700;">💰 Total Efectivo en Caja:</span>
+                            <span style="color: #ffffff; font-weight: 700;">Total Efectivo en Caja:</span>
                             <span class="fw-extrabold" style="color: #f6c078; font-size: 1.15rem;">${{ number_format($totalEfectivoEnCaja, 0, ',', '.') }}</span>
                         </div>
                         <div class="d-flex justify-content-between align-items-center mb-1" style="font-size: 0.88rem;">
-                            <span style="color: #cbd5e1;">💳 Tarjeta:</span>
+                            <span style="color: #cbd5e1;">Tarjeta:</span>
                             <span class="fw-bold" style="color: #c084fc;">${{ number_format($ventasHoyPorForma['tarjeta'], 0, ',', '.') }}</span>
                         </div>
                         <div class="d-flex justify-content-between align-items-center mb-1" style="font-size: 0.88rem;">
-                            <span style="color: #cbd5e1;">📄 Factura:</span>
+                            <span style="color: #cbd5e1;">Factura:</span>
                             <span class="fw-bold" style="color: #38bdf8;">${{ number_format($ventasHoyPorForma['factura'], 0, ',', '.') }}</span>
                         </div>
                         <div class="d-flex justify-content-between align-items-center pt-2 mt-2" style="border-top: 1px dashed var(--cy-border); font-size: 0.95rem; font-weight: 700;">
@@ -313,15 +313,15 @@
                             Ventas del Mes Actual
                         </div>
                         <div class="d-flex justify-content-between align-items-center mb-1" style="font-size: 0.88rem;">
-                            <span>💵 Efectivo:</span>
+                            <span>Efectivo:</span>
                             <span class="fw-bold text-success">${{ number_format($ventasMesPorForma['efectivo'], 0, ',', '.') }}</span>
                         </div>
                         <div class="d-flex justify-content-between align-items-center mb-1" style="font-size: 0.88rem;">
-                            <span>💳 Tarjeta:</span>
+                            <span>Tarjeta:</span>
                             <span class="fw-bold" style="color: #af7ac5;">${{ number_format($ventasMesPorForma['tarjeta'], 0, ',', '.') }}</span>
                         </div>
                         <div class="d-flex justify-content-between align-items-center mb-1" style="font-size: 0.88rem;">
-                            <span>📄 Factura:</span>
+                            <span>Factura:</span>
                             <span class="fw-bold text-info">${{ number_format($ventasMesPorForma['factura'], 0, ',', '.') }}</span>
                         </div>
                         <div class="d-flex justify-content-between align-items-center pt-2 mt-2" style="border-top: 1px dashed var(--cy-border); font-size: 1rem; font-weight: 800;">

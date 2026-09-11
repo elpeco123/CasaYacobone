@@ -34,10 +34,10 @@
                             <th>Cierre</th>
                             <th class="text-center">Estado</th>
                             <th class="text-end">Inicial</th>
-                            <th class="text-end">💵 Efectivo</th>
-                            <th class="text-end">➖ Gastos</th>
-                            <th class="text-end">💳 Tarjeta</th>
-                            <th class="text-end">📄 Factura</th>
+                            <th class="text-end">Efectivo</th>
+                            <th class="text-end">Gastos</th>
+                            <th class="text-end">Tarjeta</th>
+                            <th class="text-end">Factura</th>
                             <th class="text-center">Ventas</th>
                             <th class="text-end">Total</th>
                             <th class="text-end">Físico final</th>
