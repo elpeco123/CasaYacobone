@@ -110,18 +110,6 @@
             background: rgba(212, 165, 116, 0.1);
         }
 
-        .nav-link.active::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 20px;
-            height: 3px;
-            background: var(--cy-gold);
-            border-radius: 2px;
-        }
-
         .nav-link i {
             font-size: 1rem;
         }
@@ -147,6 +135,16 @@
         }
 
         /* ===== NAVBAR TOGGLER (hamburguesa visible en fondo oscuro) ===== */
+        /* En celular el menú de usuario siempre abre dentro de la pantalla */
+        @media (max-width: 991.98px) {
+            .navbar-custom .dropdown-menu-end {
+                position: absolute;
+                right: 0;
+                left: auto;
+                max-width: calc(100vw - 2rem);
+            }
+        }
+
         .navbar-toggler {
             border: 1px solid rgba(212, 165, 116, 0.4) !important;
             background: rgba(212, 165, 116, 0.12);
@@ -566,11 +564,38 @@
                 Casa Yacobone
             </a>
 
-            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+            <div class="d-flex align-items-center gap-2 ms-auto order-1 order-lg-2">
+                <a href="{{ route('caja.index') }}" class="btn btn-glass btn-sm d-none d-md-inline-flex align-items-center text-light" title="Apertura y Cambio en Caja" style="border-color: rgba(212,165,116,0.3);">
+                    <i class="bi bi-cash-coin me-1" style="color: var(--cy-gold);"></i>
+                    <span>Caja</span>
+                </a>
+                <div class="dropdown">
+                    <button class="user-badge dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"
+                            title="{{ Auth::user()->name }} ({{ Auth::user()->role }})">
+                        <span class="user-avatar">{{ mb_strtoupper(mb_substr(Auth::user()->name, 0, 1)) }}</span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end shadow-lg" style="background: rgba(22,33,62,0.98); border: 1px solid rgba(212,165,116,0.25); border-radius: 12px; min-width: 220px;">
+                        <li class="px-3 pt-2 pb-1">
+                            <div class="fw-bold text-white" style="font-size: 0.9rem;">{{ Auth::user()->name }}</div>
+                            <div class="text-uppercase" style="font-size: 0.7rem; color: var(--cy-gold-light); letter-spacing: 0.5px;">{{ Auth::user()->role }}</div>
+                        </li>
+                        <li><hr class="dropdown-divider my-1" style="border-color: rgba(255,255,255,0.12);"></li>
+                        <li>
+                            <form action="{{ route('logout') }}" method="POST" class="d-inline">
+                                @csrf
+                                <button type="submit" class="dropdown-item text-danger" style="font-size: 0.88rem; font-weight: 500;">
+                                    <i class="bi bi-box-arrow-right me-2"></i>Cerrar Sesión
+                                </button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+                <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
 
-            <div class="collapse navbar-collapse" id="navbarNav">
+            <div class="collapse navbar-collapse order-3 order-lg-1" id="navbarNav">
                 <ul class="navbar-nav me-auto ms-3">
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}"
@@ -664,34 +689,6 @@
                         </ul>
                     </li>
                 </ul>
-
-                <div class="d-flex align-items-center gap-2">
-                    <a href="{{ route('caja.index') }}" class="btn btn-glass btn-sm d-none d-md-inline-flex align-items-center text-light" title="Apertura y Cambio en Caja" style="border-color: rgba(212,165,116,0.3);">
-                        <i class="bi bi-cash-coin me-1" style="color: var(--cy-gold);"></i>
-                        <span>Caja</span>
-                    </a>
-                    <div class="dropdown">
-                        <button class="user-badge dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"
-                                title="{{ Auth::user()->name }} ({{ Auth::user()->role }})">
-                            <span class="user-avatar">{{ mb_strtoupper(mb_substr(Auth::user()->name, 0, 1)) }}</span>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-end shadow-lg" style="background: rgba(22,33,62,0.98); border: 1px solid rgba(212,165,116,0.25); border-radius: 12px; min-width: 220px;">
-                            <li class="px-3 pt-2 pb-1">
-                                <div class="fw-bold text-white" style="font-size: 0.9rem;">{{ Auth::user()->name }}</div>
-                                <div class="text-uppercase" style="font-size: 0.7rem; color: var(--cy-gold-light); letter-spacing: 0.5px;">{{ Auth::user()->role }}</div>
-                            </li>
-                            <li><hr class="dropdown-divider my-1" style="border-color: rgba(255,255,255,0.12);"></li>
-                            <li>
-                                <form action="{{ route('logout') }}" method="POST" class="d-inline">
-                                    @csrf
-                                    <button type="submit" class="dropdown-item text-danger" style="font-size: 0.88rem; font-weight: 500;">
-                                        <i class="bi bi-box-arrow-right me-2"></i>Cerrar Sesión
-                                    </button>
-                                </form>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
             </div>
         </div>
     </nav>
