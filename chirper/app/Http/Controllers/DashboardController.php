@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Caja;
+use App\Models\CategoriaGasto;
 use App\Models\Producto;
 use App\Models\Proveedor;
 use App\Models\Venta;
@@ -72,6 +73,8 @@ class DashboardController extends Controller
                 ? Venta::with('user')->where('caja_id', $cajaHoy->id)->latest()->get()
                 : collect();
 
+            $categoriasGasto = CategoriaGasto::orderBy('nombre')->get(['id', 'nombre']);
+
             return view('dashboard-vendedor', compact(
                 'cajaHoy',
                 'montoInicialCaja',
@@ -81,7 +84,8 @@ class DashboardController extends Controller
                 'totalRetirosCaja',
                 'totalEfectivoEnCaja',
                 'totalCierreGeneral',
-                'ventasHoyLista'
+                'ventasHoyLista',
+                'categoriasGasto'
             ));
         }
 

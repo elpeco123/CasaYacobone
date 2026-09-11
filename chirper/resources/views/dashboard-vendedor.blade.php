@@ -63,7 +63,75 @@
                 </a>
             </div>
         </div>
+        {{-- Accesos rápidos de caja --}}
+        <div class="d-flex flex-column flex-sm-row gap-2 mt-3">
+            @if($cajaHoy)
+                <button type="button" class="btn btn-glass flex-fill py-2 fw-bold text-light" data-bs-toggle="modal" data-bs-target="#modalGasto">
+                    <i class="bi bi-dash-circle-fill me-1" style="color: var(--cy-accent);"></i>Registrar Gasto
+                </button>
+                <form method="POST" action="{{ route('caja.cerrar', $cajaHoy) }}" class="flex-fill"
+                      onsubmit="return confirm('¿Cerrar la caja #{{ $cajaHoy->id }}? Se guardarán los totales del período.');">
+                    @csrf
+                    <button type="submit" class="btn btn-accent w-100 py-2 fw-bold">
+                        <i class="bi bi-lock-fill me-1"></i>Cerrar Caja
+                    </button>
+                </form>
+            @else
+                <a href="{{ route('caja.index') }}" class="btn btn-gold flex-fill py-2 fw-bold" style="color: #0f0f1e;">
+                    <i class="bi bi-unlock-fill me-1"></i>Abrir Caja
+                </a>
+            @endif
+        </div>
     </div>
+
+    {{-- Modal: registrar gasto de la caja abierta --}}
+    @if($cajaHoy)
+    <div class="modal fade" id="modalGasto" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="background: rgba(22,33,62,0.98); border: 1px solid rgba(212,165,116,0.3); border-radius: 16px;">
+                <form method="POST" action="{{ route('caja.retiros.store') }}">
+                    @csrf
+                    <div class="modal-header" style="border-bottom: 1px solid var(--cy-border);">
+                        <h5 class="modal-title fw-bold text-white">
+                            <i class="bi bi-dash-circle-fill me-2" style="color: var(--cy-accent);"></i>Registrar Gasto
+                        </h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="gasto-categoria" class="form-label">Categoría *</label>
+                            <select name="categoria_gasto_id" id="gasto-categoria" class="form-select form-select-dark" required>
+                                <option value="">Elegir categoría</option>
+                                @foreach($categoriasGasto as $cat)
+                                    <option value="{{ $cat->id }}">{{ $cat->nombre }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="gasto-monto" class="form-label">Monto *</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-dark border-secondary fw-bold" style="color: var(--cy-gold);">$</span>
+                                <input type="number" step="any" min="1" name="monto" id="gasto-monto"
+                                       class="form-control form-control-dark" placeholder="Ej: 5000" required>
+                            </div>
+                        </div>
+                        <div class="mb-0">
+                            <label for="gasto-concepto" class="form-label">Detalle (opcional)</label>
+                            <input type="text" name="concepto" id="gasto-concepto"
+                                   class="form-control form-control-dark" placeholder="Ej: yerba mate" maxlength="255">
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="border-top: 1px solid var(--cy-border);">
+                        <button type="button" class="btn btn-glass text-light" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-accent fw-bold">
+                            <i class="bi bi-check-circle-fill me-1"></i>Guardar Gasto
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    @endif
 
     <div class="row g-4">
         {{-- Resumen Cierre de Caja del Día --}}
