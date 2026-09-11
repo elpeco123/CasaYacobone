@@ -2,6 +2,7 @@
 
 use App\Models\Caja;
 use App\Models\Categoria;
+use App\Models\CategoriaGasto;
 use App\Models\Producto;
 use App\Models\Retiro;
 use App\Models\User;
@@ -137,6 +138,7 @@ test('admin ve el historial de cajas en reportes', function () {
 
 test('vendedor registra un gasto que descuenta del efectivo y se guarda al cerrar', function () {
     $vendedor = User::factory()->create(['role' => 'vendedor']);
+    $categoria = CategoriaGasto::create(['nombre' => 'Limpieza']);
 
     $this->actingAs($vendedor)->post(route('caja.store'), ['monto_inicial' => 20000])
         ->assertSessionHas('success');
@@ -152,13 +154,24 @@ test('vendedor registra un gasto que descuenta del efectivo y se guarda al cerra
         'total' => 10000,
     ]);
 
-    // Gasto de $5.000 en yerba
+    // Gasto de $5.000 en yerba con categoría
     $this->actingAs($vendedor)->post(route('caja.retiros.store'), [
         'monto' => 5000,
+        'categoria_gasto_id' => $categoria->id,
         'concepto' => 'Yerba mate',
     ])->assertSessionHas('success');
 
-    expect((float) Retiro::where('caja_id', $caja->id)->sum('monto'))->toBe(5000.0);
+    $retiro = Retiro::where('caja_id', $caja->id)->first();
+    expect($retiro)->not->toBeNull()
+        ->and((float) $retiro->monto)->toBe(5000.0)
+        ->and($retiro->categoria_gasto_id)->toBe($categoria->id);
+
+    // Sin categoría falla la validación
+    $this->actingAs($vendedor)->post(route('caja.retiros.store'), [
+        'monto' => 1000,
+        'concepto' => 'Sin categoría',
+    ])->assertSessionHasErrors('categoria_gasto_id');
+    expect(Retiro::where('caja_id', $caja->id)->count())->toBe(1);
 
     // Físico: 20000 inicial + 10000 efectivo − 5000 gasto = 25000
     $this->actingAs($vendedor)->get(route('dashboard'))
@@ -178,4 +191,43 @@ test('vendedor registra un gasto que descuenta del efectivo y se guarda al cerra
     $this->actingAs($vendedor)->delete(route('caja.retiros.destroy', $retiro))
         ->assertSessionHas('error');
     expect(Retiro::where('caja_id', $caja->id)->count())->toBe(1);
+});
+
+test('admin gestiona categorias de gasto y vendedor no puede', function () {
+    $admin = User::factory()->create(['role' => 'admin']);
+    $vendedor = User::factory()->create(['role' => 'vendedor']);
+
+    // Vendedor bloqueado por middleware de rol
+    $this->actingAs($vendedor)->get(route('categoria-gastos.index'))
+        ->assertStatus(403);
+
+    // Admin crea
+    $this->actingAs($admin)->post(route('categoria-gastos.store'), ['nombre' => 'Luz'])
+        ->assertRedirect(route('categoria-gastos.index'))
+        ->assertSessionHas('success');
+    $cat = CategoriaGasto::where('nombre', 'Luz')->first();
+    expect($cat)->not->toBeNull();
+
+    // Admin edita
+    $this->actingAs($admin)->put(route('categoria-gastos.update', $cat), ['nombre' => 'Electricidad'])
+        ->assertSessionHas('success');
+
+    // No puede borrarla si tiene gastos asociados
+    $caja = Caja::create([
+        'user_id' => $admin->id,
+        'fecha' => now()->toDateString(),
+        'fecha_apertura' => now(),
+        'estado' => Caja::ESTADO_ABIERTA,
+        'monto_inicial' => 1000,
+    ]);
+    Retiro::create([
+        'caja_id' => $caja->id,
+        'user_id' => $admin->id,
+        'categoria_gasto_id' => $cat->id,
+        'monto' => 500,
+        'concepto' => 'Factura luz',
+    ]);
+    $this->actingAs($admin)->delete(route('categoria-gastos.destroy', $cat))
+        ->assertSessionHas('error');
+    expect(CategoriaGasto::where('nombre', 'Electricidad')->count())->toBe(1);
 });

@@ -629,7 +629,7 @@
 
                     {{-- Menú Configuración (Admin y Vendedor) --}}
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle {{ request()->routeIs('caja.*') || request()->routeIs('users.*') || request()->routeIs('proveedores.*') || request()->routeIs('categorias.*') ? 'active' : '' }}"
+                        <a class="nav-link dropdown-toggle {{ request()->routeIs('caja.*') || request()->routeIs('users.*') || request()->routeIs('proveedores.*') || request()->routeIs('categorias.*') || request()->routeIs('categoria-gastos.*') ? 'active' : '' }}"
                            href="#" role="button" data-bs-toggle="dropdown">
                             <i class="bi bi-gear-fill me-1"></i> Configuración
                         </a>
@@ -658,6 +658,12 @@
                                 <a class="dropdown-item text-light py-1.5" href="{{ route('categorias.index') }}"
                                    style="font-size: 0.88rem;">
                                     <i class="bi bi-tags-fill me-2" style="color: #cbd5e1;"></i>Categorías
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item text-light py-1.5" href="{{ route('categoria-gastos.index') }}"
+                                   style="font-size: 0.88rem;">
+                                    <i class="bi bi-receipt-cutoff me-2" style="color: #cbd5e1;"></i>Categorías de Gasto
                                 </a>
                             </li>
                             @endif

@@ -10,6 +10,7 @@ class Retiro extends Model
     protected $fillable = [
         'caja_id',
         'user_id',
+        'categoria_gasto_id',
         'monto',
         'concepto',
     ];
@@ -32,5 +33,13 @@ class Retiro extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Categoría del gasto (impuestos, mantenimiento, varios, ...).
+     */
+    public function categoriaGasto(): BelongsTo
+    {
+        return $this->belongsTo(CategoriaGasto::class);
     }
 }

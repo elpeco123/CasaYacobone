@@ -138,18 +138,32 @@
 
                         <form method="POST" action="{{ route('caja.retiros.store') }}" class="row g-2 mb-3">
                             @csrf
+                            <div class="col-12">
+                                <select name="categoria_gasto_id" id="retiro-categoria"
+                                        class="form-select form-select-dark @error('categoria_gasto_id') is-invalid @enderror" required>
+                                    <option value="">Categoría del gasto *</option>
+                                    @foreach($categoriasGasto as $cat)
+                                        <option value="{{ $cat->id }}" {{ old('categoria_gasto_id') == $cat->id ? 'selected' : '' }}>
+                                            {{ $cat->nombre }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('categoria_gasto_id')
+                                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                                @enderror
+                            </div>
                             <div class="col-5">
                                 <div class="input-group">
                                     <span class="input-group-text bg-dark border-secondary fw-bold" style="color: var(--cy-gold);">$</span>
                                     <input type="number" step="any" min="1" name="monto" id="retiro-monto"
-                                           class="form-control form-control-dark" placeholder="Monto"
+                                           class="form-control form-control-dark" placeholder="Monto *"
                                            value="{{ old('monto') }}" required>
                                 </div>
                             </div>
                             <div class="col-7">
                                 <input type="text" name="concepto" id="retiro-concepto"
-                                       class="form-control form-control-dark" placeholder="Qué se compró (ej: yerba mate)"
-                                       value="{{ old('concepto') }}" maxlength="255" required>
+                                       class="form-control form-control-dark" placeholder="Detalle (ej: yerba mate)"
+                                       value="{{ old('concepto') }}" maxlength="255">
                             </div>
                             <div class="col-12">
                                 <button type="submit" class="btn btn-accent w-100 fw-bold">
@@ -169,7 +183,9 @@
                                         @foreach($retiros as $retiro)
                                             <tr>
                                                 <td class="text-white">
-                                                    <i class="bi bi-bag-fill me-1" style="color: var(--cy-accent);"></i>
+                                                    <span class="badge me-1" style="background: rgba(233,69,96,0.15); color: #ff8fa3; border: 1px solid rgba(233,69,96,0.3); font-size: 0.72rem;">
+                                                        {{ $retiro->categoriaGasto->nombre ?? 'Sin categoría' }}
+                                                    </span>
                                                     {{ $retiro->concepto }}
                                                     <br><small class="text-muted">{{ $retiro->created_at->format('d/m H:i') }} · {{ $retiro->user->name ?? '' }}</small>
                                                 </td>

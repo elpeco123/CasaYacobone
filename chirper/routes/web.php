@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\CajaController;
 use App\Http\Controllers\CategoriaController;
+use App\Http\Controllers\CategoriaGastoController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\ProveedorController;
@@ -60,6 +61,12 @@ Route::middleware('auth')->group(function () {
 
     // CRUD de Categorías (Solo Administrador)
     Route::resource('categorias', CategoriaController::class)
+        ->except(['show'])
+        ->middleware('role:admin');
+
+    // CRUD de Categorías de Gasto (Solo Administrador)
+    Route::resource('categoria-gastos', CategoriaGastoController::class)
+        ->parameters(['categoria-gastos' => 'categoriaGasto'])
         ->except(['show'])
         ->middleware('role:admin');
 

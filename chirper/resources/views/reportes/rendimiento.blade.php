@@ -335,6 +335,58 @@
             </div>
         </div>
 
+        {{-- 8b. Gastos por categoría --}}
+        <div class="card-glass mb-4">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-1">
+                    <h5 class="mb-0" style="font-weight: 700;">
+                        <i class="bi bi-cash-coin me-2" style="color: var(--cy-accent);"></i>Gastos por categoría
+                    </h5>
+                    <span class="badge fs-6" style="background: rgba(231,76,60,0.15); color: #ff8fa3; border: 1px solid rgba(231,76,60,0.3);">
+                        Total: ${{ number_format($totalGastos, 0, ',', '.') }}
+                    </span>
+                </div>
+                <p class="text-muted mb-3" style="font-size: 0.82rem;">En qué se va el dinero de la caja · {{ $esMensual ? 'mes' : 'año' }} seleccionado</p>
+                @if($totalGastos > 0)
+                    <div class="row g-3 align-items-center">
+                        <div class="col-lg-5">
+                            <div class="chart-loading text-center py-4" data-chart="ch-gastos">
+                                <div class="spinner-border text-danger" role="status"></div>
+                            </div>
+                            <div style="position: relative; height: 240px;">
+                                <canvas id="ch-gastos"></canvas>
+                            </div>
+                        </div>
+                        <div class="col-lg-7">
+                            <div class="table-responsive">
+                                <table class="table table-dark-custom table-hover mb-0">
+                                    <thead>
+                                        <tr><th>Categoría</th><th class="text-end">Importe</th><th class="text-center">Gastos</th><th class="text-end">%</th></tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($gastosCategoria as $nombre => $d)
+                                            <tr>
+                                                <td class="text-white">{{ $nombre }}</td>
+                                                <td class="text-end fw-bold text-danger">
+                                                    ${{ number_format($d['total'], 0, ',', '.') }}
+                                                </td>
+                                                <td class="text-center">{{ number_format($d['cantidad'], 0, ',', '.') }}</td>
+                                                <td class="text-end">{{ number_format($d['total'] / $totalGastos * 100, 1, ',', '.') }}%</td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                @else
+                    <p class="text-center text-muted py-3 mb-0">
+                        <i class="bi bi-inbox me-1"></i>Sin gastos registrados en este período.
+                    </p>
+                @endif
+            </div>
+        </div>
+
         {{-- 9. Tabla resumen + 10. comparación anual --}}
         <div class="card-glass mb-4">
             <div class="card-body">
@@ -445,6 +497,7 @@
     var CATEGORIAS = @json($categorias);
     var TOP_FACT = @json($topFacturacionChart);
     var PAGOS = @json($pagos);
+    var GASTOS_CAT = @json($gastosCategoria);
     var YOY = @json($comparacionAnual);
     var CON_COSTOS = @json($conCostos);
     var TOOLTIP_BG = 'rgba(15,15,30,0.95)';
@@ -656,6 +709,41 @@
             }
         });
         listo('ch-pagos');
+    })();
+
+    // 8b. Gastos por categoría (donut, solo si hay canvas).
+    (function () {
+        var canvas = document.getElementById('ch-gastos');
+        if (!canvas) return;
+        var cats = Object.keys(GASTOS_CAT);
+        new Chart(canvas, {
+            type: 'doughnut',
+            data: {
+                labels: cats,
+                datasets: [{
+                    data: cats.map(function (c) { return GASTOS_CAT[c].total; }),
+                    backgroundColor: ['#e74c3c', '#f39c12', '#9b59b6', '#3498db', '#2ecc71', '#e91e63', '#95a5a6', '#5d6d7e'],
+                    borderColor: '#16213e',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false, cutout: '62%',
+                plugins: {
+                    legend: { position: 'bottom', labels: { boxWidth: 12, padding: 12 } },
+                    tooltip: {
+                        backgroundColor: TOOLTIP_BG,
+                        callbacks: {
+                            label: function (ctx) {
+                                var c = cats[ctx.dataIndex];
+                                return ' ' + c + ': ' + fmtARS.format(GASTOS_CAT[c].total) + ' · ' + GASTOS_CAT[c].cantidad + ' gastos';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        listo('ch-gastos');
     })();
 
     // 10. Comparación año actual vs anterior (líneas).

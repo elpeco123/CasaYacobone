@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Caja;
 use App\Models\Producto;
+use App\Models\Retiro;
 use App\Models\Venta;
 use App\Models\VentaItem;
 use Carbon\Carbon;
@@ -220,6 +221,22 @@ class ReporteController extends Controller
         }
         $totalPagos = array_sum(array_column($porPago, 'total')) ?: 1;
 
+        // --- 8b. Gastos por categoría (retiros del período, mensual y anual) ---
+        $retirosPeriodo = Retiro::whereBetween('created_at', [$inicioUtc, $finUtc])
+            ->with('categoriaGasto')
+            ->get(['id', 'categoria_gasto_id', 'monto', 'created_at']);
+        $porGastoCategoria = [];
+        foreach ($retirosPeriodo as $retiro) {
+            $nombre = $retiro->categoriaGasto?->nombre ?? 'Sin categoría';
+            if (! isset($porGastoCategoria[$nombre])) {
+                $porGastoCategoria[$nombre] = ['total' => 0.0, 'cantidad' => 0];
+            }
+            $porGastoCategoria[$nombre]['total'] += (float) $retiro->monto;
+            $porGastoCategoria[$nombre]['cantidad']++;
+        }
+        arsort($porGastoCategoria);
+        $totalGastos = array_sum(array_column($porGastoCategoria, 'total'));
+
         // --- 9. Tabla resumen del período + variación vs bucket anterior ---
         $resumen = [];
         $prevTotal = null;
@@ -316,6 +333,8 @@ class ReporteController extends Controller
             'rentabilidad' => $rentabilidad,
             'pagos' => $porPago,
             'totalPagos' => $totalPagos,
+            'gastosCategoria' => $porGastoCategoria,
+            'totalGastos' => $totalGastos,
             'resumen' => $resumen,
             'comparacionAnual' => $comparacionAnual,
             'comparacionMes' => $comparacionMes,

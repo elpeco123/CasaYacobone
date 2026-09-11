@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Caja;
+use App\Models\CategoriaGasto;
 use App\Models\Venta;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
@@ -35,9 +36,11 @@ class CajaController extends Controller
             $ventasFactura = (float) $ventasCaja->where('tipo_pago', 'factura')->sum('total');
             $cantidadVentas = $ventasCaja->count();
 
-            $retiros = $cajaAbierta->retiros()->with('user')->latest()->get();
+            $retiros = $cajaAbierta->retiros()->with(['user', 'categoriaGasto'])->latest()->get();
             $totalRetiros = (float) $retiros->sum('monto');
         }
+
+        $categoriasGasto = CategoriaGasto::orderBy('nombre')->get(['id', 'nombre']);
 
         $montoInicial = $cajaAbierta ? (float) $cajaAbierta->monto_inicial : 0.0;
         $totalEfectivoEnCaja = $montoInicial + $ventasEfectivo - $totalRetiros;
@@ -52,6 +55,7 @@ class CajaController extends Controller
             'cantidadVentas',
             'retiros',
             'totalRetiros',
+            'categoriasGasto',
             'totalEfectivoEnCaja',
             'totalVendidoCaja'
         ));
