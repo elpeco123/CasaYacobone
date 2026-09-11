@@ -119,14 +119,15 @@
 
                         <div class="p-3" style="background: rgba(212, 165, 116, 0.12); border-radius: 12px; border: 1px solid rgba(212, 165, 116, 0.35);">
                             <div class="mb-1" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.6px; font-weight: 700; color: #e2e8f0;">
-                                Total General del Día (Efectivo en Caja + Digital)
+                                <span class="d-none d-md-inline">Total General del Día (Efectivo en Caja + Digital)</span>
+                                <span class="d-md-none">Total general del día</span>
                             </div>
                             <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-2">
                                 <div>
                                     <div class="fw-bold cierre-total-amount" style="font-size: 1.5rem; color: var(--cy-gold); text-shadow: 0 0 10px rgba(212, 165, 116, 0.2);">
                                         ${{ number_format($totalCierreGeneral, 0, ',', '.') }}
                                     </div>
-                                    <div style="font-size: 0.82rem; color: #cbd5e1; font-weight: 500;">
+                                    <div class="d-none d-md-block" style="font-size: 0.82rem; color: #cbd5e1; font-weight: 500;">
                                         {{ $cantidadVentasHoy }} {{ $cantidadVentasHoy === 1 ? 'operación' : 'operaciones' }} hoy · Ventas: ${{ number_format($ventasHoy, 0, ',', '.') }}
                                     </div>
                                 </div>
@@ -146,7 +147,12 @@
                     </div>
 
                     <div class="mt-3 pt-2 text-center" style="font-size: 0.8rem; color: #94a3b8;">
-                        <i class="bi bi-info-circle me-1" style="color: var(--cy-gold);"></i>El <strong>Total Efectivo en Caja (${{ number_format($totalEfectivoEnCaja, 0, ',', '.') }})</strong> es el monto físico que debe contarse en el arqueo al cerrar el día.
+                        <span class="d-none d-md-inline">
+                            <i class="bi bi-info-circle me-1" style="color: var(--cy-gold);"></i>El <strong>Total Efectivo en Caja (${{ number_format($totalEfectivoEnCaja, 0, ',', '.') }})</strong> es el monto físico que debe contarse en el arqueo al cerrar el día.
+                        </span>
+                        <span class="d-md-none">
+                            <i class="bi bi-info-circle me-1" style="color: var(--cy-gold);"></i>El <strong>Total Efectivo en Caja</strong> es: cambio inicial + efectivo − gastos.
+                        </span>
                     </div>
                 </div>
             </div>
