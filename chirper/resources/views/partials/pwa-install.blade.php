@@ -18,10 +18,10 @@
         z-index: 1080;
         display: flex; align-items: center; gap: .9rem;
         max-width: 520px; margin: 0 auto;
-        background: rgba(22, 33, 62, .96);
+        background: rgba(43, 29, 21, .96);
         backdrop-filter: blur(15px);
         -webkit-backdrop-filter: blur(15px);
-        border: 1px solid rgba(212, 165, 116, .3);
+        border: 1px solid rgba(212, 154, 82, .3);
         border-radius: 16px;
         padding: .9rem 1rem;
         box-shadow: 0 12px 40px rgba(0, 0, 0, .5);
@@ -33,32 +33,32 @@
 
     .cy-pwa-icon {
         width: 48px; height: 48px; border-radius: 12px; object-fit: cover; flex-shrink: 0;
-        border: 1px solid rgba(212, 165, 116, .4);
+        border: 1px solid rgba(212, 154, 82, .4);
     }
     .cy-pwa-text { flex: 1; min-width: 0; }
-    .cy-pwa-text strong { display: block; font-size: .9rem; color: #e8c9a0; }
-    .cy-pwa-text span { font-size: .78rem; color: #cbd5e1; }
+    .cy-pwa-text strong { display: block; font-size: .9rem; color: #ecc58f; }
+    .cy-pwa-text span { font-size: .78rem; color: #cdb99c; }
 
     .cy-pwa-actions { display: flex; align-items: center; gap: .5rem; flex-shrink: 0; }
     .cy-pwa-install {
-        background: linear-gradient(135deg, #d4a574, #c4955e);
-        border: none; color: #1a1a2e; font-weight: 700; font-size: .82rem;
+        background: linear-gradient(135deg, #d49a52, #b9803e);
+        border: none; color: #1f1510; font-weight: 700; font-size: .82rem;
         padding: .55rem 1rem; border-radius: 10px; cursor: pointer; white-space: nowrap;
     }
     .cy-pwa-install:active { transform: scale(.97); }
     .cy-pwa-close {
-        background: transparent; border: none; color: #cbd5e1;
+        background: transparent; border: none; color: #cdb99c;
         font-size: 1.2rem; line-height: 1; cursor: pointer; padding: .25rem .4rem;
     }
 
     /* ===== Guía paso a paso para iOS ===== */
-    .cy-pwa-ios-steps { margin: .6rem 0 0; padding-left: 0; list-style: none; font-size: .8rem; color: #cbd5e1; }
+    .cy-pwa-ios-steps { margin: .6rem 0 0; padding-left: 0; list-style: none; font-size: .8rem; color: #cdb99c; }
     .cy-pwa-ios-steps li {
         display: flex; align-items: center; gap: .5rem;
         padding: .35rem 0; border-top: 1px solid rgba(255, 255, 255, .06);
     }
     .cy-pwa-ios-steps li:first-child { border-top: none; }
-    .cy-pwa-ios-steps .bi { color: #d4a574; font-size: 1rem; }
+    .cy-pwa-ios-steps .bi { color: #d49a52; font-size: 1rem; }
 
     /* ===== Toast de nueva versión ===== */
     .cy-pwa-update {
@@ -66,19 +66,19 @@
         top: 1rem; left: 50%; transform: translateX(-50%);
         z-index: 1090;
         display: flex; align-items: center; gap: .75rem;
-        background: rgba(22, 33, 62, .97);
-        border: 1px solid rgba(46, 204, 113, .4);
+        background: rgba(43, 29, 21, .97);
+        border: 1px solid rgba(155, 179, 95, .4);
         border-radius: 12px;
         padding: .7rem 1rem;
-        font-size: .85rem; color: #f8fafc;
+        font-size: .85rem; color: #f2e6d2;
         box-shadow: 0 8px 30px rgba(0, 0, 0, .5);
         max-width: calc(100vw - 2rem);
     }
     .cy-pwa-update[hidden] { display: none; }
-    .cy-pwa-update .bi { color: #2ecc71; }
+    .cy-pwa-update .bi { color: #9bb35f; }
     .cy-pwa-update button {
-        background: rgba(46, 204, 113, .15); border: 1px solid rgba(46, 204, 113, .4);
-        color: #2ecc71; font-size: .8rem; font-weight: 600;
+        background: rgba(155, 179, 95, .15); border: 1px solid rgba(155, 179, 95, .4);
+        color: #9bb35f; font-size: .8rem; font-weight: 600;
         padding: .35rem .8rem; border-radius: 8px; cursor: pointer; white-space: nowrap;
     }
 </style>

@@ -14,7 +14,7 @@
             </p>
         </div>
         <div class="d-flex align-items-center gap-2">
-            <span class="badge px-3 py-2" style="font-size: 0.85rem; color: #f8f9fa; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); font-weight: 500;">
+            <span class="badge px-3 py-2" style="font-size: 0.85rem; color: #f2e6d2; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); font-weight: 500;">
                 <i class="bi bi-calendar3 me-1" style="color: var(--cy-gold);"></i>{{ now()->locale('es')->isoFormat('dddd, D [de] MMMM [de] YYYY') }}
             </span>
         </div>
@@ -24,19 +24,19 @@
         {{-- ===== CAJA ABIERTA: resumen en vivo + cierre ===== --}}
         <div class="row g-4">
             <div class="col-lg-5">
-                <div class="card-glass h-100" style="border: 1px solid rgba(46, 204, 113, 0.35);">
+                <div class="card-glass h-100" style="border: 1px solid rgba(155, 179, 95, 0.35);">
                     <div class="card-body p-4">
                         <div class="d-flex align-items-center justify-content-between mb-3">
                             <h5 class="mb-0 fw-bold text-white">
-                                <i class="bi bi-unlock-fill me-2" style="color: #4ade80;"></i>
+                                <i class="bi bi-unlock-fill me-2" style="color: #a9c46c;"></i>
                                 Caja #{{ $cajaAbierta->id }} Abierta
                             </h5>
-                            <span class="badge bg-success bg-opacity-25 text-success border border-success px-2.5 py-1" style="font-size: 0.75rem; color: #4ade80 !important; font-weight: 700;">
+                            <span class="badge bg-success bg-opacity-25 text-success border border-success px-2.5 py-1" style="font-size: 0.75rem; color: #a9c46c !important; font-weight: 700;">
                                 <i class="bi bi-check-circle-fill me-1"></i>En curso
                             </span>
                         </div>
 
-                        <div class="p-3 mb-3 rounded-3" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); font-size: 0.88rem; color: #cbd5e1;">
+                        <div class="p-3 mb-3 rounded-3" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); font-size: 0.88rem; color: #cdb99c;">
                             <div class="d-flex align-items-center mb-1">
                                 <i class="bi bi-person-check-fill me-2 text-warning"></i>
                                 <span>Abierta por: <strong class="text-white">{{ $cajaAbierta->user->name ?? 'Usuario' }}</strong></span>
@@ -55,7 +55,7 @@
                             </div>
                         </div>
 
-                        <p style="font-size: 0.85rem; color: #cbd5e1;" class="mb-3">
+                        <p style="font-size: 0.85rem; color: #cdb99c;" class="mb-3">
                             Al cerrar se guardan la hora de cierre y los totales por medio de pago. El panel de ventas se reinicia para la próxima apertura.
                         </p>
 
@@ -80,14 +80,14 @@
                             Resumen del Período en Vivo
                         </h5>
 
-                        <div class="p-3 mb-4 rounded-3" style="background: linear-gradient(135deg, rgba(22, 33, 62, 0.9), rgba(15, 52, 96, 0.85)); border: 2px solid var(--cy-gold); box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
+                        <div class="p-3 mb-4 rounded-3" style="background: linear-gradient(135deg, rgba(43, 29, 21, 0.9), rgba(60, 40, 26, 0.85)); border: 2px solid var(--cy-gold); box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
                             <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-2 mb-1">
                                 <div class="w-100">
                                     <span class="badge bg-gold-light text-dark fw-bold px-2.5 py-1 mb-1" style="font-size: 0.75rem;">
                                         DINERO FÍSICO DISPONIBLE
                                     </span>
                                     <h4 class="mb-0 fw-bold text-white">Total de Efectivo en Caja</h4>
-                                    <small style="color: #cbd5e1;">Cambio inicial + Efectivo − Gastos</small>
+                                    <small style="color: #cdb99c;">Cambio inicial + Efectivo − Gastos</small>
                                 </div>
                                 <div class="text-start text-sm-end w-100">
                                     <div class="fw-extrabold text-break" style="font-size: clamp(1.4rem, 7vw, 2rem); line-height: 1.1; color: #f6c078; text-shadow: 0 0 15px rgba(246, 192, 120, 0.4);">
@@ -97,25 +97,25 @@
                             </div>
                         </div>
 
-                        <div class="p-3 rounded-3 mb-3" style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.1);">
-                            <div class="small fw-bold text-uppercase mb-2" style="color: #e2e8f0; letter-spacing: 0.5px;">
+                        <div class="p-3 rounded-3 mb-3" style="background: rgba(26, 17, 12, 0.6); border: 1px solid rgba(255,255,255,0.1);">
+                            <div class="small fw-bold text-uppercase mb-2" style="color: #eadcc6; letter-spacing: 0.5px;">
                                 Cobros del Período
                             </div>
                             <div class="d-flex justify-content-between align-items-center py-1.5 border-bottom border-secondary border-opacity-50">
-                                <span style="color: #cbd5e1;">Efectivo:</span>
+                                <span style="color: #cdb99c;">Efectivo:</span>
                                 <span class="fw-bold text-success">+${{ number_format($ventasEfectivo, 0, ',', '.') }}</span>
                             </div>
                             <div class="d-flex justify-content-between align-items-center py-1.5 border-bottom border-secondary border-opacity-50">
-                                <span style="color: #cbd5e1;">Gastos / retiros:</span>
+                                <span style="color: #cdb99c;">Gastos / retiros:</span>
                                 <span class="fw-bold text-danger">−${{ number_format($totalRetiros, 0, ',', '.') }}</span>
                             </div>
                             <div class="d-flex justify-content-between align-items-center py-1.5 border-bottom border-secondary border-opacity-50">
-                                <span style="color: #cbd5e1;">Tarjeta:</span>
-                                <span class="fw-bold" style="color: #c084fc;">${{ number_format($ventasTarjeta, 0, ',', '.') }}</span>
+                                <span style="color: #cdb99c;">Tarjeta:</span>
+                                <span class="fw-bold" style="color: #cfa0c6;">${{ number_format($ventasTarjeta, 0, ',', '.') }}</span>
                             </div>
                             <div class="d-flex justify-content-between align-items-center py-1.5 border-bottom border-secondary border-opacity-50">
-                                <span style="color: #cbd5e1;">Factura:</span>
-                                <span class="fw-bold" style="color: #38bdf8;">${{ number_format($ventasFactura, 0, ',', '.') }}</span>
+                                <span style="color: #cdb99c;">Factura:</span>
+                                <span class="fw-bold" style="color: #8fbcd4;">${{ number_format($ventasFactura, 0, ',', '.') }}</span>
                             </div>
                             <div class="d-flex justify-content-between align-items-center pt-2 mt-1">
                                 <span class="fw-bold text-white">Total General del Período:</span>
@@ -132,7 +132,7 @@
                             <i class="bi bi-cash-coin me-2" style="color: var(--cy-accent);"></i>
                             Gastos de la Caja
                         </h5>
-                        <p style="font-size: 0.85rem; color: #cbd5e1;" class="mb-3">
+                        <p style="font-size: 0.85rem; color: #cdb99c;" class="mb-3">
                             Dinero gastado de esta caja (ej: yerba, limpieza). Se descuenta del efectivo físico.
                         </p>
 
@@ -173,7 +173,7 @@
                         </form>
 
                         @if($retiros->isEmpty())
-                            <p class="text-center mb-0" style="font-size: 0.85rem; color: #94a3b8;">
+                            <p class="text-center mb-0" style="font-size: 0.85rem; color: #a8927a;">
                                 Sin gastos registrados en esta caja.
                             </p>
                         @else
@@ -183,7 +183,7 @@
                                         @foreach($retiros as $retiro)
                                             <tr>
                                                 <td class="text-white">
-                                                    <span class="badge me-1" style="background: rgba(233,69,96,0.15); color: #ff8fa3; border: 1px solid rgba(233,69,96,0.3); font-size: 0.72rem;">
+                                                    <span class="badge me-1" style="background: rgba(192, 73, 47, 0.15); color: #ff8fa3; border: 1px solid rgba(192, 73, 47, 0.3); font-size: 0.72rem;">
                                                         {{ $retiro->categoriaGasto->nombre ?? 'Sin categoría' }}
                                                     </span>
                                                     {{ $retiro->concepto }}
@@ -216,7 +216,7 @@
         {{-- ===== SIN CAJA ABIERTA: formulario de apertura ===== --}}
         <div class="row g-4">
             <div class="col-lg-6 mx-auto">
-                <div class="card-glass h-100" style="border: 1px solid rgba(212, 165, 116, 0.35);">
+                <div class="card-glass h-100" style="border: 1px solid rgba(212, 154, 82, 0.35);">
                     <div class="card-body p-4">
                         <div class="d-flex align-items-center justify-content-between mb-3">
                             <h5 class="mb-0 fw-bold text-white">
@@ -228,7 +228,7 @@
                             </span>
                         </div>
 
-                        <p style="font-size: 0.88rem; color: #cbd5e1;" class="mb-4">
+                        <p style="font-size: 0.88rem; color: #cdb99c;" class="mb-4">
                             Ingresá el dinero en efectivo para dar cambio. Se inicia un nuevo período: solo verás las ventas de esta caja hasta cerrarla.
                         </p>
 
@@ -254,7 +254,7 @@
                             </div>
 
                             <div class="mb-3">
-                                <span class="small d-block mb-2" style="color: #cbd5e1; font-weight: 500;">Montos rápidos de cambio:</span>
+                                <span class="small d-block mb-2" style="color: #cdb99c; font-weight: 500;">Montos rápidos de cambio:</span>
                                 <div class="d-flex flex-wrap gap-2">
                                     <button type="button" class="btn btn-glass btn-sm text-light fw-bold btn-preset-monto" data-monto="5000">+$5.000</button>
                                     <button type="button" class="btn btn-glass btn-sm text-light fw-bold btn-preset-monto" data-monto="10000">+$10.000</button>

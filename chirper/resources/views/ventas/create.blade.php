@@ -9,13 +9,13 @@
         overflow-y: auto !important;
         overflow-x: hidden !important;
         scrollbar-width: thin;
-        scrollbar-color: var(--cy-gold) rgba(15, 23, 42, 0.8);
+        scrollbar-color: var(--cy-gold) rgba(26, 17, 12, 0.8);
     }
     .custom-search-results::-webkit-scrollbar {
         width: 8px;
     }
     .custom-search-results::-webkit-scrollbar-track {
-        background: rgba(15, 23, 42, 0.8);
+        background: rgba(26, 17, 12, 0.8);
         border-radius: 4px;
     }
     .custom-search-results::-webkit-scrollbar-thumb {
@@ -47,7 +47,7 @@
             <div class="col-lg-8">
 
                 {{-- Buscador Rápido de Productos --}}
-                <div class="card-glass mb-4" style="background: rgba(15, 52, 96, 0.4); border: 1px solid rgba(212, 165, 116, 0.25);">
+                <div class="card-glass mb-4" style="background: rgba(60, 40, 26, 0.4); border: 1px solid rgba(212, 154, 82, 0.25);">
                     <div class="card-body p-3">
                         <div class="d-flex align-items-center gap-2 mb-2">
                             <i class="bi bi-search text-warning fs-5"></i>
@@ -65,7 +65,7 @@
 
                         {{-- Live Search Results dropdown list --}}
                         <div id="searchResultsList" class="mt-2 rounded-3 shadow-lg custom-search-results"
-                             style="display: none; background: rgba(15, 20, 40, 0.98); border: 1px solid var(--cy-gold);">
+                             style="display: none; background: rgba(35, 23, 16, 0.98); border: 1px solid var(--cy-gold);">
                             {{-- Results populated via JS --}}
                         </div>
                     </div>
@@ -89,9 +89,9 @@
                         </div>
 
                         <div id="emptyMessage" class="text-center py-5">
-                            <i class="bi bi-cart-x" style="font-size: 3rem; color: #94a3b8; opacity: 0.7;"></i>
+                            <i class="bi bi-cart-x" style="font-size: 3rem; color: #a8927a; opacity: 0.7;"></i>
                             <h6 class="text-white mt-3 mb-1 fw-bold">No hay productos agregados a la venta</h6>
-                            <p class="small" style="color: #cbd5e1;">Buscá un producto arriba o tocá en <strong class="text-white">"Agregar Fila Manual"</strong> para comenzar.</p>
+                            <p class="small" style="color: #cdb99c;">Buscá un producto arriba o tocá en <strong class="text-white">"Agregar Fila Manual"</strong> para comenzar.</p>
                         </div>
                     </div>
                 </div>
@@ -99,7 +99,7 @@
 
             {{-- Right Column: Resumen y Confirmación --}}
             <div class="col-lg-4">
-                <div class="card-glass" style="position: sticky; top: 90px; background: rgba(22, 33, 62, 0.85); border: 1px solid rgba(212, 165, 116, 0.25);">
+                <div class="card-glass" style="position: sticky; top: 1.5rem; background: rgba(43, 29, 21, 0.85); border: 1px solid rgba(212, 154, 82, 0.25);">
                     <div class="card-body">
                         <h5 class="mb-3 fw-bold text-white">
                             <i class="bi bi-receipt-cutoff me-2" style="color: var(--cy-gold);"></i>
@@ -107,16 +107,16 @@
                         </h5>
 
                         <div class="d-flex justify-content-between align-items-center mb-2" style="font-size: 0.95rem;">
-                            <span style="color: #e2e8f0; font-weight: 500;">Variedad de Productos:</span>
+                            <span style="color: #eadcc6; font-weight: 500;">Variedad de Productos:</span>
                             <span id="totalItems" class="fw-bold text-white px-2 py-0.5 rounded" style="background: rgba(255,255,255,0.1); min-width: 28px; text-align: center;">0</span>
                         </div>
                         <div class="d-flex justify-content-between align-items-center mb-3" style="font-size: 0.95rem;">
-                            <span style="color: #e2e8f0; font-weight: 500;">Total de Unidades:</span>
-                            <span id="totalUnidades" class="fw-bold px-2 py-0.5 rounded" style="background: rgba(56, 189, 248, 0.2); color: #38bdf8; min-width: 28px; text-align: center;">0</span>
+                            <span style="color: #eadcc6; font-weight: 500;">Total de Unidades:</span>
+                            <span id="totalUnidades" class="fw-bold px-2 py-0.5 rounded" style="background: rgba(143, 188, 212, 0.2); color: #8fbcd4; min-width: 28px; text-align: center;">0</span>
                         </div>
 
                         <div class="mb-3">
-                            <label for="tipo_pago" class="form-label text-light fw-semibold" style="color: #e2e8f0 !important;">Forma de Pago *</label>
+                            <label for="tipo_pago" class="form-label text-light fw-semibold" style="color: #eadcc6 !important;">Forma de Pago *</label>
                             <select name="tipo_pago" id="tipo_pago" class="form-select form-select-dark @error('tipo_pago') is-invalid @enderror" required style="font-weight: 600;">
                                 <option value="efectivo" {{ old('tipo_pago') == 'efectivo' ? 'selected' : '' }}>Efectivo</option>
                                 <option value="tarjeta" {{ old('tipo_pago') == 'tarjeta' ? 'selected' : '' }}>Tarjeta</option>
@@ -128,7 +128,7 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="descuento_porcentaje" class="form-label d-flex justify-content-between align-items-center fw-semibold" style="color: #e2e8f0 !important;">
+                            <label for="descuento_porcentaje" class="form-label d-flex justify-content-between align-items-center fw-semibold" style="color: #eadcc6 !important;">
                                 <span>Descuento (%)</span>
                                 <span class="badge bg-warning text-dark fw-bold" id="descuentoTag" style="font-size: 0.8rem;">0%</span>
                             </label>
@@ -146,17 +146,17 @@
                         <hr style="border-color: rgba(255,255,255,0.15); margin: 1.2rem 0;">
 
                         <div class="d-flex justify-content-between align-items-center mb-2" style="font-size: 0.95rem;">
-                            <span style="color: #e2e8f0; font-weight: 600;">Subtotal:</span>
+                            <span style="color: #eadcc6; font-weight: 600;">Subtotal:</span>
                             <span id="subtotalMonto" class="fw-bold text-white fs-6">$0</span>
                         </div>
                         <div class="d-flex justify-content-between align-items-center mb-3" style="font-size: 0.95rem;">
-                            <span style="color: #e2e8f0; font-weight: 600;">Descuento Aplicado:</span>
-                            <span id="descuentoMonto" class="fw-bold fs-6" style="color: #ff6b6b;">-$0</span>
+                            <span style="color: #eadcc6; font-weight: 600;">Descuento Aplicado:</span>
+                            <span id="descuentoMonto" class="fw-bold fs-6" style="color: #e2765c;">-$0</span>
                         </div>
 
-                        <div class="d-flex justify-content-between align-items-center mb-3 p-3 rounded-3" style="background: rgba(212, 165, 116, 0.12); border: 1px solid rgba(212, 165, 116, 0.3);">
+                        <div class="d-flex justify-content-between align-items-center mb-3 p-3 rounded-3" style="background: rgba(212, 154, 82, 0.12); border: 1px solid rgba(212, 154, 82, 0.3);">
                             <span class="text-white" style="font-size: 1.15rem; font-weight: 700;">Total a Cobrar:</span>
-                            <span id="totalMonto" style="font-size: 1.85rem; font-weight: 800; color: var(--cy-gold); text-shadow: 0 0 14px rgba(212,165,116,0.35);">$0</span>
+                            <span id="totalMonto" style="font-size: 1.85rem; font-weight: 800; color: var(--cy-gold); text-shadow: 0 0 14px rgba(212, 154, 82, 0.35);">$0</span>
                         </div>
 
                         <button type="submit" class="btn btn-accent w-100 py-2.5 text-uppercase fw-bold" id="btnRegistrar" disabled style="letter-spacing: 0.5px;">
@@ -177,7 +177,7 @@
     <div class="item-row mb-3 p-3 rounded-3 fade-in" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12);">
         <div class="row g-3 align-items-end">
             <div class="col-md-5">
-                <label class="form-label text-light fw-medium" style="color: #e2e8f0 !important;">Seleccionar Producto</label>
+                <label class="form-label text-light fw-medium" style="color: #eadcc6 !important;">Seleccionar Producto</label>
                 <select class="form-select form-select-dark item-producto" name="items[__INDEX__][producto_id]" required>
                     <option value="">Buscar o seleccionar...</option>
                     @foreach($productos as $prod)
@@ -193,28 +193,28 @@
                 </select>
             </div>
             <div class="col-md-2">
-                <label class="form-label text-light fw-medium" style="color: #e2e8f0 !important;">Cantidad</label>
+                <label class="form-label text-light fw-medium" style="color: #eadcc6 !important;">Cantidad</label>
                 <input type="number" class="form-control form-control-dark item-cantidad"
                        name="items[__INDEX__][cantidad]" min="1" value="1" required>
             </div>
             <div class="col-md-2">
-                <label class="form-label text-light fw-medium" style="color: #e2e8f0 !important;">Precio Unit.</label>
+                <label class="form-label text-light fw-medium" style="color: #eadcc6 !important;">Precio Unit.</label>
                 <input type="text" class="form-control form-control-dark item-precio text-end fw-bold" readonly
                        style="color: var(--cy-gold);">
             </div>
             <div class="col-md-2">
-                <label class="form-label text-light fw-medium" style="color: #e2e8f0 !important;">Subtotal</label>
+                <label class="form-label text-light fw-medium" style="color: #eadcc6 !important;">Subtotal</label>
                 <input type="text" class="form-control form-control-dark item-subtotal text-end" readonly
                        style="color: var(--cy-gold-light); font-weight: 700; font-size: 1.05rem;">
             </div>
             <div class="col-md-1 text-center">
                 <button type="button" class="btn btn-sm btn-remove-item" title="Quitar item"
-                        style="background: rgba(231,76,60,0.18); border: 1px solid rgba(231,76,60,0.35); color: #ff6b6b; border-radius: 8px; padding: 0.45rem 0.65rem;">
+                        style="background: rgba(208, 85, 58, 0.18); border: 1px solid rgba(208, 85, 58, 0.35); color: #e2765c; border-radius: 8px; padding: 0.45rem 0.65rem;">
                     <i class="bi bi-trash"></i>
                 </button>
             </div>
         </div>
-        <div class="item-stock-info mt-2 d-flex justify-content-between align-items-center" style="font-size: 0.82rem; color: #cbd5e1; display: none;">
+        <div class="item-stock-info mt-2 d-flex justify-content-between align-items-center" style="font-size: 0.82rem; color: #cdb99c; display: none;">
             <span><i class="bi bi-info-circle me-1 text-info"></i>Stock disponible: <strong class="item-stock-display text-white">0</strong></span>
             <span class="item-categoria-display text-gold-light fw-semibold"></span>
         </div>
@@ -266,7 +266,7 @@
 
             if (matches.length === 0) {
                 resultsList.innerHTML = `
-                    <div class="p-3 text-center" style="color: #cbd5e1;">
+                    <div class="p-3 text-center" style="color: #cdb99c;">
                         <i class="bi bi-search me-1"></i>No se encontraron productos con "${query}"
                     </div>
                 `;
@@ -278,11 +278,11 @@
                 <div class="search-item-result p-2 px-3 border-bottom border-secondary d-flex justify-content-between align-items-center"
                      style="cursor: pointer; transition: background 0.2s;"
                      data-id="${p.id}"
-                     onmouseover="this.style.background='rgba(212, 165, 116, 0.15)'"
+                     onmouseover="this.style.background='rgba(212, 154, 82, 0.15)'"
                      onmouseout="this.style.background='transparent'">
                     <div>
                         <strong class="text-white">${p.nombre}</strong>
-                        <div class="small" style="color: #cbd5e1;">${p.marca} · <span class="text-info">${p.categoria}</span></div>
+                        <div class="small" style="color: #cdb99c;">${p.marca} · <span class="text-info">${p.categoria}</span></div>
                     </div>
                     <div class="text-end ms-3">
                         <div class="fw-bold" style="color: var(--cy-gold); font-size: 1rem;">$${p.precio.toLocaleString('es-AR')}</div>

@@ -47,31 +47,31 @@
     </div>
 
     {{-- Desglose de Caja y Formas de Pago --}}
-    <div class="card-glass mb-4" style="background: rgba(15, 52, 96, 0.35); border: 1px solid rgba(212, 165, 116, 0.25);">
+    <div class="card-glass mb-4" style="background: rgba(60, 40, 26, 0.35); border: 1px solid rgba(212, 154, 82, 0.25);">
         <div class="card-body p-3">
             <div class="row g-3 align-items-center">
                 <div class="col-md-3">
-                    <div class="p-2.5 rounded-3" style="background: rgba(212, 165, 116, 0.12); border: 1px solid rgba(212, 165, 116, 0.25);">
-                        <span class="d-block small" style="color: #cbd5e1;">Cambio Inicial:</span>
+                    <div class="p-2.5 rounded-3" style="background: rgba(212, 154, 82, 0.12); border: 1px solid rgba(212, 154, 82, 0.25);">
+                        <span class="d-block small" style="color: #cdb99c;">Cambio Inicial:</span>
                         <strong class="fs-6" style="color: var(--cy-gold);">${{ number_format($montoInicialCaja, 0, ',', '.') }}</strong>
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <div class="p-2.5 rounded-3" style="background: rgba(74, 222, 128, 0.1); border: 1px solid rgba(74, 222, 128, 0.25);">
-                        <span class="d-block small" style="color: #cbd5e1;">Ventas Efectivo:</span>
+                    <div class="p-2.5 rounded-3" style="background: rgba(155, 179, 95, 0.1); border: 1px solid rgba(155, 179, 95, 0.25);">
+                        <span class="d-block small" style="color: #cdb99c;">Ventas Efectivo:</span>
                         <strong class="fs-6 text-success">+${{ number_format($ventasEfectivoDia, 0, ',', '.') }}</strong>
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <div class="p-2.5 rounded-3" style="background: rgba(192, 132, 252, 0.1); border: 1px solid rgba(192, 132, 252, 0.25);">
-                        <span class="d-block small" style="color: #cbd5e1;">Ventas Tarjeta:</span>
-                        <strong class="fs-6" style="color: #c084fc;">${{ number_format($ventasTarjetaDia, 0, ',', '.') }}</strong>
+                    <div class="p-2.5 rounded-3" style="background: rgba(207, 160, 198, 0.1); border: 1px solid rgba(207, 160, 198, 0.25);">
+                        <span class="d-block small" style="color: #cdb99c;">Ventas Tarjeta:</span>
+                        <strong class="fs-6" style="color: #cfa0c6;">${{ number_format($ventasTarjetaDia, 0, ',', '.') }}</strong>
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <div class="p-2.5 rounded-3" style="background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.25);">
-                        <span class="d-block small" style="color: #cbd5e1;">Ventas Factura:</span>
-                        <strong class="fs-6" style="color: #38bdf8;">${{ number_format($ventasFacturaDia, 0, ',', '.') }}</strong>
+                    <div class="p-2.5 rounded-3" style="background: rgba(143, 188, 212, 0.1); border: 1px solid rgba(143, 188, 212, 0.25);">
+                        <span class="d-block small" style="color: #cdb99c;">Ventas Factura:</span>
+                        <strong class="fs-6" style="color: #8fbcd4;">${{ number_format($ventasFacturaDia, 0, ',', '.') }}</strong>
                     </div>
                 </div>
             </div>

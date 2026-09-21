@@ -62,10 +62,10 @@
                                     <i class="bi bi-person-fill me-1" style="color: var(--cy-gold);"></i>
                                     {{ $caja->user->name ?? 'Usuario' }}
                                 </td>
-                                <td style="color: #cbd5e1;">
+                                <td style="color: #cdb99c;">
                                     {{ $caja->fecha_apertura?->format('d/m/Y H:i') ?? $caja->fecha?->format('d/m/Y') ?? '—' }}
                                 </td>
-                                <td style="color: #cbd5e1;">
+                                <td style="color: #cdb99c;">
                                     {{ $caja->fecha_cierre?->format('d/m/Y H:i') ?? '—' }}
                                 </td>
                                 <td class="text-center">
@@ -74,12 +74,12 @@
                                             <i class="bi bi-unlock-fill me-1"></i>Abierta
                                         </span>
                                     @else
-                                        <span class="badge" style="background: rgba(148,163,184,0.15); color: #94a3b8; font-weight: 600; padding: 0.35rem 0.7rem; border-radius: 8px; font-size: 0.78rem;">
+                                        <span class="badge" style="background: rgba(168, 146, 122, 0.15); color: #a8927a; font-weight: 600; padding: 0.35rem 0.7rem; border-radius: 8px; font-size: 0.78rem;">
                                             <i class="bi bi-lock-fill me-1"></i>Cerrada
                                         </span>
                                     @endif
                                 </td>
-                                <td class="text-end" style="color: #cbd5e1;">
+                                <td class="text-end" style="color: #cdb99c;">
                                     ${{ number_format($caja->monto_inicial, 0, ',', '.') }}
                                 </td>
                                 <td class="text-end fw-bold text-success">
@@ -88,10 +88,10 @@
                                 <td class="text-end fw-bold text-danger">
                                     −${{ number_format($retiros, 0, ',', '.') }}
                                 </td>
-                                <td class="text-end fw-bold" style="color: #c084fc;">
+                                <td class="text-end fw-bold" style="color: #cfa0c6;">
                                     ${{ number_format($tarjeta, 0, ',', '.') }}
                                 </td>
-                                <td class="text-end fw-bold" style="color: #38bdf8;">
+                                <td class="text-end fw-bold" style="color: #8fbcd4;">
                                     ${{ number_format($factura, 0, ',', '.') }}
                                 </td>
                                 <td class="text-center">{{ $cantidad }}</td>
@@ -105,8 +105,8 @@
                         @empty
                             <tr>
                                 <td colspan="13" class="text-center py-4">
-                                    <i class="bi bi-inbox" style="font-size: 2.2rem; color: #94a3b8;"></i>
-                                    <p class="mt-2 mb-0" style="color: #cbd5e1;">Todavía no hay cajas registradas.</p>
+                                    <i class="bi bi-inbox" style="font-size: 2.2rem; color: #a8927a;"></i>
+                                    <p class="mt-2 mb-0" style="color: #cdb99c;">Todavía no hay cajas registradas.</p>
                                 </td>
                             </tr>
                         @endforelse

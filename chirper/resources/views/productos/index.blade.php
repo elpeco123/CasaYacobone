@@ -38,8 +38,8 @@
             </div>
         </div>
         <div class="col-md-6 col-lg-3">
-            <div class="kpi-card kpi-purple" style="background: linear-gradient(135deg, rgba(155, 89, 182, 0.15), rgba(142, 68, 173, 0.25)); border: 1px solid rgba(155, 89, 182, 0.3);">
-                <div class="kpi-icon" style="color: #af7ac5;"><i class="bi bi-graph-up-arrow"></i></div>
+            <div class="kpi-card kpi-purple" style="background: linear-gradient(135deg, rgba(176, 104, 128, 0.15), rgba(150, 84, 108, 0.25)); border: 1px solid rgba(176, 104, 128, 0.3);">
+                <div class="kpi-icon" style="color: #cfa0c6;"><i class="bi bi-graph-up-arrow"></i></div>
                 <div class="kpi-value" style="color: #d7bde2;">${{ number_format($valorTotalStockVenta, 0, ',', '.') }}</div>
                 <div class="kpi-label">Valor Stock (a Venta)</div>
             </div>
@@ -149,7 +149,7 @@
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-glass btn-sm px-2 py-1"
-                                                style="background: rgba(231,76,60,0.15); border: 1px solid rgba(231,76,60,0.3); color: #e74c3c;"
+                                                style="background: rgba(208, 85, 58, 0.15); border: 1px solid rgba(208, 85, 58, 0.3); color: #d0553a;"
                                                 title="Eliminar">
                                             <i class="bi bi-trash"></i>
                                         </button>

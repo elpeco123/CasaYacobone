@@ -23,11 +23,11 @@
             <h1><i class="bi bi-cart-fill me-2" style="color: var(--cy-gold);"></i>Ventas</h1>
             @if(!empty($soloHoy))
                 @if(!empty($cajaAbierta))
-                    <span class="badge" style="background: rgba(46,204,113,0.15); color: #4ade80; border: 1px solid rgba(46,204,113,0.3); font-weight: 500;">
+                    <span class="badge" style="background: rgba(155, 179, 95, 0.15); color: #a9c46c; border: 1px solid rgba(155, 179, 95, 0.3); font-weight: 500;">
                         <i class="bi bi-unlock-fill me-1"></i>Caja #{{ $cajaAbierta->id }} · abierta {{ $cajaAbierta->fecha_apertura?->format('d/m H:i') }}
                     </span>
                 @else
-                    <a href="{{ route('caja.index') }}" class="badge text-decoration-none" style="background: rgba(243,156,18,0.15); color: #fbbf24; border: 1px solid rgba(243,156,18,0.3); font-weight: 500;">
+                    <a href="{{ route('caja.index') }}" class="badge text-decoration-none" style="background: rgba(224, 163, 58, 0.15); color: #fbbf24; border: 1px solid rgba(224, 163, 58, 0.3); font-weight: 500;">
                         <i class="bi bi-exclamation-circle-fill me-1"></i>Sin caja abierta · Tocá para abrir una
                     </a>
                 @endif
@@ -58,22 +58,22 @@
                         <tr>
                             <td class="fw-bold text-white">{{ $venta->id }}</td>
                             <td class="text-light">{{ $venta->created_at->format('d/m/Y') }}</td>
-                            <td style="color: #cbd5e1;">{{ $venta->created_at->format('H:i') }}</td>
+                            <td style="color: #cdb99c;">{{ $venta->created_at->format('H:i') }}</td>
                             <td class="text-white">
                                 <i class="bi bi-person-fill me-1" style="color: var(--cy-gold);"></i>
                                 {{ $venta->user->name }}
                             </td>
                             <td class="text-center">
                                 @if(($venta->tipo_pago ?? 'efectivo') === 'tarjeta')
-                                    <span class="badge" style="background: rgba(155, 89, 182, 0.25); color: #c084fc; border: 1px solid rgba(155, 89, 182, 0.5); font-weight: 600;">
+                                    <span class="badge" style="background: rgba(176, 104, 128, 0.25); color: #cfa0c6; border: 1px solid rgba(176, 104, 128, 0.5); font-weight: 600;">
                                         Tarjeta
                                     </span>
                                 @elseif(($venta->tipo_pago ?? 'efectivo') === 'factura')
-                                    <span class="badge" style="background: rgba(52, 152, 219, 0.25); color: #38bdf8; border: 1px solid rgba(52, 152, 219, 0.5); font-weight: 600;">
+                                    <span class="badge" style="background: rgba(143, 188, 212, 0.25); color: #8fbcd4; border: 1px solid rgba(143, 188, 212, 0.5); font-weight: 600;">
                                         Factura
                                     </span>
                                 @else
-                                    <span class="badge" style="background: rgba(46, 204, 113, 0.25); color: #4ade80; border: 1px solid rgba(46, 204, 113, 0.5); font-weight: 600;">
+                                    <span class="badge" style="background: rgba(155, 179, 95, 0.25); color: #a9c46c; border: 1px solid rgba(155, 179, 95, 0.5); font-weight: 600;">
                                         Efectivo
                                     </span>
                                 @endif
@@ -90,8 +90,8 @@
                         @empty
                         <tr>
                             <td colspan="7" class="text-center py-3">
-                                <i class="bi bi-cart-x" style="font-size: 1.8rem; color: #94a3b8;"></i>
-                                <p class="mt-2 mb-0" style="color: #cbd5e1;">No hay ventas registradas.</p>
+                                <i class="bi bi-cart-x" style="font-size: 1.8rem; color: #a8927a;"></i>
+                                <p class="mt-2 mb-0" style="color: #cdb99c;">No hay ventas registradas.</p>
                             </td>
                         </tr>
                         @endforelse

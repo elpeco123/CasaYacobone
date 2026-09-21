@@ -37,7 +37,7 @@
                             <td>{{ $proveedor->telefono ?? '—' }}</td>
                             <td>{{ $proveedor->email ?? '—' }}</td>
                             <td class="text-center">
-                                <span class="badge" style="background: rgba(52,152,219,0.15); color: #3498db; padding: 0.35rem 0.7rem; font-size: 0.78rem;">
+                                <span class="badge" style="background: rgba(143, 188, 212, 0.15); color: #8fbcd4; padding: 0.35rem 0.7rem; font-size: 0.78rem;">
                                     {{ $proveedor->productos_count }}
                                 </span>
                             </td>
@@ -51,7 +51,7 @@
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-sm px-2 py-1"
-                                                style="background: rgba(231,76,60,0.15); border: 1px solid rgba(231,76,60,0.3); color: #e74c3c;"
+                                                style="background: rgba(208, 85, 58, 0.15); border: 1px solid rgba(208, 85, 58, 0.3); color: #d0553a;"
                                                 title="Eliminar">
                                             <i class="bi bi-trash"></i>
                                         </button>

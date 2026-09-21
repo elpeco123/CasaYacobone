@@ -34,8 +34,8 @@
             </div>
         </div>
         <div class="col-md-4">
-            <div class="kpi-card kpi-purple" style="background: linear-gradient(135deg, rgba(155, 89, 182, 0.15), rgba(142, 68, 173, 0.25)); border: 1px solid rgba(155, 89, 182, 0.3);">
-                <div class="kpi-icon" style="color: #af7ac5;"><i class="bi bi-graph-up-arrow"></i></div>
+            <div class="kpi-card kpi-purple" style="background: linear-gradient(135deg, rgba(176, 104, 128, 0.15), rgba(150, 84, 108, 0.25)); border: 1px solid rgba(176, 104, 128, 0.3);">
+                <div class="kpi-icon" style="color: #cfa0c6;"><i class="bi bi-graph-up-arrow"></i></div>
                 <div class="kpi-value" style="color: #d7bde2;">${{ number_format($ventasAnoActual, 0, ',', '.') }}</div>
                 <div class="kpi-label">Total Vendido Anual ({{ now()->year }})</div>
             </div>
@@ -43,14 +43,14 @@
     </div>
 
     {{-- Descuentos Otorgados (Dinero Perdido) --}}
-    <div class="card-glass mb-4" style="border: 1px solid rgba(231, 76, 60, 0.3);">
+    <div class="card-glass mb-4" style="border: 1px solid rgba(208, 85, 58, 0.3);">
         <div class="card-body">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h5 class="mb-0" style="font-weight: 700; color: #ffffff;">
                     <i class="bi bi-percent me-2" style="color: var(--cy-accent);"></i>
                     Dinero Perdido por Descuentos
                 </h5>
-                <span class="badge" style="background: rgba(231, 76, 60, 0.15); color: #e74c3c; border: 1px solid rgba(231, 76, 60, 0.3); font-size: 0.78rem; padding: 0.4rem 0.8rem;">
+                <span class="badge" style="background: rgba(208, 85, 58, 0.15); color: #d0553a; border: 1px solid rgba(208, 85, 58, 0.3); font-size: 0.78rem; padding: 0.4rem 0.8rem;">
                     <i class="bi bi-arrow-down-circle-fill me-1"></i>Resumen de Pérdidas
                 </span>
             </div>
@@ -58,19 +58,19 @@
             <div class="row g-3">
                 {{-- Descuentos Hoy --}}
                 <div class="col-md-4">
-                    <div class="p-3 rounded-3" style="background: rgba(231, 76, 60, 0.08); border: 1px solid rgba(231, 76, 60, 0.2); transition: all 0.3s ease;">
+                    <div class="p-3 rounded-3" style="background: rgba(208, 85, 58, 0.08); border: 1px solid rgba(208, 85, 58, 0.2); transition: all 0.3s ease;">
                         <div class="d-flex align-items-center mb-2">
-                            <div class="me-2" style="width: 38px; height: 38px; background: rgba(231, 76, 60, 0.15); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
-                                <i class="bi bi-calendar-day" style="color: #e74c3c; font-size: 1.1rem;"></i>
+                            <div class="me-2" style="width: 38px; height: 38px; background: rgba(208, 85, 58, 0.15); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                                <i class="bi bi-calendar-day" style="color: #d0553a; font-size: 1.1rem;"></i>
                             </div>
                             <div>
-                                <div style="font-size: 0.75rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">Hoy</div>
+                                <div style="font-size: 0.75rem; color: #a8927a; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">Hoy</div>
                             </div>
                         </div>
-                        <div class="fw-bold" style="font-size: 1.5rem; color: #ff6b6b; letter-spacing: -0.5px;">
+                        <div class="fw-bold" style="font-size: 1.5rem; color: #e2765c; letter-spacing: -0.5px;">
                             -${{ number_format($descuentosHoy, 0, ',', '.') }}
                         </div>
-                        <div style="font-size: 0.78rem; color: #94a3b8;">
+                        <div style="font-size: 0.78rem; color: #a8927a;">
                             {{ $cantidadDescuentosHoy }} {{ $cantidadDescuentosHoy == 1 ? 'venta con descuento' : 'ventas con descuento' }}
                         </div>
                     </div>
@@ -78,19 +78,19 @@
 
                 {{-- Descuentos del Mes --}}
                 <div class="col-md-4">
-                    <div class="p-3 rounded-3" style="background: rgba(243, 156, 18, 0.08); border: 1px solid rgba(243, 156, 18, 0.2); transition: all 0.3s ease;">
+                    <div class="p-3 rounded-3" style="background: rgba(224, 163, 58, 0.08); border: 1px solid rgba(224, 163, 58, 0.2); transition: all 0.3s ease;">
                         <div class="d-flex align-items-center mb-2">
-                            <div class="me-2" style="width: 38px; height: 38px; background: rgba(243, 156, 18, 0.15); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                            <div class="me-2" style="width: 38px; height: 38px; background: rgba(224, 163, 58, 0.15); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
                                 <i class="bi bi-calendar-month" style="color: #f39c12; font-size: 1.1rem;"></i>
                             </div>
                             <div>
-                                <div style="font-size: 0.75rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">{{ ucfirst(now()->locale('es')->monthName) }}</div>
+                                <div style="font-size: 0.75rem; color: #a8927a; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">{{ ucfirst(now()->locale('es')->monthName) }}</div>
                             </div>
                         </div>
                         <div class="fw-bold" style="font-size: 1.5rem; color: #fbbf24; letter-spacing: -0.5px;">
                             -${{ number_format($descuentosMes, 0, ',', '.') }}
                         </div>
-                        <div style="font-size: 0.78rem; color: #94a3b8;">
+                        <div style="font-size: 0.78rem; color: #a8927a;">
                             {{ $cantidadDescuentosMes }} {{ $cantidadDescuentosMes == 1 ? 'venta con descuento' : 'ventas con descuento' }}
                         </div>
                     </div>
@@ -98,19 +98,19 @@
 
                 {{-- Descuentos del Año --}}
                 <div class="col-md-4">
-                    <div class="p-3 rounded-3" style="background: rgba(155, 89, 182, 0.08); border: 1px solid rgba(155, 89, 182, 0.2); transition: all 0.3s ease;">
+                    <div class="p-3 rounded-3" style="background: rgba(176, 104, 128, 0.08); border: 1px solid rgba(176, 104, 128, 0.2); transition: all 0.3s ease;">
                         <div class="d-flex align-items-center mb-2">
-                            <div class="me-2" style="width: 38px; height: 38px; background: rgba(155, 89, 182, 0.15); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
-                                <i class="bi bi-calendar-range" style="color: #af7ac5; font-size: 1.1rem;"></i>
+                            <div class="me-2" style="width: 38px; height: 38px; background: rgba(176, 104, 128, 0.15); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                                <i class="bi bi-calendar-range" style="color: #cfa0c6; font-size: 1.1rem;"></i>
                             </div>
                             <div>
-                                <div style="font-size: 0.75rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">Año {{ now()->year }}</div>
+                                <div style="font-size: 0.75rem; color: #a8927a; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">Año {{ now()->year }}</div>
                             </div>
                         </div>
                         <div class="fw-bold" style="font-size: 1.5rem; color: #d7bde2; letter-spacing: -0.5px;">
                             -${{ number_format($descuentosAno, 0, ',', '.') }}
                         </div>
-                        <div style="font-size: 0.78rem; color: #94a3b8;">
+                        <div style="font-size: 0.78rem; color: #a8927a;">
                             {{ $cantidadDescuentosAno }} {{ $cantidadDescuentosAno == 1 ? 'venta con descuento' : 'ventas con descuento' }}
                         </div>
                     </div>
@@ -278,29 +278,29 @@
                         </a>
                     </div>
 
-                    <div class="p-3 mb-3" style="background: rgba(15, 23, 42, 0.6); border-radius: 12px; border: 1px solid var(--cy-border);">
+                    <div class="p-3 mb-3" style="background: rgba(26, 17, 12, 0.6); border-radius: 12px; border: 1px solid var(--cy-border);">
                         <div class="text-muted mb-2" style="font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">
                             Total Vendido Hoy
                         </div>
                         <div class="d-flex justify-content-between align-items-center mb-1.5" style="font-size: 0.88rem;">
-                            <span style="color: #cbd5e1;">Cambio Inicial (Apertura):</span>
+                            <span style="color: #cdb99c;">Cambio Inicial (Apertura):</span>
                             <span class="fw-bold" style="color: var(--cy-gold);">${{ number_format($montoInicialCaja, 0, ',', '.') }}</span>
                         </div>
                         <div class="d-flex justify-content-between align-items-center mb-1.5" style="font-size: 0.88rem;">
-                            <span style="color: #cbd5e1;">Ventas en Efectivo:</span>
+                            <span style="color: #cdb99c;">Ventas en Efectivo:</span>
                             <span class="fw-bold text-success">+${{ number_format($ventasHoyPorForma['efectivo'], 0, ',', '.') }}</span>
                         </div>
-                        <div class="d-flex justify-content-between align-items-center py-2 px-2 my-1.5 rounded-2" style="background: rgba(212, 165, 116, 0.15); border: 1px solid rgba(212, 165, 116, 0.35); font-size: 0.92rem;">
+                        <div class="d-flex justify-content-between align-items-center py-2 px-2 my-1.5 rounded-2" style="background: rgba(212, 154, 82, 0.15); border: 1px solid rgba(212, 154, 82, 0.35); font-size: 0.92rem;">
                             <span style="color: #ffffff; font-weight: 700;">Total Efectivo en Caja:</span>
                             <span class="fw-extrabold" style="color: #f6c078; font-size: 1.15rem;">${{ number_format($totalEfectivoEnCaja, 0, ',', '.') }}</span>
                         </div>
                         <div class="d-flex justify-content-between align-items-center mb-1" style="font-size: 0.88rem;">
-                            <span style="color: #cbd5e1;">Tarjeta:</span>
-                            <span class="fw-bold" style="color: #c084fc;">${{ number_format($ventasHoyPorForma['tarjeta'], 0, ',', '.') }}</span>
+                            <span style="color: #cdb99c;">Tarjeta:</span>
+                            <span class="fw-bold" style="color: #cfa0c6;">${{ number_format($ventasHoyPorForma['tarjeta'], 0, ',', '.') }}</span>
                         </div>
                         <div class="d-flex justify-content-between align-items-center mb-1" style="font-size: 0.88rem;">
-                            <span style="color: #cbd5e1;">Factura:</span>
-                            <span class="fw-bold" style="color: #38bdf8;">${{ number_format($ventasHoyPorForma['factura'], 0, ',', '.') }}</span>
+                            <span style="color: #cdb99c;">Factura:</span>
+                            <span class="fw-bold" style="color: #8fbcd4;">${{ number_format($ventasHoyPorForma['factura'], 0, ',', '.') }}</span>
                         </div>
                         <div class="d-flex justify-content-between align-items-center pt-2 mt-2" style="border-top: 1px dashed var(--cy-border); font-size: 0.95rem; font-weight: 700;">
                             <span style="color: #ffffff;">Total Ventas del Día:</span>
@@ -318,7 +318,7 @@
                         </div>
                         <div class="d-flex justify-content-between align-items-center mb-1" style="font-size: 0.88rem;">
                             <span>Tarjeta:</span>
-                            <span class="fw-bold" style="color: #af7ac5;">${{ number_format($ventasMesPorForma['tarjeta'], 0, ',', '.') }}</span>
+                            <span class="fw-bold" style="color: #cfa0c6;">${{ number_format($ventasMesPorForma['tarjeta'], 0, ',', '.') }}</span>
                         </div>
                         <div class="d-flex justify-content-between align-items-center mb-1" style="font-size: 0.88rem;">
                             <span>Factura:</span>

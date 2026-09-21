@@ -44,7 +44,7 @@
                                         <i class="bi bi-shield-lock-fill me-1"></i>Administrador
                                     </span>
                                 @else
-                                    <span class="badge" style="background: rgba(54, 162, 235, 0.2); color: #36a2eb; border: 1px solid rgba(54, 162, 235, 0.4); padding: 0.35rem 0.7rem; font-size: 0.78rem;">
+                                    <span class="badge" style="background: rgba(143, 188, 212, 0.2); color: #8fbcd4; border: 1px solid rgba(143, 188, 212, 0.4); padding: 0.35rem 0.7rem; font-size: 0.78rem;">
                                         <i class="bi bi-person-badge me-1"></i>Vendedor
                                     </span>
                                 @endif
@@ -61,7 +61,7 @@
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-sm"
-                                                    style="background: rgba(231,76,60,0.15); border: 1px solid rgba(231,76,60,0.3); color: #e74c3c;"
+                                                    style="background: rgba(208, 85, 58, 0.15); border: 1px solid rgba(208, 85, 58, 0.3); color: #d0553a;"
                                                     title="Eliminar">
                                                 <i class="bi bi-trash"></i>
                                             </button>

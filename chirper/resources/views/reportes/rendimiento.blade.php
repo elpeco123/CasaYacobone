@@ -121,7 +121,7 @@
                 <div class="card-glass h-100">
                     <div class="card-body">
                         <h5 class="mb-1" style="font-weight: 700;">
-                            <i class="bi bi-bar-chart-fill me-2" style="color: #3498db;"></i>Cantidad de ventas
+                            <i class="bi bi-bar-chart-fill me-2" style="color: #8fbcd4;"></i>Cantidad de ventas
                         </h5>
                         <p class="text-muted mb-3" style="font-size: 0.82rem;">
                             {{ $esMensual ? 'Operaciones por día' : 'Operaciones por mes' }}
@@ -139,7 +139,7 @@
                 <div class="card-glass h-100">
                     <div class="card-body">
                         <h5 class="mb-1" style="font-weight: 700;">
-                            <i class="bi bi-receipt me-2" style="color: #2ecc71;"></i>Ticket promedio
+                            <i class="bi bi-receipt me-2" style="color: #9bb35f;"></i>Ticket promedio
                         </h5>
                         <p class="text-muted mb-3" style="font-size: 0.82rem;">Total vendido / cantidad de ventas</p>
                         <div class="chart-loading text-center py-4" data-chart="ch-ticket">
@@ -157,13 +157,13 @@
         <div class="card-glass mb-4">
             <div class="card-body">
                 <h5 class="mb-1" style="font-weight: 700;">
-                    <i class="bi bi-pie-chart-fill me-2" style="color: #af7ac5;"></i>Ventas por categoría
+                    <i class="bi bi-pie-chart-fill me-2" style="color: #cfa0c6;"></i>Ventas por categoría
                 </h5>
                 <p class="text-muted mb-3" style="font-size: 0.82rem;">Distribución del importe vendido</p>
                 <div class="row g-3 align-items-center">
                     <div class="col-lg-5">
                         <div class="chart-loading text-center py-4" data-chart="ch-categorias">
-                            <div class="spinner-border" style="color: #af7ac5;" role="status"></div>
+                            <div class="spinner-border" style="color: #cfa0c6;" role="status"></div>
                         </div>
                         <div style="position: relative; height: 260px;">
                             <canvas id="ch-categorias"></canvas>
@@ -217,7 +217,7 @@
                                 <tr>
                                     <td class="text-muted">{{ $i + 1 }}</td>
                                     <td class="text-white fw-bold">{{ $p['producto'] }}</td>
-                                    <td style="color: #cbd5e1;">{{ $p['categoria'] }}</td>
+                                    <td style="color: #cdb99c;">{{ $p['categoria'] }}</td>
                                     <td class="text-center">{{ number_format($p['unidades'], 0, ',', '.') }}</td>
                                     <td class="text-end fw-bold" style="color: var(--cy-gold);">
                                         ${{ number_format($p['total'], 0, ',', '.') }}
@@ -236,7 +236,7 @@
         <div class="card-glass mb-4">
             <div class="card-body">
                 <h5 class="mb-1" style="font-weight: 700;">
-                    <i class="bi bi-cash-stack me-2" style="color: #2ecc71;"></i>Productos que más facturan · Top 10
+                    <i class="bi bi-cash-stack me-2" style="color: #9bb35f;"></i>Productos que más facturan · Top 10
                 </h5>
                 <p class="text-muted mb-3" style="font-size: 0.82rem;">Ranking por importe total (independiente del ranking por unidades)</p>
                 <div class="chart-loading text-center py-4" data-chart="ch-facturacion">
@@ -250,10 +250,10 @@
 
         {{-- 7. Rentabilidad (solo si hay costos confiables) --}}
         @if($conCostos)
-            <div class="card-glass mb-4" style="border-color: rgba(46, 204, 113, 0.25);">
+            <div class="card-glass mb-4" style="border-color: rgba(155, 179, 95, 0.25);">
                 <div class="card-body">
                     <h5 class="mb-1" style="font-weight: 700;">
-                        <i class="bi bi-piggy-bank-fill me-2" style="color: #2ecc71;"></i>Ganancia
+                        <i class="bi bi-piggy-bank-fill me-2" style="color: #9bb35f;"></i>Ganancia
                     </h5>
                     <p class="text-muted mb-3" style="font-size: 0.82rem;">
                         Ventas − costo de los productos vendidos · {{ $esMensual ? 'por día' : 'por mes' }}
@@ -274,7 +274,7 @@
                                     <tr>
                                         <td class="text-white">{{ $r['producto'] }}</td>
                                         <td class="text-end">${{ number_format($r['ventas'], 0, ',', '.') }}</td>
-                                        <td class="text-end" style="color: #cbd5e1;">${{ number_format($r['costo'], 0, ',', '.') }}</td>
+                                        <td class="text-end" style="color: #cdb99c;">${{ number_format($r['costo'], 0, ',', '.') }}</td>
                                         <td class="text-end fw-bold {{ $r['ganancia'] >= 0 ? 'text-success' : 'text-danger' }}">
                                             ${{ number_format($r['ganancia'], 0, ',', '.') }}
                                         </td>
@@ -342,7 +342,7 @@
                     <h5 class="mb-0" style="font-weight: 700;">
                         <i class="bi bi-cash-coin me-2" style="color: var(--cy-accent);"></i>Gastos por categoría
                     </h5>
-                    <span class="badge fs-6" style="background: rgba(231,76,60,0.15); color: #ff8fa3; border: 1px solid rgba(231,76,60,0.3);">
+                    <span class="badge fs-6" style="background: rgba(208, 85, 58, 0.15); color: #ff8fa3; border: 1px solid rgba(208, 85, 58, 0.3);">
                         Total: ${{ number_format($totalGastos, 0, ',', '.') }}
                     </span>
                 </div>
@@ -438,7 +438,7 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-1">
                         <h5 class="mb-0" style="font-weight: 700;">
-                            <i class="bi bi-calendar-range me-2" style="color: #3498db;"></i>
+                            <i class="bi bi-calendar-range me-2" style="color: #8fbcd4;"></i>
                             {{ $anio }} vs {{ $comparacionAnual['anioPrevio'] }}
                         </h5>
                         <span class="badge fs-6 {{ $comparacionAnual['variacion'] >= 0 ? 'badge-stock-ok' : 'badge-stock-critico' }}">
@@ -486,7 +486,7 @@
     }
 
     // Tema oscuro global de Chart.js.
-    Chart.defaults.color = '#cbd5e1';
+    Chart.defaults.color = '#cdb99c';
     Chart.defaults.borderColor = 'rgba(255,255,255,0.06)';
     Chart.defaults.font.family = "'Inter', system-ui, sans-serif";
 
@@ -500,9 +500,9 @@
     var GASTOS_CAT = @json($gastosCategoria);
     var YOY = @json($comparacionAnual);
     var CON_COSTOS = @json($conCostos);
-    var TOOLTIP_BG = 'rgba(15,15,30,0.95)';
+    var TOOLTIP_BG = 'rgba(26, 17, 12, 0.95)';
 
-    var PALETA = ['#d4a574', '#3498db', '#2ecc71', '#9b59b6', '#e74c3c', '#f39c12', '#1abc9c', '#e91e63', '#95a5a6', '#5d6d7e', '#f1948a', '#85c1e9'];
+    var PALETA = ['#d49a52', '#8fbcd4', '#9bb35f', '#c28aa0', '#d0553a', '#f39c12', '#1abc9c', '#e91e63', '#95a5a6', '#7d6a57', '#f1948a', '#85c1e9'];
 
     function listo(id) {
         var loader = document.querySelector('.chart-loading[data-chart="' + id + '"]');
@@ -512,7 +512,7 @@
     function tooltipMoneda() {
         return {
             backgroundColor: TOOLTIP_BG,
-            borderColor: 'rgba(212,165,116,0.3)',
+            borderColor: 'rgba(212, 154, 82, 0.3)',
             borderWidth: 1,
             padding: 10,
             callbacks: {
@@ -529,12 +529,12 @@
             datasets: [{
                 label: 'Total vendido',
                 data: SERIES.totales,
-                borderColor: '#d4a574',
-                backgroundColor: 'rgba(212,165,116,0.15)',
+                borderColor: '#d49a52',
+                backgroundColor: 'rgba(212, 154, 82, 0.15)',
                 fill: true,
                 tension: 0.35,
                 pointRadius: 3,
-                pointBackgroundColor: '#d4a574'
+                pointBackgroundColor: '#d49a52'
             }]
         },
         options: {
@@ -553,7 +553,7 @@
             datasets: [{
                 label: 'Ventas',
                 data: SERIES.cantidades,
-                backgroundColor: 'rgba(52,152,219,0.7)',
+                backgroundColor: 'rgba(143, 188, 212, 0.7)',
                 borderRadius: 6
             }]
         },
@@ -573,12 +573,12 @@
             datasets: [{
                 label: 'Ticket promedio',
                 data: SERIES.tickets,
-                borderColor: '#2ecc71',
-                backgroundColor: 'rgba(46,204,113,0.12)',
+                borderColor: '#9bb35f',
+                backgroundColor: 'rgba(155, 179, 95, 0.12)',
                 fill: true,
                 tension: 0.35,
                 pointRadius: 3,
-                pointBackgroundColor: '#2ecc71'
+                pointBackgroundColor: '#9bb35f'
             }]
         },
         options: {
@@ -597,7 +597,7 @@
             datasets: [{
                 data: CATEGORIAS.totales,
                 backgroundColor: PALETA,
-                borderColor: '#16213e',
+                borderColor: '#2b1d15',
                 borderWidth: 2
             }]
         },
@@ -628,7 +628,7 @@
             datasets: [{
                 label: 'Facturación',
                 data: TOP_FACT.map(function (p) { return p.total; }),
-                backgroundColor: 'rgba(46,204,113,0.65)',
+                backgroundColor: 'rgba(155, 179, 95, 0.65)',
                 borderRadius: 6
             }]
         },
@@ -661,12 +661,12 @@
                 datasets: [{
                     label: 'Ganancia',
                     data: SERIES.ganancias,
-                    borderColor: '#2ecc71',
-                    backgroundColor: 'rgba(46,204,113,0.12)',
+                    borderColor: '#9bb35f',
+                    backgroundColor: 'rgba(155, 179, 95, 0.12)',
                     fill: true,
                     tension: 0.35,
                     pointRadius: 3,
-                    pointBackgroundColor: '#2ecc71'
+                    pointBackgroundColor: '#9bb35f'
                 }]
             },
             options: {
@@ -687,8 +687,8 @@
                 labels: medios.map(function (m) { return m.charAt(0).toUpperCase() + m.slice(1); }),
                 datasets: [{
                     data: medios.map(function (m) { return PAGOS[m].total; }),
-                    backgroundColor: ['#2ecc71', '#9b59b6', '#3498db', '#f39c12', '#e74c3c'],
-                    borderColor: '#16213e',
+                    backgroundColor: ['#9bb35f', '#c28aa0', '#8fbcd4', '#f39c12', '#d0553a'],
+                    borderColor: '#2b1d15',
                     borderWidth: 2
                 }]
             },
@@ -722,8 +722,8 @@
                 labels: cats,
                 datasets: [{
                     data: cats.map(function (c) { return GASTOS_CAT[c].total; }),
-                    backgroundColor: ['#e74c3c', '#f39c12', '#9b59b6', '#3498db', '#2ecc71', '#e91e63', '#95a5a6', '#5d6d7e'],
-                    borderColor: '#16213e',
+                    backgroundColor: ['#d0553a', '#f39c12', '#c28aa0', '#8fbcd4', '#9bb35f', '#e91e63', '#95a5a6', '#7d6a57'],
+                    borderColor: '#2b1d15',
                     borderWidth: 2
                 }]
             },
@@ -756,19 +756,19 @@
                     {
                         label: String(YOY.anioPrevio + 1),
                         data: SERIES.totales,
-                        borderColor: '#d4a574',
+                        borderColor: '#d49a52',
                         tension: 0.35,
                         pointRadius: 3,
-                        pointBackgroundColor: '#d4a574'
+                        pointBackgroundColor: '#d49a52'
                     },
                     {
                         label: String(YOY.anioPrevio),
                         data: YOY.seriePrevia,
-                        borderColor: '#5d6d7e',
+                        borderColor: '#7d6a57',
                         borderDash: [6, 4],
                         tension: 0.35,
                         pointRadius: 2,
-                        pointBackgroundColor: '#5d6d7e'
+                        pointBackgroundColor: '#7d6a57'
                     }
                 ]
             },

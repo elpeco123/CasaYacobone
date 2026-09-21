@@ -33,7 +33,7 @@
                                 <tr>
                                     <td>
                                         <strong class="text-white">{{ $item->producto->nombre }}</strong>
-                                        <br><small style="color: #cbd5e1;">{{ $item->producto->marca }}</small>
+                                        <br><small style="color: #cdb99c;">{{ $item->producto->marca }}</small>
                                     </td>
                                     <td class="text-light">{{ $item->producto->categoria->nombre }}</td>
                                     <td class="text-center fw-bold text-white">{{ $item->cantidad }}</td>
@@ -47,7 +47,7 @@
                             <tfoot>
                                 @if(($venta->monto_descuento ?? 0) > 0)
                                     <tr>
-                                        <td colspan="4" class="text-end" style="color: #e2e8f0; font-size: 0.95rem; font-weight: 600;">
+                                        <td colspan="4" class="text-end" style="color: #eadcc6; font-size: 0.95rem; font-weight: 600;">
                                             Subtotal:
                                         </td>
                                         <td class="text-end text-white" style="font-size: 1.05rem; font-weight: 700;">
@@ -55,10 +55,10 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td colspan="4" class="text-end" style="color: #ff6b6b; font-size: 0.95rem; font-weight: 600;">
+                                        <td colspan="4" class="text-end" style="color: #e2765c; font-size: 0.95rem; font-weight: 600;">
                                             Descuento ({{ number_format($venta->descuento_porcentaje, 0) }}%):
                                         </td>
-                                        <td class="text-end fw-bold" style="color: #ff6b6b; font-size: 1.05rem;">
+                                        <td class="text-end fw-bold" style="color: #e2765c; font-size: 1.05rem;">
                                             -${{ number_format($venta->monto_descuento, 0, ',', '.') }}
                                         </td>
                                     </tr>
@@ -67,7 +67,7 @@
                                     <td colspan="4" class="text-end text-white" style="font-size: 1.15rem; font-weight: 700;">
                                         TOTAL COBRADO:
                                     </td>
-                                    <td class="text-end" style="font-size: 1.35rem; font-weight: 800; color: var(--cy-gold); text-shadow: 0 0 10px rgba(212, 165, 116, 0.2);">
+                                    <td class="text-end" style="font-size: 1.35rem; font-weight: 800; color: var(--cy-gold); text-shadow: 0 0 10px rgba(212, 154, 82, 0.2);">
                                         ${{ number_format($venta->total, 0, ',', '.') }}
                                     </td>
                                 </tr>
@@ -87,37 +87,37 @@
                     </h5>
 
                     <div class="mb-3">
-                        <span class="form-label d-block" style="color: #cbd5e1 !important; font-weight: 600;">Fecha</span>
+                        <span class="form-label d-block" style="color: #cdb99c !important; font-weight: 600;">Fecha</span>
                         <span class="fw-bold text-white">{{ $venta->created_at->format('d/m/Y') }}</span>
                     </div>
                     <div class="mb-3">
-                        <span class="form-label d-block" style="color: #cbd5e1 !important; font-weight: 600;">Hora</span>
+                        <span class="form-label d-block" style="color: #cdb99c !important; font-weight: 600;">Hora</span>
                         <span class="fw-bold text-white">{{ $venta->created_at->format('H:i:s') }}</span>
                     </div>
                     <div class="mb-3">
-                        <span class="form-label d-block" style="color: #cbd5e1 !important; font-weight: 600;">Vendedor</span>
+                        <span class="form-label d-block" style="color: #cdb99c !important; font-weight: 600;">Vendedor</span>
                         <span class="fw-bold text-white">
                             <i class="bi bi-person-fill me-1" style="color: var(--cy-gold);"></i>{{ $venta->user->name }}
                         </span>
                     </div>
                     <div class="mb-3">
-                        <span class="form-label d-block" style="color: #cbd5e1 !important; font-weight: 600;">Forma de Pago</span>
+                        <span class="form-label d-block" style="color: #cdb99c !important; font-weight: 600;">Forma de Pago</span>
                         @if(($venta->tipo_pago ?? 'efectivo') === 'tarjeta')
-                            <span class="badge" style="background: rgba(155, 89, 182, 0.25); color: #c084fc; border: 1px solid rgba(155, 89, 182, 0.5); font-size: 0.9rem; font-weight: 600;">
+                            <span class="badge" style="background: rgba(176, 104, 128, 0.25); color: #cfa0c6; border: 1px solid rgba(176, 104, 128, 0.5); font-size: 0.9rem; font-weight: 600;">
                                 Tarjeta
                             </span>
                         @elseif(($venta->tipo_pago ?? 'efectivo') === 'factura')
-                            <span class="badge" style="background: rgba(52, 152, 219, 0.25); color: #38bdf8; border: 1px solid rgba(52, 152, 219, 0.5); font-size: 0.9rem; font-weight: 600;">
+                            <span class="badge" style="background: rgba(143, 188, 212, 0.25); color: #8fbcd4; border: 1px solid rgba(143, 188, 212, 0.5); font-size: 0.9rem; font-weight: 600;">
                                 Factura
                             </span>
                         @else
-                            <span class="badge" style="background: rgba(46, 204, 113, 0.25); color: #4ade80; border: 1px solid rgba(46, 204, 113, 0.5); font-size: 0.9rem; font-weight: 600;">
+                            <span class="badge" style="background: rgba(155, 179, 95, 0.25); color: #a9c46c; border: 1px solid rgba(155, 179, 95, 0.5); font-size: 0.9rem; font-weight: 600;">
                                 Efectivo
                             </span>
                         @endif
                     </div>
                     <div class="mb-3">
-                        <span class="form-label d-block" style="color: #cbd5e1 !important; font-weight: 600;">Items</span>
+                        <span class="form-label d-block" style="color: #cdb99c !important; font-weight: 600;">Items</span>
                         <span class="fw-bold text-white">{{ $venta->items->count() }} productos ({{ $venta->items->sum('cantidad') }} unidades)</span>
                     </div>
 
