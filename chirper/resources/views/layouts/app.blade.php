@@ -834,9 +834,11 @@
                     <button type="button" class="btn-close btn-close-white d-lg-none mt-2" data-bs-dismiss="offcanvas" data-bs-target="#cySidebar" aria-label="Cerrar menú"></button>
                 </div>
 
+                @if($esVendedor)
                 <a href="{{ route('ventas.create') }}" class="cy-sell-btn">
                     <i class="bi bi-plus-lg"></i>Nueva venta
                 </a>
+                @endif
 
                 <nav>
                     <div class="cy-nav-group">

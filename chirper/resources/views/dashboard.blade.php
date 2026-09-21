@@ -332,26 +332,6 @@
                 </div>
             </div>
 
-            {{-- Quick Actions --}}
-            <div class="card-glass mt-4">
-                <div class="card-body">
-                    <h5 class="mb-3" style="font-weight: 700;">
-                        <i class="bi bi-lightning-fill me-2" style="color: var(--cy-accent);"></i>
-                        Acciones Rápidas
-                    </h5>
-                    <div class="d-grid gap-2">
-                        <a href="{{ route('ventas.create') }}" class="btn btn-accent text-uppercase fw-bold py-2">
-                            <i class="bi bi-cart-plus-fill me-1"></i>Registrar Venta
-                        </a>
-                        <a href="{{ route('productos.create') }}" class="btn btn-glass py-2">
-                            <i class="bi bi-plus-circle me-1"></i>Nuevo Producto
-                        </a>
-                        <a href="{{ route('reportes.diario') }}" class="btn btn-glass">
-                            <i class="bi bi-file-bar-graph me-2"></i>Ver Reporte Diario
-                        </a>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 </div>
