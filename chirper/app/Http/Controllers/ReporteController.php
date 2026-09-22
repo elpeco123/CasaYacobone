@@ -85,15 +85,19 @@ class ReporteController extends Controller
         // Rango del período seleccionado.
         if ($tipo === 'mensual') {
             $inicio = Carbon::create($anio, $mes, 1)->startOfDay();
-            $fin = $inicio->copy()->endOfMonth()->endOfDay();
+            // Del mes en curso solo se informan los días transcurridos.
+            $ultimo = $inicio->isSameMonth(now()) ? now()->day : $inicio->daysInMonth;
+            $fin = $inicio->copy()->setDay($ultimo)->endOfDay();
             // Clave de agrupación: día del mes (1..N).
-            $buckets = range(1, $inicio->daysInMonth);
+            $buckets = range(1, $ultimo);
             $etiquetas = array_map(fn ($d) => (string) $d, $buckets);
         } else {
             $inicio = Carbon::create($anio, 1, 1)->startOfDay();
-            $fin = Carbon::create($anio, 12, 31)->endOfDay();
-            // Clave de agrupación: mes (1..12).
-            $buckets = range(1, 12);
+            // Del año en curso solo se informan los meses transcurridos.
+            $ultimo = $anio === now()->year ? now()->month : 12;
+            $fin = Carbon::create($anio, $ultimo, 1)->endOfMonth()->endOfDay();
+            // Clave de agrupación: mes (1..N).
+            $buckets = range(1, $ultimo);
             $etiquetas = array_map(
                 fn ($m) => ucfirst(Carbon::create($anio, $m, 1)->locale('es')->monthName),
                 $buckets
@@ -269,6 +273,7 @@ class ReporteController extends Controller
                 foreach ($ventasPrevias as $vp) {
                     $seriePrevia[(int) $vp->created_at->month - 1] += (float) $vp->total;
                 }
+                $seriePrevia = array_slice($seriePrevia, 0, count($buckets));
                 $totalPrevio = array_sum($seriePrevia);
                 $totalActual = array_sum(array_values($totales));
                 $comparacionAnual = [
@@ -313,7 +318,8 @@ class ReporteController extends Controller
                 'etiquetas' => array_values($etiquetas),
                 'totales' => array_values(array_map(fn ($v) => round($v, 2), $totales)),
                 'cantidades' => array_values($cantidades),
-                'tickets' => array_values($tickets),
+                // Sin ventas no hay ticket: null deja un hueco en el gráfico en vez de un $0 falso.
+                'tickets' => array_map(fn ($b) => $cantidades[$b] > 0 ? $tickets[$b] : null, $buckets),
                 'ganancias' => array_values(array_map(fn ($v) => round($v, 2), $ganancias)),
             ],
             'categorias' => [

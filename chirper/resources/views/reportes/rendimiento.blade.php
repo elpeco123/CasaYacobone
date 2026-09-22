@@ -82,7 +82,7 @@
             <div class="col-6 col-md-3">
                 <div class="kpi-card kpi-red">
                     <div class="kpi-value">@if($conCostos)${{ number_format($gananciaPeriodo, 0, ',', '.') }}@else — @endif</div>
-                    <div class="kpi-label">Ganancia estimada</div>
+                    <div class="kpi-label">Beneficio estimado</div>
                 </div>
             </div>
         </div>
@@ -253,7 +253,7 @@
             <div class="card-glass mb-4" style="border-color: rgba(155, 179, 95, 0.25);">
                 <div class="card-body">
                     <h5 class="mb-1" style="font-weight: 700;">
-                        <i class="bi bi-piggy-bank-fill me-2" style="color: #9bb35f;"></i>Ganancia
+                        <i class="bi bi-piggy-bank-fill me-2" style="color: #9bb35f;"></i>Beneficio
                     </h5>
                     <p class="text-muted mb-3" style="font-size: 0.82rem;">
                         Ventas − costo de los productos vendidos · {{ $esMensual ? 'por día' : 'por mes' }}
@@ -267,7 +267,7 @@
                     <div class="table-responsive">
                         <table class="table table-dark-custom table-hover mb-0">
                             <thead>
-                                <tr><th>Producto</th><th class="text-end">Ventas</th><th class="text-end">Costo</th><th class="text-end">Ganancia</th><th class="text-end">Margen %</th></tr>
+                                <tr><th>Producto</th><th class="text-end">Ventas</th><th class="text-end">Costo</th><th class="text-end">Beneficio</th><th class="text-end">Margen %</th></tr>
                             </thead>
                             <tbody>
                                 @foreach($rentabilidad as $r)
@@ -289,8 +289,8 @@
         @else
             <div class="alert alert-custom-warning mb-4" role="alert">
                 <i class="bi bi-exclamation-triangle-fill me-2"></i>
-                Sección de ganancia no disponible: solo el {{ number_format($coberturaCosto, 1, ',', '.') }}% de lo vendido
-                tiene costo registrado. No se calculan ganancias sin información confiable.
+                Sección de beneficio no disponible: solo el {{ number_format($coberturaCosto, 1, ',', '.') }}% de lo vendido
+                tiene costo registrado. No se calcula el beneficio sin información confiable.
             </div>
         @endif
 
@@ -402,7 +402,7 @@
                                 <th class="text-end">Ventas</th>
                                 <th class="text-center">Cantidad</th>
                                 <th class="text-end">Ticket prom.</th>
-                                @if($conCostos)<th class="text-end">Ganancia</th>@endif
+                                @if($conCostos)<th class="text-end">Beneficio</th>@endif
                                 <th class="text-end">Var. vs anterior</th>
                             </tr>
                         </thead>
@@ -442,10 +442,10 @@
                             {{ $anio }} vs {{ $comparacionAnual['anioPrevio'] }}
                         </h5>
                         <span class="badge fs-6 {{ $comparacionAnual['variacion'] >= 0 ? 'badge-stock-ok' : 'badge-stock-critico' }}">
-                            {{ $comparacionAnual['variacion'] >= 0 ? '+' : '' }}{{ number_format($comparacionAnual['variacion'], 1, ',', '.') }}% anual
+                            {{ $comparacionAnual['variacion'] >= 0 ? '+' : '' }}{{ number_format($comparacionAnual['variacion'], 1, ',', '.') }}% vs. {{ $comparacionAnual['anioPrevio'] }}
                         </span>
                     </div>
-                    <p class="text-muted mb-3" style="font-size: 0.82rem;">Ventas mes por mes</p>
+                    <p class="text-muted mb-3" style="font-size: 0.82rem;">Ventas mes a mes, comparando el mismo tramo del año</p>
                     <div class="chart-loading text-center py-4" data-chart="ch-yoy">
                         <div class="spinner-border text-info" role="status"></div>
                     </div>
@@ -488,7 +488,7 @@
     // Tema oscuro global de Chart.js.
     Chart.defaults.color = '#cdb99c';
     Chart.defaults.borderColor = 'rgba(255,255,255,0.06)';
-    Chart.defaults.font.family = "'Inter', system-ui, sans-serif";
+    Chart.defaults.font.family = "'Work Sans', system-ui, sans-serif";
 
     var fmtARS = new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 });
     var fmtNum = new Intl.NumberFormat('es-AR');
@@ -502,7 +502,15 @@
     var CON_COSTOS = @json($conCostos);
     var TOOLTIP_BG = 'rgba(26, 17, 12, 0.95)';
 
+    var COLOR_PAGO = { efectivo: '#9bb35f', tarjeta: '#c28aa0', factura: '#8fbcd4' };
     var PALETA = ['#d49a52', '#8fbcd4', '#9bb35f', '#c28aa0', '#d0553a', '#f39c12', '#1abc9c', '#e91e63', '#95a5a6', '#7d6a57', '#f1948a', '#85c1e9'];
+
+    // Repite la paleta si hay más porciones que colores.
+    function colores(n) {
+        var out = [];
+        for (var i = 0; i < n; i++) { out.push(PALETA[i % PALETA.length]); }
+        return out;
+    }
 
     function listo(id) {
         var loader = document.querySelector('.chart-loading[data-chart="' + id + '"]');
@@ -532,7 +540,7 @@
                 borderColor: '#d49a52',
                 backgroundColor: 'rgba(212, 154, 82, 0.15)',
                 fill: true,
-                tension: 0.35,
+                tension: 0,
                 pointRadius: 3,
                 pointBackgroundColor: '#d49a52'
             }]
@@ -540,7 +548,7 @@
         options: {
             responsive: true, maintainAspectRatio: false,
             plugins: { legend: { display: false }, tooltip: tooltipMoneda() },
-            scales: { y: { ticks: { callback: function (v) { return '$' + fmtNum.format(v); } } } }
+            scales: { y: { beginAtZero: true, ticks: { callback: function (v) { return '$' + fmtNum.format(v); } } } }
         }
     });
     listo('ch-evolucion');
@@ -576,7 +584,7 @@
                 borderColor: '#9bb35f',
                 backgroundColor: 'rgba(155, 179, 95, 0.12)',
                 fill: true,
-                tension: 0.35,
+                tension: 0,
                 pointRadius: 3,
                 pointBackgroundColor: '#9bb35f'
             }]
@@ -584,7 +592,7 @@
         options: {
             responsive: true, maintainAspectRatio: false,
             plugins: { legend: { display: false }, tooltip: tooltipMoneda() },
-            scales: { y: { ticks: { callback: function (v) { return '$' + fmtNum.format(v); } } } }
+            scales: { y: { beginAtZero: true, ticks: { callback: function (v) { return '$' + fmtNum.format(v); } } } }
         }
     });
     listo('ch-ticket');
@@ -596,7 +604,7 @@
             labels: CATEGORIAS.nombres,
             datasets: [{
                 data: CATEGORIAS.totales,
-                backgroundColor: PALETA,
+                backgroundColor: colores(CATEGORIAS.totales.length),
                 borderColor: '#2b1d15',
                 borderWidth: 2
             }]
@@ -652,27 +660,25 @@
     });
     listo('ch-facturacion');
 
-    // 7. Ganancia (línea, solo con costos confiables).
+    // 7. Beneficio por bucket (barras: el signo se lee de una).
     if (CON_COSTOS && document.getElementById('ch-ganancia')) {
         new Chart(document.getElementById('ch-ganancia'), {
-            type: 'line',
+            type: 'bar',
             data: {
                 labels: SERIES.etiquetas,
                 datasets: [{
-                    label: 'Ganancia',
+                    label: 'Beneficio',
                     data: SERIES.ganancias,
-                    borderColor: '#9bb35f',
-                    backgroundColor: 'rgba(155, 179, 95, 0.12)',
-                    fill: true,
-                    tension: 0.35,
-                    pointRadius: 3,
-                    pointBackgroundColor: '#9bb35f'
+                    backgroundColor: SERIES.ganancias.map(function (v) {
+                        return v < 0 ? 'rgba(208, 85, 58, 0.75)' : 'rgba(155, 179, 95, 0.7)';
+                    }),
+                    borderRadius: 6
                 }]
             },
             options: {
                 responsive: true, maintainAspectRatio: false,
                 plugins: { legend: { display: false }, tooltip: tooltipMoneda() },
-                scales: { y: { ticks: { callback: function (v) { return '$' + fmtNum.format(v); } } } }
+                scales: { y: { beginAtZero: true, ticks: { callback: function (v) { return '$' + fmtNum.format(v); } } } }
             }
         });
         listo('ch-ganancia');
@@ -687,7 +693,8 @@
                 labels: medios.map(function (m) { return m.charAt(0).toUpperCase() + m.slice(1); }),
                 datasets: [{
                     data: medios.map(function (m) { return PAGOS[m].total; }),
-                    backgroundColor: ['#9bb35f', '#c28aa0', '#8fbcd4', '#f39c12', '#d0553a'],
+                    // Cada medio conserva su color de siempre (el mismo de los chips de venta).
+                    backgroundColor: medios.map(function (m, i) { return COLOR_PAGO[m] || PALETA[i % PALETA.length]; }),
                     borderColor: '#2b1d15',
                     borderWidth: 2
                 }]
@@ -722,7 +729,7 @@
                 labels: cats,
                 datasets: [{
                     data: cats.map(function (c) { return GASTOS_CAT[c].total; }),
-                    backgroundColor: ['#d0553a', '#f39c12', '#c28aa0', '#8fbcd4', '#9bb35f', '#e91e63', '#95a5a6', '#7d6a57'],
+                    backgroundColor: colores(cats.length),
                     borderColor: '#2b1d15',
                     borderWidth: 2
                 }]
@@ -757,7 +764,7 @@
                         label: String(YOY.anioPrevio + 1),
                         data: SERIES.totales,
                         borderColor: '#d49a52',
-                        tension: 0.35,
+                        tension: 0,
                         pointRadius: 3,
                         pointBackgroundColor: '#d49a52'
                     },
@@ -766,7 +773,7 @@
                         data: YOY.seriePrevia,
                         borderColor: '#7d6a57',
                         borderDash: [6, 4],
-                        tension: 0.35,
+                        tension: 0,
                         pointRadius: 2,
                         pointBackgroundColor: '#7d6a57'
                     }
@@ -775,7 +782,7 @@
             options: {
                 responsive: true, maintainAspectRatio: false,
                 plugins: { legend: { position: 'bottom' }, tooltip: tooltipMoneda() },
-                scales: { y: { ticks: { callback: function (v) { return '$' + fmtNum.format(v); } } } }
+                scales: { y: { beginAtZero: true, ticks: { callback: function (v) { return '$' + fmtNum.format(v); } } } }
             }
         });
         listo('ch-yoy');
