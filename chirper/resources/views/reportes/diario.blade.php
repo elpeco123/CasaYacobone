@@ -9,7 +9,8 @@
             <h1><i class="bi bi-calendar-day me-2" style="color: var(--cy-gold);"></i>Reporte Diario</h1>
         </div>
         <form method="GET" action="{{ route('reportes.diario') }}" class="d-flex gap-2 align-items-center">
-            <input type="date" name="fecha" class="form-control form-control-dark" value="{{ $fecha->format('Y-m-d') }}">
+            <input type="date" name="fecha" class="form-control form-control-dark" value="{{ $fecha->format('Y-m-d') }}"
+                   aria-label="Día del reporte">
             <button type="submit" class="btn btn-accent"><i class="bi bi-filter me-1"></i>Ver Fecha</button>
         </form>
     </div>
@@ -118,7 +119,8 @@
                                 ${{ number_format($venta->total, 0, ',', '.') }}
                             </td>
                             <td class="text-center">
-                                <a href="{{ route('ventas.show', $venta) }}" class="btn btn-glass btn-sm">
+                                <a href="{{ route('ventas.show', $venta) }}" class="btn btn-glass btn-sm"
+                                   title="Ver la venta" aria-label="Ver la venta">
                                     <i class="bi bi-eye"></i>
                                 </a>
                             </td>

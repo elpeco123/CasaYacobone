@@ -157,16 +157,18 @@
                                 @enderror
                             </div>
                             <div class="col-5">
+                                <label for="retiro-monto" class="form-label">Monto *</label>
                                 <div class="input-group">
                                     <span class="input-group-text bg-dark border-secondary fw-bold" style="color: var(--cy-gold);">$</span>
                                     <input type="number" step="any" min="1" name="monto" id="retiro-monto"
-                                           class="form-control form-control-dark" placeholder="Monto *"
+                                           class="form-control form-control-dark"
                                            value="{{ old('monto') }}" required>
                                 </div>
                             </div>
                             <div class="col-7">
+                                <label for="retiro-concepto" class="form-label">Detalle</label>
                                 <input type="text" name="concepto" id="retiro-concepto"
-                                       class="form-control form-control-dark" placeholder="Detalle (ej: yerba mate)"
+                                       class="form-control form-control-dark" placeholder="Ej: yerba mate"
                                        value="{{ old('concepto') }}" maxlength="255">
                             </div>
                             <div class="col-12">
@@ -232,11 +234,7 @@
                             </span>
                         </div>
 
-                        <p style="font-size: 0.88rem; color: #cdb99c;" class="mb-4">
-                            Ingresá el dinero en efectivo para dar cambio. Se inicia un nuevo período: solo verás las ventas de esta caja hasta cerrarla.
-                        </p>
-
-                        <form method="POST" action="{{ route('caja.store') }}">
+                        <form method="POST" action="{{ route('caja.store') }}" class="mt-4">
                             @csrf
 
                             <div class="mb-3">

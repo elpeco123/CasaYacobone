@@ -69,7 +69,7 @@
                     <input type="text"
                            name="buscar"
                            class="form-control form-control-dark"
-                           placeholder="Nombre, artículo o color..."
+                           placeholder="Nombre, artículo o color..." aria-label="Buscar productos"
                            value="{{ request('buscar') }}">
                 </div>
                 <div class="col-md-3">
@@ -96,7 +96,7 @@
                     <button type="submit" class="btn btn-accent flex-fill">
                         <i class="bi bi-search me-1"></i>Filtrar
                     </button>
-                    <a href="{{ route('productos.index') }}" class="btn btn-glass">
+                    <a href="{{ route('productos.index') }}" class="btn btn-glass" title="Limpiar la búsqueda" aria-label="Limpiar la búsqueda">
                         <i class="bi bi-x-lg"></i>
                     </a>
                 </div>

@@ -735,6 +735,24 @@
             color: var(--cy-gold);
         }
 
+        /* 16px es chico para el dedo: las casillas y los botones de cerrar van más grandes. */
+        .form-check-input {
+            width: 1.5rem;
+            height: 1.5rem;
+            margin-top: 0.1rem;
+        }
+
+        .form-check-label {
+            margin-left: 0.3rem;
+            padding-top: 0.15rem;
+        }
+
+        .btn-close {
+            width: 2rem;
+            height: 2rem;
+            background-size: 0.85rem;
+        }
+
         .form-check-input:checked {
             background-color: var(--cy-gold);
             border-color: var(--cy-gold);

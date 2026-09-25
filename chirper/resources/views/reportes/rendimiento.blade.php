@@ -502,14 +502,34 @@
     var CON_COSTOS = @json($conCostos);
     var TOOLTIP_BG = 'rgba(26, 17, 12, 0.95)';
 
-    var COLOR_PAGO = { efectivo: '#9bb35f', tarjeta: '#c28aa0', factura: '#8fbcd4' };
-    var PALETA = ['#d49a52', '#8fbcd4', '#9bb35f', '#c28aa0', '#d0553a', '#f39c12', '#1abc9c', '#e91e63', '#95a5a6', '#7d6a57', '#f1948a', '#85c1e9'];
+    // Paleta de 8 colores, en este orden fijo. Verificada sobre el fondo oscuro:
+    // todos se distinguen entre sí, también con daltonismo, y no se leen grises.
+    var PALETA = ['#b77610', '#0098b7', '#58994a', '#b9649f', '#8b8c14', '#5685d4', '#c86556', '#9372c8'];
 
-    // Repite la paleta si hay más porciones que colores.
-    function colores(n) {
-        var out = [];
-        for (var i = 0; i < n; i++) { out.push(PALETA[i % PALETA.length]); }
-        return out;
+    // Cada forma de pago tiene su color fijo, no depende del orden en que aparezca.
+    var COLOR_PAGO = {
+        efectivo: '#58994a',
+        debito: '#0098b7',
+        credito: '#b9649f',
+        factura: '#5685d4',
+        cuenta_corriente: '#b77610',
+        tarjeta: '#b9649f'
+    };
+
+    // Una torta con más de 8 porciones no se lee: las más chicas se juntan en
+    // "Otros". La tabla de al lado sigue mostrando todas, una por una.
+    var MAX_PORCIONES = 7;
+
+    function agrupar(nombres, valores) {
+        if (nombres.length <= MAX_PORCIONES + 1) {
+            return { nombres: nombres, valores: valores };
+        }
+        var resto = valores.slice(MAX_PORCIONES).reduce(function (a, b) { return a + b; }, 0);
+
+        return {
+            nombres: nombres.slice(0, MAX_PORCIONES).concat(['Otros']),
+            valores: valores.slice(0, MAX_PORCIONES).concat([resto])
+        };
     }
 
     function listo(id) {
@@ -529,6 +549,10 @@
         };
     }
 
+    // Con el dedo o el mouse alcanza con estar sobre la columna: no hay que
+    // acertarle justo al punto.
+    var PORCOLUMNA = { mode: 'index', intersect: false };
+
     // 1. Evolución de ventas (línea, principal).
     new Chart(document.getElementById('ch-evolucion'), {
         type: 'line',
@@ -541,12 +565,13 @@
                 backgroundColor: 'rgba(212, 154, 82, 0.15)',
                 fill: true,
                 tension: 0,
-                pointRadius: 3,
+                pointRadius: 4,
                 pointBackgroundColor: '#d49a52'
             }]
         },
         options: {
             responsive: true, maintainAspectRatio: false,
+            interaction: PORCOLUMNA,
             plugins: { legend: { display: false }, tooltip: tooltipMoneda() },
             scales: { y: { beginAtZero: true, ticks: { callback: function (v) { return '$' + fmtNum.format(v); } } } }
         }
@@ -562,7 +587,7 @@
                 label: 'Ventas',
                 data: SERIES.cantidades,
                 backgroundColor: 'rgba(143, 188, 212, 0.7)',
-                borderRadius: 6
+                borderRadius: 4
             }]
         },
         options: {
@@ -585,12 +610,13 @@
                 backgroundColor: 'rgba(155, 179, 95, 0.12)',
                 fill: true,
                 tension: 0,
-                pointRadius: 3,
+                pointRadius: 4,
                 pointBackgroundColor: '#9bb35f'
             }]
         },
         options: {
             responsive: true, maintainAspectRatio: false,
+            interaction: PORCOLUMNA,
             plugins: { legend: { display: false }, tooltip: tooltipMoneda() },
             scales: { y: { beginAtZero: true, ticks: { callback: function (v) { return '$' + fmtNum.format(v); } } } }
         }
@@ -598,13 +624,14 @@
     listo('ch-ticket');
 
     // 4. Ventas por categoría (donut).
+    var CATS = agrupar(CATEGORIAS.nombres, CATEGORIAS.totales);
     new Chart(document.getElementById('ch-categorias'), {
         type: 'doughnut',
         data: {
-            labels: CATEGORIAS.nombres,
+            labels: CATS.nombres,
             datasets: [{
-                data: CATEGORIAS.totales,
-                backgroundColor: colores(CATEGORIAS.totales.length),
+                data: CATS.valores,
+                backgroundColor: PALETA.slice(0, CATS.valores.length),
                 borderColor: '#2b1d15',
                 borderWidth: 2
             }]
@@ -617,9 +644,11 @@
                     backgroundColor: TOOLTIP_BG,
                     callbacks: {
                         label: function (ctx) {
-                            var i = ctx.dataIndex;
-                            return ' ' + CATEGORIAS.nombres[i] + ': ' + fmtARS.format(ctx.parsed) +
-                                ' (' + CATEGORIAS.porcentajes[i] + '%)';
+                            var total = CATS.valores.reduce(function (a, b) { return a + b; }, 0);
+                            var porcentaje = total > 0 ? (ctx.parsed / total * 100).toFixed(1) : '0,0';
+
+                            return ' ' + CATS.nombres[ctx.dataIndex] + ': ' + fmtARS.format(ctx.parsed) +
+                                ' (' + porcentaje + '%)';
                         }
                     }
                 }
@@ -637,7 +666,7 @@
                 label: 'Facturación',
                 data: TOP_FACT.map(function (p) { return p.total; }),
                 backgroundColor: 'rgba(155, 179, 95, 0.65)',
-                borderRadius: 6
+                borderRadius: 4
             }]
         },
         options: {
@@ -672,11 +701,12 @@
                     backgroundColor: SERIES.ganancias.map(function (v) {
                         return v < 0 ? 'rgba(208, 85, 58, 0.75)' : 'rgba(155, 179, 95, 0.7)';
                     }),
-                    borderRadius: 6
+                    borderRadius: 4
                 }]
             },
             options: {
                 responsive: true, maintainAspectRatio: false,
+                interaction: PORCOLUMNA,
                 plugins: { legend: { display: false }, tooltip: tooltipMoneda() },
                 scales: { y: { beginAtZero: true, ticks: { callback: function (v) { return '$' + fmtNum.format(v); } } } }
             }
@@ -694,7 +724,7 @@
                 datasets: [{
                     data: medios.map(function (m) { return PAGOS[m].total; }),
                     // Cada medio conserva su color de siempre (el mismo de los chips de venta).
-                    backgroundColor: medios.map(function (m, i) { return COLOR_PAGO[m] || PALETA[i % PALETA.length]; }),
+                    backgroundColor: medios.map(function (m, i) { return COLOR_PAGO[m] || PALETA[i]; }),
                     borderColor: '#2b1d15',
                     borderWidth: 2
                 }]
@@ -723,13 +753,14 @@
         var canvas = document.getElementById('ch-gastos');
         if (!canvas) return;
         var cats = Object.keys(GASTOS_CAT);
+        var gastos = agrupar(cats, cats.map(function (c) { return GASTOS_CAT[c].total; }));
         new Chart(canvas, {
             type: 'doughnut',
             data: {
-                labels: cats,
+                labels: gastos.nombres,
                 datasets: [{
-                    data: cats.map(function (c) { return GASTOS_CAT[c].total; }),
-                    backgroundColor: colores(cats.length),
+                    data: gastos.valores,
+                    backgroundColor: PALETA.slice(0, gastos.valores.length),
                     borderColor: '#2b1d15',
                     borderWidth: 2
                 }]
@@ -742,8 +773,12 @@
                         backgroundColor: TOOLTIP_BG,
                         callbacks: {
                             label: function (ctx) {
-                                var c = cats[ctx.dataIndex];
-                                return ' ' + c + ': ' + fmtARS.format(GASTOS_CAT[c].total) + ' · ' + GASTOS_CAT[c].cantidad + ' gastos';
+                                var c = gastos.nombres[ctx.dataIndex];
+                                var d = GASTOS_CAT[c];
+
+                                return d
+                                    ? ' ' + c + ': ' + fmtARS.format(d.total) + ' · ' + d.cantidad + ' gastos'
+                                    : ' ' + c + ': ' + fmtARS.format(gastos.valores[ctx.dataIndex]);
                             }
                         }
                     }
@@ -765,7 +800,7 @@
                         data: SERIES.totales,
                         borderColor: '#d49a52',
                         tension: 0,
-                        pointRadius: 3,
+                        pointRadius: 4,
                         pointBackgroundColor: '#d49a52'
                     },
                     {
@@ -781,6 +816,7 @@
             },
             options: {
                 responsive: true, maintainAspectRatio: false,
+                interaction: PORCOLUMNA,
                 plugins: { legend: { position: 'bottom' }, tooltip: tooltipMoneda() },
                 scales: { y: { beginAtZero: true, ticks: { callback: function (v) { return '$' + fmtNum.format(v); } } } }
             }

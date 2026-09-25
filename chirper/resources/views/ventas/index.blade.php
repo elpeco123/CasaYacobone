@@ -74,7 +74,7 @@
                             </td>
                             <td class="text-center">
                                 <a href="{{ route('ventas.show', $venta) }}" class="btn btn-glass btn-sm text-light">
-                                    <i class="bi bi-eye"></i><span class="d-none d-md-inline ms-1">Ver</span>
+                                    <i class="bi bi-eye"></i><span class="d-none d-md-inline ms-1">Ver</span><span class="visually-hidden">Ver la venta</span>
                                 </a>
                             </td>
                         </tr>

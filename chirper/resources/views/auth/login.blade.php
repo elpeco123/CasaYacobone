@@ -73,6 +73,7 @@
             box-shadow: 0 0 0 3px rgba(212, 154, 82, 0.15);
         }
         .form-control-login::placeholder { color: #666; }
+        .form-label { color: #cdb99c; font-size: 0.88rem; font-weight: 500; margin-bottom: 0.35rem; }
         .input-group-icon {
             position: relative;
         }
@@ -102,6 +103,8 @@
             box-shadow: 0 8px 25px rgba(192, 73, 47, 0.5);
             color: white;
         }
+        .form-check-input { width: 1.5rem; height: 1.5rem; margin-top: 0.05rem; }
+        .form-check-label { margin-left: 0.35rem; padding-top: 0.2rem; }
         .form-check-input:checked {
             background-color: #d49a52;
             border-color: #d49a52;
@@ -149,6 +152,7 @@
             @csrf
 
             <div class="mb-3">
+                <label for="email" class="form-label">Correo electrónico</label>
                 <div class="input-group-icon">
                     <i class="bi bi-envelope-fill"></i>
                     <input type="email"
@@ -156,20 +160,19 @@
                            id="email"
                            name="email"
                            value="{{ old('email') }}"
-                           placeholder="Correo electrónico"
                            required
                            autofocus>
                 </div>
             </div>
 
             <div class="mb-3">
+                <label for="password" class="form-label">Contraseña</label>
                 <div class="input-group-icon">
                     <i class="bi bi-lock-fill"></i>
                     <input type="password"
                            class="form-control form-control-login"
                            id="password"
                            name="password"
-                           placeholder="Contraseña"
                            required>
                 </div>
             </div>

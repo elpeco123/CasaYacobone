@@ -58,6 +58,7 @@
                         </div>
                         <div class="position-relative">
                             <input type="text" id="quickProductSearch" class="form-control form-control-dark ps-5"
+                                   aria-label="Buscar productos"
                                    placeholder="Buscá por artículo, nombre, color o categoría (ej: BC-100, bombacha, negro)..."
                                    autocomplete="off">
                             <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"></i>
