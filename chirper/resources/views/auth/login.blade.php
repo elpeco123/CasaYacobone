@@ -186,7 +186,7 @@
             </button>
 
             <div class="text-center">
-                <a href="{{ route('register') }}" style="color: #d49a52; font-size: 0.88rem; text-decoration: none;">
+                <a href="{{ route('register') }}" class="d-inline-block py-2 px-3" style="color: #d49a52; font-size: 0.88rem; text-decoration: none;">
                     ¿No tenés cuenta? Registrarse
                 </a>
             </div>

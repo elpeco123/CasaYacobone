@@ -116,7 +116,7 @@
                                     <tr>
                                         <td style="color: #cdb99c;">{{ $venta->created_at->format('d/m/Y H:i') }}</td>
                                         <td>
-                                            <a href="{{ route('ventas.show', $venta) }}">N.º {{ $venta->id }}</a>
+                                            <a href="{{ route('ventas.show', $venta) }}" class="d-inline-block py-1">N.º {{ $venta->id }}</a>
                                         </td>
                                         <td style="color: #cdb99c;">{{ $venta->user->name ?? '—' }}</td>
                                         <td class="text-end fw-bold" style="color: var(--cy-gold);">

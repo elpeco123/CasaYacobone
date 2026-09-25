@@ -21,9 +21,9 @@
                         <tr>
                             <th>#</th>
                             <th>Nombre</th>
-                            <th>Email</th>
+                            <th class="d-none d-md-table-cell">Email</th>
                             <th class="text-center">Rol</th>
-                            <th>Fecha Registro</th>
+                            <th class="d-none d-lg-table-cell">Fecha Registro</th>
                             <th class="text-center">Acciones</th>
                         </tr>
                     </thead>
@@ -37,7 +37,7 @@
                                     <span class="badge bg-info ms-1" style="font-size: 0.7rem;">Tú</span>
                                 @endif
                             </td>
-                            <td>{{ $user->email }}</td>
+                            <td class="d-none d-md-table-cell">{{ $user->email }}</td>
                             <td class="text-center">
                                 @if($user->isAdmin())
                                     <span class="badge" style="background: var(--cy-accent); color: white; padding: 0.35rem 0.7rem; font-size: 0.78rem;">
@@ -49,7 +49,7 @@
                                     </span>
                                 @endif
                             </td>
-                            <td>{{ $user->created_at ? $user->created_at->format('d/m/Y H:i') : '—' }}</td>
+                            <td class="d-none d-lg-table-cell">{{ $user->created_at ? $user->created_at->format('d/m/Y H:i') : '—' }}</td>
                             <td class="text-center">
                                 <div class="d-flex gap-1 justify-content-center">
                                     <a href="{{ route('users.edit', $user) }}" class="btn btn-glass btn-sm" title="Editar">

@@ -48,8 +48,8 @@
                     <thead>
                         <tr>
                             <th>Cliente</th>
-                            <th>Teléfono</th>
-                            <th>Dirección</th>
+                            <th class="d-none d-md-table-cell">Teléfono</th>
+                            <th class="d-none d-lg-table-cell">Dirección</th>
                             <th class="text-center">Debe desde</th>
                             <th class="text-end">Saldo</th>
                             <th class="text-end">Acción</th>
@@ -59,8 +59,8 @@
                         @forelse($clientes as $cliente)
                             <tr>
                                 <td class="text-white fw-bold">{{ $cliente->nombreCompleto() }}</td>
-                                <td style="color: #cdb99c;">{{ $cliente->telefono }}</td>
-                                <td style="color: #cdb99c;">{{ $cliente->direccion }}</td>
+                                <td class="d-none d-md-table-cell" style="color: #cdb99c;">{{ $cliente->telefono }}</td>
+                                <td class="d-none d-lg-table-cell" style="color: #cdb99c;">{{ $cliente->direccion }}</td>
                                 <td class="text-center">
                                     @if($cliente->desde)
                                         <span class="{{ $cliente->diasDeuda >= 30 ? 'badge-stock-critico' : 'badge-stock-ok' }}">

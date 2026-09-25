@@ -109,7 +109,7 @@
                             <td>{{ $venta->user->name }}</td>
                             <td>
                                 @foreach($venta->items as $item)
-                                    <span class="badge bg-secondary me-1">
+                                    <span class="badge bg-secondary me-1" style="font-size: 0.78rem; font-weight: 500;">
                                         {{ $item->cantidad }}x {{ $item->producto->nombre }}
                                     </span>
                                 @endforeach

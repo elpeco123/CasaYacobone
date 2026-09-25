@@ -2,6 +2,20 @@
 
 @section('title', 'Productos')
 
+@push('styles')
+<style>
+    #tabla-productos th,
+    #tabla-productos td {
+        padding: 0.45rem 0.5rem;
+        font-size: 0.8rem;
+        vertical-align: middle;
+    }
+
+    #tabla-productos th {
+        font-size: 0.74rem;
+    }
+</style>
+@endpush
 @section('content')
 <div class="fade-in">
     {{-- Page Header --}}
@@ -94,20 +108,18 @@
     <div class="card-glass">
         <div class="card-body p-3">
             <div class="table-responsive">
-                <table class="table table-dark-custom table-hover align-middle mb-0" style="font-size: 0.84rem;">
+                <table class="table table-dark-custom table-hover align-middle mb-0" id="tabla-productos">
                     <thead>
                         <tr>
                             <th>Artículo</th>
                             <th>Producto</th>
-                            <th>Categoría</th>
-                            <th>Proveedor</th>
-                            <th>Talle</th>
-                            <th>Color</th>
-                            <th class="text-end text-nowrap">P. Compra</th>
+                            <th class="d-none d-md-table-cell">Categoría</th>
+                            <th class="d-none d-xxl-table-cell">Proveedor</th>
+                            <th class="text-nowrap">Talle y color</th>
+                            <th class="text-end text-nowrap d-none d-md-table-cell">P. Compra</th>
                             <th class="text-end text-nowrap">P. Venta</th>
                             <th class="text-center text-nowrap">Stock</th>
-                            <th class="text-end text-nowrap">Valor Stock</th>
-                            <th class="text-center text-nowrap">Mín.</th>
+                            <th class="text-end text-nowrap d-none d-xxl-table-cell">Valor Stock</th>
                             <th class="text-nowrap">Estado</th>
                             <th class="text-center text-nowrap" style="width: 100px;">Acciones</th>
                         </tr>
@@ -117,15 +129,16 @@
                         <tr>
                             <td class="fw-bold text-nowrap" style="color: var(--cy-gold-light);">{{ $producto->articulo }}</td>
                             <td class="fw-bold">{{ $producto->nombre }}</td>
-                            <td>{{ $producto->categoria->nombre }}</td>
-                            <td>{{ $producto->proveedor->nombre ?? '—' }}</td>
-                            <td>{{ $producto->talle ?? '—' }}</td>
-                            <td>{{ $producto->color ?? '—' }}</td>
-                            <td class="text-end text-nowrap">${{ number_format($producto->precio_compra, 0, ',', '.') }}</td>
+                            <td class="d-none d-md-table-cell">{{ $producto->categoria->nombre }}</td>
+                            <td class="d-none d-xxl-table-cell">{{ $producto->proveedor->nombre ?? '—' }}</td>
+                            <td class="text-nowrap">{{ $producto->variante() }}</td>
+                            <td class="text-end text-nowrap d-none d-md-table-cell">${{ number_format($producto->precio_compra, 0, ',', '.') }}</td>
                             <td class="text-end fw-bold text-nowrap" style="color: var(--cy-gold);">${{ number_format($producto->precio_venta, 0, ',', '.') }}</td>
-                            <td class="text-center fw-bold text-nowrap">{{ $producto->stock }}</td>
-                            <td class="text-end fw-bold text-nowrap">${{ number_format($producto->valor_stock_compra, 0, ',', '.') }}</td>
-                            <td class="text-center text-muted text-nowrap">{{ $producto->stock_minimo }}</td>
+                            <td class="text-center text-nowrap">
+                                <span class="fw-bold">{{ $producto->stock }}</span>
+                                <span class="text-muted" style="font-size: 0.78rem;">/ mín {{ $producto->stock_minimo }}</span>
+                            </td>
+                            <td class="text-end fw-bold text-nowrap d-none d-xxl-table-cell">${{ number_format($producto->valor_stock_compra, 0, ',', '.') }}</td>
                             <td class="text-nowrap">
                                 @if($producto->stock == 0)
                                     <span class="badge-stock-critico" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;"><i class="bi bi-x-circle-fill me-1"></i>Sin Stock</span>

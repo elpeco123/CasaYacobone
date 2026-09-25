@@ -45,21 +45,21 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Fecha</th>
+                            <th class="d-none d-md-table-cell">Fecha</th>
                             <th>Hora</th>
-                            <th>Vendedor</th>
+                            <th class="d-none d-md-table-cell">Vendedor</th>
                             <th class="text-center">Forma de Pago</th>
                             <th class="text-end">Total</th>
-                            <th class="text-center">Acción</th>
+                            <th class="text-center">Ver</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse($ventas as $venta)
                         <tr>
                             <td class="fw-bold text-white">{{ $venta->id }}</td>
-                            <td class="text-light">{{ $venta->created_at->format('d/m/Y') }}</td>
+                            <td class="text-light d-none d-md-table-cell">{{ $venta->created_at->format('d/m/Y') }}</td>
                             <td style="color: #cdb99c;">{{ $venta->created_at->format('H:i') }}</td>
-                            <td class="text-white">
+                            <td class="text-white d-none d-md-table-cell">
                                 <i class="bi bi-person-fill me-1" style="color: var(--cy-gold);"></i>
                                 {{ $venta->user->name }}
                             </td>
@@ -74,7 +74,7 @@
                             </td>
                             <td class="text-center">
                                 <a href="{{ route('ventas.show', $venta) }}" class="btn btn-glass btn-sm text-light">
-                                    <i class="bi bi-eye me-1"></i>Ver
+                                    <i class="bi bi-eye"></i><span class="d-none d-md-inline ms-1">Ver</span>
                                 </a>
                             </td>
                         </tr>

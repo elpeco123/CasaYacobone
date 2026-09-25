@@ -557,6 +557,42 @@
             vertical-align: middle;
         }
 
+        /* ===== TABLAS QUE NO ENTRAN A LO ANCHO ===== */
+        .table-responsive {
+            position: relative;
+        }
+
+        /* Aviso: aparece solo si la tabla realmente se desborda (lo marca el JS). */
+        .table-responsive[data-desliza]::after {
+            content: 'Deslizá la tabla para ver el resto →';
+            position: absolute;
+            bottom: -1.4rem;
+            right: 0;
+            font-size: 0.75rem;
+            color: var(--cy-text-faint);
+            pointer-events: none;
+        }
+
+        .table-responsive[data-desliza] {
+            margin-bottom: 1.5rem;
+        }
+
+        @media (max-width: 767.98px) {
+            /* La primera columna queda a la vista: sin ella no se sabe qué fila se está leyendo. */
+            .table-responsive[data-desliza] table th:first-child,
+            .table-responsive[data-desliza] table td:first-child {
+                position: sticky;
+                left: 0;
+                z-index: 2;
+                background: #2b1d15;
+                box-shadow: 1px 0 0 var(--cy-border);
+            }
+
+            .table-responsive[data-desliza] table thead th:first-child {
+                background: #241810;
+            }
+        }
+
         /* ===== BUTTONS ===== */
         .btn-accent {
             background: var(--cy-accent);
@@ -1073,6 +1109,19 @@
         </div>
     @endif
     @endauth
+
+    <script>
+        // Marca las tablas que no entran a lo ancho, para avisar que se deslizan.
+        (function () {
+            function marcar() {
+                document.querySelectorAll('.table-responsive').forEach(function (caja) {
+                    caja.toggleAttribute('data-desliza', caja.scrollWidth > caja.clientWidth + 2);
+                });
+            }
+            document.addEventListener('DOMContentLoaded', marcar);
+            window.addEventListener('resize', marcar);
+        })();
+    </script>
 
     {{-- Bootstrap JS --}}
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

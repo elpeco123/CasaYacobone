@@ -4,11 +4,22 @@
 
 @push('styles')
 <style>
-    /* Evita que emojis, fechas y montos se partan en dos líneas */
+    /* Evita que fechas y montos se partan en dos líneas */
     #tabla-cajas th,
     #tabla-cajas td {
         white-space: nowrap;
         vertical-align: middle;
+        padding: 0.45rem 0.5rem;
+        font-size: 0.78rem;
+    }
+
+    #tabla-cajas th {
+        font-size: 0.74rem;
+    }
+
+    /* El total del período es la columna que se busca primero. */
+    #tabla-cajas td.col-total {
+        font-size: 0.92rem;
     }
 </style>
 @endpush
@@ -29,21 +40,20 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Responsable</th>
+                            <th class="d-none d-xxl-table-cell">Abrió</th>
                             <th>Apertura</th>
                             <th>Cierre</th>
                             <th class="text-center">Estado</th>
-                            <th class="text-end">Inicial</th>
+                            <th class="text-end d-none d-xxl-table-cell" title="Cambio inicial de la apertura">Cambio</th>
                             <th class="text-end">Efectivo</th>
                             <th class="text-end">Gastos</th>
-                            <th class="text-end">Tarjeta</th>
-                            <th class="text-end">Débito</th>
+                            <th class="text-end" title="Incluye las ventas viejas cargadas como tarjeta">Débito</th>
                             <th class="text-end">Crédito</th>
                             <th class="text-end">Factura</th>
-                            <th class="text-end">Cta. corriente</th>
+                            <th class="text-end" title="Ventas a cuenta corriente: quedan a cobrar">Cta. cte.</th>
                             <th class="text-center">Ventas</th>
                             <th class="text-end">Total</th>
-                            <th class="text-end">Físico final</th>
+                            <th class="text-end" title="Efectivo que tiene que haber en el cajón">Físico</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -65,15 +75,12 @@
                             @endphp
                             <tr>
                                 <td class="fw-bold text-white">#{{ $caja->id }}</td>
-                                <td class="text-white">
-                                    <i class="bi bi-person-fill me-1" style="color: var(--cy-gold);"></i>
-                                    {{ $caja->user->name ?? 'Usuario' }}
+                                <td class="text-white d-none d-xxl-table-cell">{{ $caja->user->name ?? 'Usuario' }}</td>
+                                <td style="color: #cdb99c;">
+                                    {{ $caja->fecha_apertura?->format('d/m/y H:i') ?? $caja->fecha?->format('d/m/y') ?? '—' }}
                                 </td>
                                 <td style="color: #cdb99c;">
-                                    {{ $caja->fecha_apertura?->format('d/m/Y H:i') ?? $caja->fecha?->format('d/m/Y') ?? '—' }}
-                                </td>
-                                <td style="color: #cdb99c;">
-                                    {{ $caja->fecha_cierre?->format('d/m/Y H:i') ?? '—' }}
+                                    {{ $caja->fecha_cierre?->format('d/m/y H:i') ?? '—' }}
                                 </td>
                                 <td class="text-center">
                                     @if($caja->estaAbierta())
@@ -86,7 +93,7 @@
                                         </span>
                                     @endif
                                 </td>
-                                <td class="text-end" style="color: #cdb99c;">
+                                <td class="text-end d-none d-xxl-table-cell" style="color: #cdb99c;">
                                     ${{ number_format($caja->monto_inicial, 0, ',', '.') }}
                                 </td>
                                 <td class="text-end fw-bold text-success">
@@ -108,7 +115,7 @@
                                     ${{ number_format($cuentaCorriente, 0, ',', '.') }}
                                 </td>
                                 <td class="text-center">{{ $cantidad }}</td>
-                                <td class="text-end fw-bold" style="font-size: 1.05rem; color: var(--cy-gold);">
+                                <td class="text-end fw-bold col-total" style="color: var(--cy-gold);">
                                     ${{ number_format($total, 0, ',', '.') }}
                                 </td>
                                 <td class="text-end fw-bold" style="color: #f6c078;">
@@ -117,7 +124,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="13" class="text-center py-4">
+                                <td colspan="15" class="text-center py-4">
                                     <i class="bi bi-inbox" style="font-size: 2.2rem; color: #a8927a;"></i>
                                     <p class="mt-2 mb-0" style="color: #cdb99c;">Todavía no hay cajas registradas.</p>
                                 </td>
