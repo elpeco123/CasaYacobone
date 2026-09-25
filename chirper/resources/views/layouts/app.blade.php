@@ -642,6 +642,22 @@
             50% { opacity: 0.65; }
         }
 
+        /* ===== CHIPS DE FORMA DE PAGO ===== */
+        .pay-chip {
+            display: inline-block;
+            font-size: 0.78rem;
+            font-weight: 600;
+            padding: 0.2rem 0.55rem;
+            border-radius: 6px;
+        }
+
+        .pay-efectivo { background: rgba(155, 179, 95, 0.18); color: #c3d690; }
+        .pay-debito { background: rgba(143, 188, 212, 0.18); color: #b9d6e6; }
+        .pay-credito { background: rgba(207, 160, 198, 0.18); color: #e2c1dc; }
+        .pay-tarjeta { background: rgba(207, 160, 198, 0.18); color: #e2c1dc; }
+        .pay-factura { background: rgba(127, 169, 192, 0.18); color: #a9cbdd; }
+        .pay-cuenta_corriente { background: rgba(212, 154, 82, 0.2); color: var(--cy-gold-light); }
+
         /* ===== FORMS ===== */
         .form-control-dark,
         .form-select-dark {
@@ -869,6 +885,17 @@
                     </div>
 
                     @if(Auth::user()->isAdmin())
+                    <div class="cy-nav-group">
+                        <div class="cy-nav-heading">Clientes</div>
+                        <ul class="cy-nav">
+                            <li>
+                                <a href="{{ route('cuentas-corrientes.index') }}" class="{{ request()->routeIs('cuentas-corrientes.*') ? 'active' : '' }}">
+                                    <i class="bi bi-person-lines-fill"></i>Cuentas corrientes
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
                     <div class="cy-nav-group">
                         <div class="cy-nav-heading">Reportes</div>
                         <ul class="cy-nav">

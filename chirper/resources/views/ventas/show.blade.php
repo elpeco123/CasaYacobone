@@ -102,20 +102,22 @@
                     </div>
                     <div class="mb-3">
                         <span class="form-label d-block" style="color: #cdb99c !important; font-weight: 600;">Forma de Pago</span>
-                        @if(($venta->tipo_pago ?? 'efectivo') === 'tarjeta')
-                            <span class="badge" style="background: rgba(176, 104, 128, 0.25); color: #cfa0c6; border: 1px solid rgba(176, 104, 128, 0.5); font-size: 0.9rem; font-weight: 600;">
-                                Tarjeta
-                            </span>
-                        @elseif(($venta->tipo_pago ?? 'efectivo') === 'factura')
-                            <span class="badge" style="background: rgba(143, 188, 212, 0.25); color: #8fbcd4; border: 1px solid rgba(143, 188, 212, 0.5); font-size: 0.9rem; font-weight: 600;">
-                                Factura
-                            </span>
-                        @else
-                            <span class="badge" style="background: rgba(155, 179, 95, 0.25); color: #a9c46c; border: 1px solid rgba(155, 179, 95, 0.5); font-size: 0.9rem; font-weight: 600;">
-                                Efectivo
-                            </span>
+                        @include('partials.chip-pago', ['tipo' => $venta->tipo_pago])
+                        @if($venta->monto_recargo > 0)
+                            <div class="mt-1" style="font-size: 0.85rem; color: var(--cy-text-faint);">
+                                Incluye ${{ number_format($venta->monto_recargo, 0, ',', '.') }} de recargo ({{ \App\Models\Venta::RECARGO_CREDITO }}%).
+                            </div>
                         @endif
                     </div>
+                    @if($venta->cliente)
+                        <div class="mb-3">
+                            <span class="form-label d-block" style="color: #cdb99c !important; font-weight: 600;">Cliente (cuenta corriente)</span>
+                            <span class="fw-bold text-white">{{ $venta->cliente->nombreCompleto() }}</span>
+                            <div style="font-size: 0.85rem; color: var(--cy-text-faint);">
+                                {{ $venta->cliente->telefono }} · {{ $venta->cliente->direccion }}
+                            </div>
+                        </div>
+                    @endif
                     <div class="mb-3">
                         <span class="form-label d-block" style="color: #cdb99c !important; font-weight: 600;">Items</span>
                         <span class="fw-bold text-white">{{ $venta->items->count() }} productos ({{ $venta->items->sum('cantidad') }} unidades)</span>

@@ -27,6 +27,9 @@ class Caja extends Model
         'observaciones',
         'total_efectivo',
         'total_tarjeta',
+        'total_debito',
+        'total_credito',
+        'total_cuenta_corriente',
         'total_factura',
         'total_retiros',
         'cantidad_ventas',
@@ -39,6 +42,9 @@ class Caja extends Model
         'monto_inicial' => 'decimal:2',
         'total_efectivo' => 'decimal:2',
         'total_tarjeta' => 'decimal:2',
+        'total_debito' => 'decimal:2',
+        'total_credito' => 'decimal:2',
+        'total_cuenta_corriente' => 'decimal:2',
         'total_factura' => 'decimal:2',
         'total_retiros' => 'decimal:2',
     ];
@@ -80,7 +86,12 @@ class Caja extends Model
      */
     public function totalGeneral(): float
     {
-        return (float) $this->total_efectivo + (float) $this->total_tarjeta + (float) $this->total_factura;
+        return (float) $this->total_efectivo
+            + (float) $this->total_tarjeta
+            + (float) $this->total_debito
+            + (float) $this->total_credito
+            + (float) $this->total_factura
+            + (float) $this->total_cuenta_corriente;
     }
 
     /**

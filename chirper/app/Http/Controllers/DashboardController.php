@@ -6,6 +6,7 @@ use App\Models\Caja;
 use App\Models\CategoriaGasto;
 use App\Models\Producto;
 use App\Models\Proveedor;
+use App\Models\Retiro;
 use App\Models\Venta;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -29,17 +30,20 @@ class DashboardController extends Controller
         $cantidadVentasHoy = Venta::whereDate('created_at', $hoy)->count();
 
         // Desglose de ventas del día por tipo de pago
-        $ventasHoyPorForma = [
-            'efectivo' => Venta::whereDate('created_at', $hoy)->where('tipo_pago', 'efectivo')->sum('total'),
-            'tarjeta' => Venta::whereDate('created_at', $hoy)->where('tipo_pago', 'tarjeta')->sum('total'),
-            'factura' => Venta::whereDate('created_at', $hoy)->where('tipo_pago', 'factura')->sum('total'),
-        ];
+        $ventasHoyPorForma = Venta::desglosePorPago(Venta::whereDate('created_at', $hoy));
 
-        // Total físico de efectivo en caja (Cambio Inicial + Ventas en efectivo)
-        $totalEfectivoEnCaja = $montoInicialCaja + $ventasHoyPorForma['efectivo'];
+        // Gastos (retiros) del día: salen del cajón, así que descuentan efectivo.
+        $totalRetirosHoy = (float) Retiro::whereDate('created_at', $hoy)->sum('monto');
 
-        // Total Cierre de Caja General
-        $totalCierreGeneral = $totalEfectivoEnCaja + $ventasHoyPorForma['tarjeta'] + $ventasHoyPorForma['factura'];
+        // Total físico de efectivo en caja (Cambio inicial + ventas en efectivo − gastos)
+        $totalEfectivoEnCaja = $montoInicialCaja + $ventasHoyPorForma['efectivo'] - $totalRetirosHoy;
+
+        // Total del día: efectivo del cajón + lo cobrado por otros medios.
+        // La cuenta corriente no entra: es plata a cobrar, todavía no cobrada.
+        $totalCierreGeneral = $totalEfectivoEnCaja
+            + array_sum($ventasHoyPorForma)
+            - $ventasHoyPorForma['efectivo']
+            - $ventasHoyPorForma['cuenta_corriente'];
 
         // Si el usuario es vendedor, mostrar vista específica de vendedor
         // con los datos de SU caja abierta (período en curso).
@@ -57,17 +61,19 @@ class DashboardController extends Controller
             $cantidadVentasHoy = $ventasCaja->count();
 
             // Desglose de ventas de la caja por tipo de pago
-            $ventasHoyPorForma = [
-                'efectivo' => (float) $ventasCaja->where('tipo_pago', 'efectivo')->sum('total'),
-                'tarjeta' => (float) $ventasCaja->where('tipo_pago', 'tarjeta')->sum('total'),
-                'factura' => (float) $ventasCaja->where('tipo_pago', 'factura')->sum('total'),
-            ];
+            $ventasHoyPorForma = Venta::desglosePorPago(
+                Venta::where('caja_id', $cajaHoy?->id ?? -1)
+            );
 
             // Total físico de efectivo en caja (Cambio Inicial + Ventas en efectivo − Retiros)
             $totalEfectivoEnCaja = $montoInicialCaja + $ventasHoyPorForma['efectivo'] - $totalRetirosCaja;
 
-            // Total Cierre de Caja General
-            $totalCierreGeneral = $totalEfectivoEnCaja + $ventasHoyPorForma['tarjeta'] + $ventasHoyPorForma['factura'];
+            // Total del período: efectivo del cajón + lo cobrado por otros medios
+            // (la cuenta corriente queda afuera: todavía no se cobró).
+            $totalCierreGeneral = $totalEfectivoEnCaja
+                + array_sum($ventasHoyPorForma)
+                - $ventasHoyPorForma['efectivo']
+                - $ventasHoyPorForma['cuenta_corriente'];
 
             $ventasHoyLista = $cajaHoy
                 ? Venta::with('user')->where('caja_id', $cajaHoy->id)->latest()->get()
@@ -104,12 +110,7 @@ class DashboardController extends Controller
         $ventasAnoActual = Venta::where('created_at', '>=', Carbon::now()->startOfYear())->sum('total');
 
         // Desglose de ventas del mes actual por tipo de pago
-        $ventasMesPorForma = [
-            'efectivo' => Venta::where('created_at', '>=', $inicioMes)->where('tipo_pago', 'efectivo')->sum('total'),
-            'tarjeta' => Venta::where('created_at', '>=', $inicioMes)->where('tipo_pago', 'tarjeta')->sum('total'),
-            'factura' => Venta::where('created_at', '>=', $inicioMes)->where('tipo_pago', 'factura')->sum('total'),
-            'total' => $ventasMesActual,
-        ];
+        $ventasMesPorForma = Venta::desglosePorPago(Venta::where('created_at', '>=', $inicioMes));
 
         // Productos con stock bajo
         $productosBajoStock = Producto::stockBajo()
@@ -169,6 +170,7 @@ class DashboardController extends Controller
             'ventasAnoActual',
             'ventasHoyPorForma',
             'ventasMesPorForma',
+            'totalRetirosHoy',
             'totalEfectivoEnCaja',
             'totalCierreGeneral',
             'productosBajoStock',

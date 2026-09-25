@@ -109,16 +109,20 @@
                                 <span style="color: #cdb99c;">Gastos / retiros:</span>
                                 <span class="fw-bold text-danger">−${{ number_format($totalRetiros, 0, ',', '.') }}</span>
                             </div>
-                            <div class="d-flex justify-content-between align-items-center py-1.5 border-bottom border-secondary border-opacity-50">
-                                <span style="color: #cdb99c;">Tarjeta:</span>
-                                <span class="fw-bold" style="color: #cfa0c6;">${{ number_format($ventasTarjeta, 0, ',', '.') }}</span>
-                            </div>
-                            <div class="d-flex justify-content-between align-items-center py-1.5 border-bottom border-secondary border-opacity-50">
-                                <span style="color: #cdb99c;">Factura:</span>
-                                <span class="fw-bold" style="color: #8fbcd4;">${{ number_format($ventasFactura, 0, ',', '.') }}</span>
-                            </div>
+                            @foreach($ventasPorForma as $tipo => $monto)
+                                @continue($tipo === 'efectivo')
+                                <div class="d-flex justify-content-between align-items-center py-1.5 border-bottom border-secondary border-opacity-50">
+                                    <span style="color: #cdb99c;">
+                                        {{ \App\Models\Venta::etiquetaPago($tipo) }}:
+                                        @if($tipo === 'cuenta_corriente')
+                                            <span style="color: #a8927a; font-size: 0.82rem;">(queda a cobrar)</span>
+                                        @endif
+                                    </span>
+                                    <span class="fw-bold" style="color: {{ $tipo === 'cuenta_corriente' ? '#ecc58f' : '#cfa0c6' }};">${{ number_format($monto, 0, ',', '.') }}</span>
+                                </div>
+                            @endforeach
                             <div class="d-flex justify-content-between align-items-center pt-2 mt-1">
-                                <span class="fw-bold text-white">Total General del Período:</span>
+                                <span class="fw-bold text-white">Total vendido en el período:</span>
                                 <span class="fw-bold fs-5" style="color: var(--cy-gold);">${{ number_format($totalVendidoCaja, 0, ',', '.') }}</span>
                             </div>
                         </div>

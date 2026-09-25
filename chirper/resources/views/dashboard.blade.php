@@ -290,18 +290,27 @@
                             <span style="color: #cdb99c;">Ventas en Efectivo:</span>
                             <span class="fw-bold text-success">+${{ number_format($ventasHoyPorForma['efectivo'], 0, ',', '.') }}</span>
                         </div>
+                        <div class="d-flex justify-content-between align-items-center mb-1.5" style="font-size: 0.88rem;">
+                            <span style="color: #cdb99c;">Gastos del día:</span>
+                            <span class="fw-bold text-danger">−${{ number_format($totalRetirosHoy, 0, ',', '.') }}</span>
+                        </div>
                         <div class="d-flex justify-content-between align-items-center py-2 px-2 my-1.5 rounded-2" style="background: rgba(212, 154, 82, 0.15); border: 1px solid rgba(212, 154, 82, 0.35); font-size: 0.92rem;">
                             <span style="color: #ffffff; font-weight: 700;">Total Efectivo en Caja:</span>
                             <span class="fw-extrabold" style="color: #f6c078; font-size: 1.15rem;">${{ number_format($totalEfectivoEnCaja, 0, ',', '.') }}</span>
                         </div>
-                        <div class="d-flex justify-content-between align-items-center mb-1" style="font-size: 0.88rem;">
-                            <span style="color: #cdb99c;">Tarjeta:</span>
-                            <span class="fw-bold" style="color: #cfa0c6;">${{ number_format($ventasHoyPorForma['tarjeta'], 0, ',', '.') }}</span>
-                        </div>
-                        <div class="d-flex justify-content-between align-items-center mb-1" style="font-size: 0.88rem;">
-                            <span style="color: #cdb99c;">Factura:</span>
-                            <span class="fw-bold" style="color: #8fbcd4;">${{ number_format($ventasHoyPorForma['factura'], 0, ',', '.') }}</span>
-                        </div>
+                        @foreach($ventasHoyPorForma as $tipo => $monto)
+                            @continue(in_array($tipo, ['efectivo', 'cuenta_corriente'], true))
+                            <div class="d-flex justify-content-between align-items-center mb-1" style="font-size: 0.88rem;">
+                                <span style="color: #cdb99c;">{{ \App\Models\Venta::etiquetaPago($tipo) }}:</span>
+                                <span class="fw-bold" style="color: #cfa0c6;">${{ number_format($monto, 0, ',', '.') }}</span>
+                            </div>
+                        @endforeach
+                        @if($ventasHoyPorForma['cuenta_corriente'] > 0)
+                            <div class="d-flex justify-content-between align-items-center mb-1" style="font-size: 0.88rem;">
+                                <span style="color: #cdb99c;">Cuenta corriente <span style="color: #a8927a;">(queda a cobrar)</span>:</span>
+                                <span class="fw-bold" style="color: #ecc58f;">${{ number_format($ventasHoyPorForma['cuenta_corriente'], 0, ',', '.') }}</span>
+                            </div>
+                        @endif
                         <div class="d-flex justify-content-between align-items-center pt-2 mt-2" style="border-top: 1px dashed var(--cy-border); font-size: 0.95rem; font-weight: 700;">
                             <span style="color: #ffffff;">Total Ventas del Día:</span>
                             <span style="color: var(--cy-gold); font-size: 1.1rem;">${{ number_format($ventasHoy, 0, ',', '.') }}</span>
@@ -312,21 +321,15 @@
                         <div class="text-muted mb-2" style="font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">
                             Ventas del Mes Actual
                         </div>
-                        <div class="d-flex justify-content-between align-items-center mb-1" style="font-size: 0.88rem;">
-                            <span>Efectivo:</span>
-                            <span class="fw-bold text-success">${{ number_format($ventasMesPorForma['efectivo'], 0, ',', '.') }}</span>
-                        </div>
-                        <div class="d-flex justify-content-between align-items-center mb-1" style="font-size: 0.88rem;">
-                            <span>Tarjeta:</span>
-                            <span class="fw-bold" style="color: #cfa0c6;">${{ number_format($ventasMesPorForma['tarjeta'], 0, ',', '.') }}</span>
-                        </div>
-                        <div class="d-flex justify-content-between align-items-center mb-1" style="font-size: 0.88rem;">
-                            <span>Factura:</span>
-                            <span class="fw-bold text-info">${{ number_format($ventasMesPorForma['factura'], 0, ',', '.') }}</span>
-                        </div>
+                        @foreach($ventasMesPorForma as $tipo => $monto)
+                            <div class="d-flex justify-content-between align-items-center mb-1" style="font-size: 0.88rem;">
+                                <span>{{ \App\Models\Venta::etiquetaPago($tipo) }}:</span>
+                                <span class="fw-bold" style="color: {{ $tipo === 'efectivo' ? '#a9c46c' : '#cfa0c6' }};">${{ number_format($monto, 0, ',', '.') }}</span>
+                            </div>
+                        @endforeach
                         <div class="d-flex justify-content-between align-items-center pt-2 mt-2" style="border-top: 1px dashed var(--cy-border); font-size: 1rem; font-weight: 800;">
                             <span>Total del Mes:</span>
-                            <span style="color: var(--cy-gold); font-size: 1.15rem;">${{ number_format($ventasMesPorForma['total'], 0, ',', '.') }}</span>
+                            <span style="color: var(--cy-gold); font-size: 1.15rem;">${{ number_format($ventasMesActual, 0, ',', '.') }}</span>
                         </div>
                     </div>
                 </div>

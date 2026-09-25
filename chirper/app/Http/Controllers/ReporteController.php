@@ -32,13 +32,9 @@ class ReporteController extends Controller
             if (! $caja->estaAbierta()) {
                 continue;
             }
-            $ventas = $caja->ventas()->get(['tipo_pago', 'total']);
-            $enVivo[$caja->id] = [
-                'efectivo' => (float) $ventas->where('tipo_pago', 'efectivo')->sum('total'),
-                'tarjeta' => (float) $ventas->where('tipo_pago', 'tarjeta')->sum('total'),
-                'factura' => (float) $ventas->where('tipo_pago', 'factura')->sum('total'),
+            $enVivo[$caja->id] = Venta::desglosePorPago(Venta::where('caja_id', $caja->id)) + [
                 'retiros' => (float) $caja->retiros()->sum('monto'),
-                'cantidad' => $ventas->count(),
+                'cantidad' => $caja->ventas()->count(),
             ];
         }
 
@@ -366,12 +362,14 @@ class ReporteController extends Controller
         $montoInicialCaja = $cajaDia ? (float) $cajaDia->monto_inicial : 0.0;
 
         // Desglose por forma de pago
-        $ventasEfectivoDia = $ventasDelDia->where('tipo_pago', 'efectivo')->sum('total');
-        $ventasTarjetaDia = $ventasDelDia->where('tipo_pago', 'tarjeta')->sum('total');
-        $ventasFacturaDia = $ventasDelDia->where('tipo_pago', 'factura')->sum('total');
+        $ventasPorForma = Venta::desglosePorPago(Venta::whereDate('created_at', $fecha));
+        $ventasEfectivoDia = $ventasPorForma['efectivo'];
+
+        // Gastos del día: salen del cajón.
+        $retirosDia = (float) Retiro::whereDate('created_at', $fecha)->sum('monto');
 
         // Total físico de efectivo en caja
-        $totalEfectivoEnCaja = $montoInicialCaja + $ventasEfectivoDia;
+        $totalEfectivoEnCaja = $montoInicialCaja + $ventasEfectivoDia - $retirosDia;
 
         // Total vendido
         $totalVendido = $ventasDelDia->sum('total');
@@ -401,8 +399,8 @@ class ReporteController extends Controller
             'cajaDia',
             'montoInicialCaja',
             'ventasEfectivoDia',
-            'ventasTarjetaDia',
-            'ventasFacturaDia',
+            'ventasPorForma',
+            'retirosDia',
             'totalEfectivoEnCaja',
             'ventasDelDia',
             'totalVendido',

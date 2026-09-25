@@ -118,13 +118,45 @@
                         <div class="mb-3">
                             <label for="tipo_pago" class="form-label text-light fw-semibold" style="color: #eadcc6 !important;">Forma de Pago *</label>
                             <select name="tipo_pago" id="tipo_pago" class="form-select form-select-dark @error('tipo_pago') is-invalid @enderror" required style="font-weight: 600;">
-                                <option value="efectivo" {{ old('tipo_pago') == 'efectivo' ? 'selected' : '' }}>Efectivo</option>
-                                <option value="tarjeta" {{ old('tipo_pago') == 'tarjeta' ? 'selected' : '' }}>Tarjeta</option>
-                                <option value="factura" {{ old('tipo_pago') == 'factura' ? 'selected' : '' }}>Factura</option>
+                                @foreach(\App\Models\Venta::PAGOS as $valor => $etiqueta)
+                                    <option value="{{ $valor }}" {{ old('tipo_pago') == $valor ? 'selected' : '' }}>
+                                        {{ $etiqueta }}@if($valor === 'credito') (+{{ \App\Models\Venta::RECARGO_CREDITO }}%)@endif
+                                    </option>
+                                @endforeach
                             </select>
                             @error('tipo_pago')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
+                        </div>
+
+                        {{-- Datos del cliente: aparecen al elegir cuenta corriente --}}
+                        <div id="bloqueCliente" class="mb-3 p-3 rounded-3" style="display: none; background: rgba(236, 197, 143, 0.06); border: 1px solid var(--cy-border-strong);">
+                            <div class="fw-bold mb-1" style="font-size: 0.92rem;">Datos del cliente</div>
+                            <p class="mb-3" style="font-size: 0.82rem; color: var(--cy-text-faint);">
+                                Queda anotado en cuentas corrientes con esta deuda. Si ya compró antes, cargá el mismo teléfono.
+                            </p>
+                            <div class="row g-2">
+                                <div class="col-6">
+                                    <label for="cliente_nombre" class="form-label">Nombre</label>
+                                    <input type="text" name="cliente_nombre" id="cliente_nombre" maxlength="80"
+                                           class="form-control form-control-dark" value="{{ old('cliente_nombre') }}">
+                                </div>
+                                <div class="col-6">
+                                    <label for="cliente_apellido" class="form-label">Apellido</label>
+                                    <input type="text" name="cliente_apellido" id="cliente_apellido" maxlength="80"
+                                           class="form-control form-control-dark" value="{{ old('cliente_apellido') }}">
+                                </div>
+                                <div class="col-12">
+                                    <label for="cliente_telefono" class="form-label">Teléfono</label>
+                                    <input type="tel" name="cliente_telefono" id="cliente_telefono" maxlength="30" inputmode="tel"
+                                           class="form-control form-control-dark" value="{{ old('cliente_telefono') }}" placeholder="Ej: 2954 123456">
+                                </div>
+                                <div class="col-12">
+                                    <label for="cliente_direccion" class="form-label">Dirección</label>
+                                    <input type="text" name="cliente_direccion" id="cliente_direccion" maxlength="160"
+                                           class="form-control form-control-dark" value="{{ old('cliente_direccion') }}" placeholder="Calle, número y localidad">
+                                </div>
+                            </div>
                         </div>
 
                         <div class="mb-3">
@@ -152,6 +184,10 @@
                         <div class="d-flex justify-content-between align-items-center mb-3" style="font-size: 0.95rem;">
                             <span style="color: #eadcc6; font-weight: 600;">Descuento Aplicado:</span>
                             <span id="descuentoMonto" class="fw-bold fs-6" style="color: #e2765c;">-$0</span>
+                        </div>
+                        <div id="filaRecargo" class="mb-3" style="display: none; justify-content: space-between; align-items: center; font-size: 0.95rem;">
+                            <span style="color: #eadcc6; font-weight: 600;">Recargo crédito ({{ \App\Models\Venta::RECARGO_CREDITO }}%):</span>
+                            <span id="recargoMonto" class="fw-bold fs-6" style="color: #ecc58f;">+$0</span>
                         </div>
 
                         <div class="d-flex justify-content-between align-items-center mb-3 p-3 rounded-3" style="background: rgba(212, 154, 82, 0.12); border: 1px solid rgba(212, 154, 82, 0.3);">
@@ -433,6 +469,25 @@
             });
         }
 
+        const tipoPago = document.getElementById('tipo_pago');
+        const bloqueCliente = document.getElementById('bloqueCliente');
+        const filaRecargo = document.getElementById('filaRecargo');
+        const RECARGO_CREDITO = @json(\App\Models\Venta::RECARGO_CREDITO);
+
+        function actualizarFormaPago() {
+            const esCuentaCorriente = tipoPago.value === 'cuenta_corriente';
+            bloqueCliente.style.display = esCuentaCorriente ? 'block' : 'none';
+            bloqueCliente.querySelectorAll('input').forEach(function (input) {
+                input.required = esCuentaCorriente;
+            });
+            updateTotal();
+        }
+
+        if (tipoPago) {
+            tipoPago.addEventListener('change', actualizarFormaPago);
+            actualizarFormaPago();
+        }
+
         function updateTotal() {
             let subtotalSum = 0;
             let totalItems = 0;
@@ -457,7 +512,15 @@
             if (descPorcentaje > 100) descPorcentaje = 100;
 
             const descMonto = Math.round((subtotalSum * (descPorcentaje / 100)) * 100) / 100;
-            const totalMonto = Math.max(0, Math.round((subtotalSum - descMonto) * 100) / 100);
+            const conDescuento = Math.max(0, Math.round((subtotalSum - descMonto) * 100) / 100);
+
+            // El crédito siempre suma su recargo fijo sobre lo que paga el cliente.
+            const esCredito = tipoPago && tipoPago.value === 'credito';
+            const recargo = esCredito ? Math.round(conDescuento * (RECARGO_CREDITO / 100) * 100) / 100 : 0;
+            const totalMonto = Math.round((conDescuento + recargo) * 100) / 100;
+
+            filaRecargo.style.display = esCredito ? 'flex' : 'none';
+            document.getElementById('recargoMonto').textContent = '+$' + recargo.toLocaleString('es-AR', {minimumFractionDigits: 0, maximumFractionDigits: 2});
 
             document.getElementById('totalItems').textContent = totalItems;
             document.getElementById('totalUnidades').textContent = totalUnidades;

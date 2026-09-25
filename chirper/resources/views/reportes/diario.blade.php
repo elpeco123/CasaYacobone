@@ -63,17 +63,20 @@
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <div class="p-2.5 rounded-3" style="background: rgba(207, 160, 198, 0.1); border: 1px solid rgba(207, 160, 198, 0.25);">
-                        <span class="d-block small" style="color: #cdb99c;">Ventas Tarjeta:</span>
-                        <strong class="fs-6" style="color: #cfa0c6;">${{ number_format($ventasTarjetaDia, 0, ',', '.') }}</strong>
+                    <div class="p-2.5 rounded-3" style="background: rgba(208, 85, 58, 0.1); border: 1px solid rgba(208, 85, 58, 0.25);">
+                        <span class="d-block small" style="color: #cdb99c;">Gastos del día:</span>
+                        <strong class="fs-6 text-danger">−${{ number_format($retirosDia, 0, ',', '.') }}</strong>
                     </div>
                 </div>
-                <div class="col-md-3">
-                    <div class="p-2.5 rounded-3" style="background: rgba(143, 188, 212, 0.1); border: 1px solid rgba(143, 188, 212, 0.25);">
-                        <span class="d-block small" style="color: #cdb99c;">Ventas Factura:</span>
-                        <strong class="fs-6" style="color: #8fbcd4;">${{ number_format($ventasFacturaDia, 0, ',', '.') }}</strong>
+                @foreach($ventasPorForma as $tipo => $monto)
+                    @continue($tipo === 'efectivo')
+                    <div class="col-md-3">
+                        <div class="p-2.5 rounded-3" style="background: rgba(207, 160, 198, 0.1); border: 1px solid rgba(207, 160, 198, 0.25);">
+                            <span class="d-block small" style="color: #cdb99c;">Ventas {{ \App\Models\Venta::etiquetaPago($tipo) }}:</span>
+                            <strong class="fs-6" style="color: #cfa0c6;">${{ number_format($monto, 0, ',', '.') }}</strong>
+                        </div>
                     </div>
-                </div>
+                @endforeach
             </div>
         </div>
     </div>

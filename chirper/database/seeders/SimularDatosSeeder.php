@@ -106,7 +106,7 @@ class SimularDatosSeeder extends Seeder
 
         $this->command->info('5. Generando simulación de 20 a 25 ventas por día durante los últimos 12 meses (365 días)...');
 
-        $tiposPago = ['efectivo', 'efectivo', 'tarjeta', 'tarjeta', 'factura']; // 40% efectivo, 40% tarjeta, 20% factura
+        $tiposPago = ['efectivo', 'efectivo', 'debito', 'credito', 'factura']; // 40% efectivo, 20% débito, 20% crédito, 20% factura
         $userIDs = $users->pluck('id')->toArray();
         $prodList = $allProductos->toArray();
         $prodCount = count($prodList);

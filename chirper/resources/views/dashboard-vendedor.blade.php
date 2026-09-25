@@ -246,18 +246,6 @@
 
     .vd-sale-chev { color: var(--cy-text-faint); }
 
-    .pay-chip {
-        display: inline-block;
-        font-size: 0.78rem;
-        font-weight: 600;
-        padding: 0.2rem 0.55rem;
-        border-radius: 6px;
-        margin-right: 0.35rem;
-    }
-
-    .pay-efectivo { background: rgba(155, 179, 95, 0.18); color: #c3d690; }
-    .pay-tarjeta { background: rgba(207, 160, 198, 0.18); color: #e2c1dc; }
-    .pay-factura { background: rgba(143, 188, 212, 0.18); color: #b9d6e6; }
 
     .vd-empty {
         text-align: center;
@@ -303,9 +291,14 @@
                 <div class="vd-line"><span>Ventas en efectivo</span><strong class="is-plus">+${{ $pesos($ventasHoyPorForma['efectivo']) }}</strong></div>
                 <div class="vd-line"><span>Gastos</span><strong class="is-minus">−${{ $pesos($totalRetirosCaja ?? 0) }}</strong></div>
                 <div class="vd-sep"></div>
-                <div class="vd-line"><span>Tarjeta</span><strong>${{ $pesos($ventasHoyPorForma['tarjeta']) }}</strong></div>
-                <div class="vd-line"><span>Factura</span><strong>${{ $pesos($ventasHoyPorForma['factura']) }}</strong></div>
-                <div class="vd-line is-total"><span>Total de la caja</span><strong>${{ $pesos($totalCierreGeneral) }}</strong></div>
+                @foreach($ventasHoyPorForma as $tipo => $monto)
+                    @continue($tipo === 'efectivo')
+                    <div class="vd-line">
+                        <span>{{ \App\Models\Venta::etiquetaPago($tipo) }}@if($tipo === 'cuenta_corriente') <small>(a cobrar)</small>@endif</span>
+                        <strong>${{ $pesos($monto) }}</strong>
+                    </div>
+                @endforeach
+                <div class="vd-line is-total"><span>Total cobrado <small>(sin cuenta corriente)</small></span><strong>${{ $pesos($totalCierreGeneral) }}</strong></div>
             </details>
         </section>
 
@@ -338,7 +331,7 @@
                 <a href="{{ route('ventas.show', $venta) }}" class="vd-sale">
                     <span class="vd-sale-time">{{ $venta->created_at->format('H:i') }}</span>
                     <span>
-                        <span class="pay-chip pay-{{ $pago }}">{{ ucfirst($pago) }}</span>
+                        @include('partials.chip-pago', ['tipo' => $pago])
                         <span class="vd-sale-id">N.º {{ $venta->id }}</span>
                     </span>
                     <span class="vd-sale-total">${{ $pesos($venta->total) }}</span>

@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\CajaController;
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\CategoriaGastoController;
+use App\Http\Controllers\CuentaCorrienteController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\ProveedorController;
@@ -84,6 +85,13 @@ Route::middleware('auth')->group(function () {
     // Retiros / gastos de la caja abierta (Vendedores y Administradores)
     Route::post('/caja/retiros', [RetiroController::class, 'store'])->name('caja.retiros.store');
     Route::delete('/caja/retiros/{retiro}', [RetiroController::class, 'destroy'])->name('caja.retiros.destroy');
+
+    // Cuentas corrientes de clientes (Solo Administrador)
+    Route::middleware('role:admin')->prefix('cuentas-corrientes')->name('cuentas-corrientes.')->group(function () {
+        Route::get('/', [CuentaCorrienteController::class, 'index'])->name('index');
+        Route::get('/{cliente}', [CuentaCorrienteController::class, 'show'])->name('show');
+        Route::post('/{cliente}/pagos', [CuentaCorrienteController::class, 'pagar'])->name('pagar');
+    });
 
     // Reportes (Solo Administrador)
     Route::prefix('reportes')->name('reportes.')->middleware('role:admin')->group(function () {

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\VentaRequest;
 use App\Models\Caja;
+use App\Models\Cliente;
 use App\Models\Producto;
 use App\Models\Venta;
 use Illuminate\Http\RedirectResponse;
@@ -21,7 +22,7 @@ class VentaController extends Controller
      */
     public function index(): View
     {
-        $query = Venta::with('user')->latest();
+        $query = Venta::with(['user', 'cliente'])->latest();
 
         // Los vendedores solo ven las ventas de su caja abierta; el admin ve el historial completo.
         $soloHoy = false;
@@ -100,14 +101,35 @@ class VentaController extends Controller
                 $montoDescuento = round($subtotalSum * ($descuentoPorcentaje / 100), 2);
                 $total = max(0, round($subtotalSum - $montoDescuento, 2));
 
+                // El crédito siempre lleva recargo fijo sobre lo que paga el cliente.
+                $montoRecargo = $validated['tipo_pago'] === 'credito'
+                    ? round($total * (Venta::RECARGO_CREDITO / 100), 2)
+                    : 0.0;
+                $total = round($total + $montoRecargo, 2);
+
+                // A cuenta corriente la venta queda a nombre del cliente, que se
+                // da de alta (o se actualiza) con el teléfono como identificador.
+                $cliente = $validated['tipo_pago'] === 'cuenta_corriente'
+                    ? Cliente::updateOrCreate(
+                        ['telefono' => trim($validated['cliente_telefono'])],
+                        [
+                            'nombre' => trim($validated['cliente_nombre']),
+                            'apellido' => trim($validated['cliente_apellido']),
+                            'direccion' => trim($validated['cliente_direccion']),
+                        ]
+                    )
+                    : null;
+
                 // Create the venta
                 $venta = Venta::create([
                     'user_id' => Auth::id(),
                     'caja_id' => $cajaAbierta?->id,
+                    'cliente_id' => $cliente?->id,
                     'tipo_pago' => $validated['tipo_pago'],
                     'subtotal' => $subtotalSum,
                     'descuento_porcentaje' => $descuentoPorcentaje,
                     'monto_descuento' => $montoDescuento,
+                    'monto_recargo' => $montoRecargo,
                     'total' => $total,
                 ]);
 
@@ -134,7 +156,7 @@ class VentaController extends Controller
      */
     public function show(Venta $venta): View
     {
-        $venta->load(['user', 'items.producto.categoria']);
+        $venta->load(['user', 'cliente', 'items.producto.categoria']);
 
         return view('ventas.show', compact('venta'));
     }

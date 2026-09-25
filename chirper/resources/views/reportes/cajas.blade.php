@@ -37,7 +37,10 @@
                             <th class="text-end">Efectivo</th>
                             <th class="text-end">Gastos</th>
                             <th class="text-end">Tarjeta</th>
+                            <th class="text-end">Débito</th>
+                            <th class="text-end">Crédito</th>
                             <th class="text-end">Factura</th>
+                            <th class="text-end">Cta. corriente</th>
                             <th class="text-center">Ventas</th>
                             <th class="text-end">Total</th>
                             <th class="text-end">Físico final</th>
@@ -49,11 +52,15 @@
                                 // Las cerradas usan el snapshot; las abiertas, el cálculo en vivo.
                                 $vivo = $enVivo[$caja->id] ?? null;
                                 $efectivo = $vivo ? $vivo['efectivo'] : (float) $caja->total_efectivo;
-                                $tarjeta = $vivo ? $vivo['tarjeta'] : (float) $caja->total_tarjeta;
+                                // "Tarjeta" existe solo en cajas viejas, antes de separar débito y crédito.
+                                $tarjeta = $vivo ? ($vivo['tarjeta'] ?? 0) : (float) $caja->total_tarjeta;
+                                $debito = $vivo ? $vivo['debito'] : (float) $caja->total_debito;
+                                $credito = $vivo ? $vivo['credito'] : (float) $caja->total_credito;
                                 $factura = $vivo ? $vivo['factura'] : (float) $caja->total_factura;
+                                $cuentaCorriente = $vivo ? $vivo['cuenta_corriente'] : (float) $caja->total_cuenta_corriente;
                                 $retiros = $vivo ? $vivo['retiros'] : (float) $caja->total_retiros;
                                 $cantidad = $vivo ? $vivo['cantidad'] : $caja->ventas_count;
-                                $total = $efectivo + $tarjeta + $factura;
+                                $total = $efectivo + $tarjeta + $debito + $credito + $factura + $cuentaCorriente;
                                 $fisico = (float) $caja->monto_inicial + $efectivo - $retiros;
                             @endphp
                             <tr>
@@ -89,10 +96,16 @@
                                     −${{ number_format($retiros, 0, ',', '.') }}
                                 </td>
                                 <td class="text-end fw-bold" style="color: #cfa0c6;">
-                                    ${{ number_format($tarjeta, 0, ',', '.') }}
+                                    ${{ number_format($debito + $tarjeta, 0, ',', '.') }}
+                                </td>
+                                <td class="text-end fw-bold" style="color: #cfa0c6;">
+                                    ${{ number_format($credito, 0, ',', '.') }}
                                 </td>
                                 <td class="text-end fw-bold" style="color: #8fbcd4;">
                                     ${{ number_format($factura, 0, ',', '.') }}
+                                </td>
+                                <td class="text-end fw-bold" style="color: #ecc58f;">
+                                    ${{ number_format($cuentaCorriente, 0, ',', '.') }}
                                 </td>
                                 <td class="text-center">{{ $cantidad }}</td>
                                 <td class="text-end fw-bold" style="font-size: 1.05rem; color: var(--cy-gold);">

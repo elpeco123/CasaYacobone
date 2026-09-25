@@ -22,19 +22,16 @@ class CajaController extends Controller
             ->latest()
             ->first();
 
+        $ventasPorForma = array_fill_keys(array_keys(Venta::PAGOS), 0.0);
         $ventasEfectivo = 0.0;
-        $ventasTarjeta = 0.0;
-        $ventasFactura = 0.0;
         $cantidadVentas = 0;
         $retiros = collect();
         $totalRetiros = 0.0;
 
         if ($cajaAbierta) {
-            $ventasCaja = Venta::where('caja_id', $cajaAbierta->id)->get(['tipo_pago', 'total']);
-            $ventasEfectivo = (float) $ventasCaja->where('tipo_pago', 'efectivo')->sum('total');
-            $ventasTarjeta = (float) $ventasCaja->where('tipo_pago', 'tarjeta')->sum('total');
-            $ventasFactura = (float) $ventasCaja->where('tipo_pago', 'factura')->sum('total');
-            $cantidadVentas = $ventasCaja->count();
+            $ventasPorForma = Venta::desglosePorPago(Venta::where('caja_id', $cajaAbierta->id));
+            $ventasEfectivo = $ventasPorForma['efectivo'];
+            $cantidadVentas = Venta::where('caja_id', $cajaAbierta->id)->count();
 
             $retiros = $cajaAbierta->retiros()->with(['user', 'categoriaGasto'])->latest()->get();
             $totalRetiros = (float) $retiros->sum('monto');
@@ -44,14 +41,13 @@ class CajaController extends Controller
 
         $montoInicial = $cajaAbierta ? (float) $cajaAbierta->monto_inicial : 0.0;
         $totalEfectivoEnCaja = $montoInicial + $ventasEfectivo - $totalRetiros;
-        $totalVendidoCaja = $ventasEfectivo + $ventasTarjeta + $ventasFactura;
+        $totalVendidoCaja = array_sum($ventasPorForma);
 
         return view('caja.index', compact(
             'cajaAbierta',
             'montoInicial',
+            'ventasPorForma',
             'ventasEfectivo',
-            'ventasTarjeta',
-            'ventasFactura',
             'cantidadVentas',
             'retiros',
             'totalRetiros',
@@ -107,17 +103,20 @@ class CajaController extends Controller
                 ->with('error', 'La caja #'.$caja->id.' ya está cerrada.');
         }
 
-        $ventasCaja = Venta::where('caja_id', $caja->id)->get(['tipo_pago', 'total']);
+        $porForma = Venta::desglosePorPago(Venta::where('caja_id', $caja->id));
         $totalRetiros = (float) $caja->retiros()->sum('monto');
 
         $caja->update([
             'estado' => Caja::ESTADO_CERRADA,
             'fecha_cierre' => Carbon::now(),
-            'total_efectivo' => $ventasCaja->where('tipo_pago', 'efectivo')->sum('total'),
-            'total_tarjeta' => $ventasCaja->where('tipo_pago', 'tarjeta')->sum('total'),
-            'total_factura' => $ventasCaja->where('tipo_pago', 'factura')->sum('total'),
+            'total_efectivo' => $porForma['efectivo'],
+            'total_tarjeta' => $porForma['tarjeta'] ?? 0,
+            'total_debito' => $porForma['debito'],
+            'total_credito' => $porForma['credito'],
+            'total_factura' => $porForma['factura'],
+            'total_cuenta_corriente' => $porForma['cuenta_corriente'],
             'total_retiros' => $totalRetiros,
-            'cantidad_ventas' => $ventasCaja->count(),
+            'cantidad_ventas' => Venta::where('caja_id', $caja->id)->count(),
         ]);
 
         $caja->refresh();
