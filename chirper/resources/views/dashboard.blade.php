@@ -150,7 +150,7 @@
                                     <tr>
                                         <td>
                                             <strong>{{ $producto->nombre }}</strong>
-                                            <br><small class="text-muted">{{ $producto->marca }}</small>
+                                            <br><small class="text-muted">{{ $producto->articulo }} · {{ $producto->variante() }}</small>
                                         </td>
                                         <td>{{ $producto->categoria->nombre }}</td>
                                         <td class="text-center fw-bold">{{ $producto->stock }}</td>

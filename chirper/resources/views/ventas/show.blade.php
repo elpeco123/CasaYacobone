@@ -33,7 +33,7 @@
                                 <tr>
                                     <td>
                                         <strong class="text-white">{{ $item->producto->nombre }}</strong>
-                                        <br><small style="color: #cdb99c;">{{ $item->producto->marca }}</small>
+                                        <br><small style="color: #cdb99c;">{{ $item->producto->articulo }} · {{ $item->producto->variante() }}</small>
                                     </td>
                                     <td class="text-light">{{ $item->producto->categoria->nombre }}</td>
                                     <td class="text-center fw-bold text-white">{{ $item->cantidad }}</td>

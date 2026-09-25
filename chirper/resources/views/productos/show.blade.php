@@ -23,12 +23,12 @@
                                 <span class="fw-bold" style="font-size: 1.05rem;">{{ $producto->proveedor->nombre ?? 'N/A' }}</span>
                             </div>
                             <div class="mb-3">
-                                <span class="form-label d-block">Marca</span>
-                                <span class="fw-bold" style="font-size: 1.05rem;">{{ $producto->marca }}</span>
+                                <span class="form-label d-block">Artículo</span>
+                                <span class="fw-bold" style="font-size: 1.05rem; color: var(--cy-gold-light);">{{ $producto->articulo }}</span>
                             </div>
                             <div class="mb-3">
-                                <span class="form-label d-block">Talle</span>
-                                <span class="fw-bold" style="font-size: 1.05rem;">{{ $producto->talle ?? 'N/A' }}</span>
+                                <span class="form-label d-block">Talle y color</span>
+                                <span class="fw-bold" style="font-size: 1.05rem;">{{ $producto->variante() }}</span>
                             </div>
                         </div>
                         <div class="col-md-6">

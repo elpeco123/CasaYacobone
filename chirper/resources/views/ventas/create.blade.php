@@ -53,12 +53,12 @@
                             <i class="bi bi-search text-warning fs-5"></i>
                             <h6 class="mb-0 fw-bold text-light">Buscador Rápido de Productos</h6>
                             <span class="badge bg-gold-light text-dark ms-auto" style="font-size: 0.75rem;">
-                                {{ $productos->count() }} disponibles
+                                {{ $porArticulo->count() }} artículos
                             </span>
                         </div>
                         <div class="position-relative">
                             <input type="text" id="quickProductSearch" class="form-control form-control-dark ps-5"
-                                   placeholder="Escribí el nombre, marca o categoría del producto (ej: Remera, Nike)..."
+                                   placeholder="Buscá por artículo, nombre, color o categoría (ej: BC-100, bombacha, negro)..."
                                    autocomplete="off">
                             <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"></i>
                         </div>
@@ -212,31 +212,32 @@
 <template id="itemTemplate">
     <div class="item-row mb-3 p-3 rounded-3 fade-in" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12);">
         <div class="row g-3 align-items-end">
-            <div class="col-md-5">
-                <label class="form-label text-light fw-medium" style="color: #eadcc6 !important;">Seleccionar Producto</label>
-                <select class="form-select form-select-dark item-producto" name="items[__INDEX__][producto_id]" required>
-                    <option value="">Buscar o seleccionar...</option>
-                    @foreach($productos as $prod)
-                        <option value="{{ $prod->id }}"
-                                data-precio="{{ $prod->precio_venta }}"
-                                data-stock="{{ $prod->stock }}"
-                                data-nombre="{{ $prod->nombre }}"
-                                data-marca="{{ $prod->marca }}"
-                                data-categoria="{{ $prod->categoria->nombre ?? '' }}">
-                            {{ $prod->nombre }} ({{ $prod->marca }}) — ${{ number_format($prod->precio_venta, 0, ',', '.') }} [Stock: {{ $prod->stock }}]
+            <div class="col-md-4">
+                <label class="form-label text-light fw-medium" style="color: #eadcc6 !important;">Artículo</label>
+                <select class="form-select form-select-dark item-articulo" required>
+                    <option value="">Elegí un artículo...</option>
+                    @foreach($porArticulo as $codigo => $variantes)
+                        <option value="{{ $codigo }}">
+                            {{ $codigo }} — {{ $variantes->first()->nombre }}@if($variantes->count() > 1) ({{ $variantes->count() }} opciones)@endif
                         </option>
                     @endforeach
                 </select>
             </div>
-            <div class="col-md-2">
-                <label class="form-label text-light fw-medium" style="color: #eadcc6 !important;">Cantidad</label>
+            <div class="col-md-3">
+                <label class="form-label text-light fw-medium" style="color: #eadcc6 !important;">Talle y color</label>
+                <select class="form-select form-select-dark item-producto" name="items[__INDEX__][producto_id]" required disabled>
+                    <option value="">Elegí el artículo primero</option>
+                </select>
+            </div>
+            <div class="col-md-1">
+                <label class="form-label text-light fw-medium" style="color: #eadcc6 !important;">Cant.</label>
                 <input type="number" class="form-control form-control-dark item-cantidad"
                        name="items[__INDEX__][cantidad]" min="1" value="1" required>
             </div>
-            <div class="col-md-2">
-                <label class="form-label text-light fw-medium" style="color: #eadcc6 !important;">Precio Unit.</label>
-                <input type="text" class="form-control form-control-dark item-precio text-end fw-bold" readonly
-                       style="color: var(--cy-gold);">
+            <div class="col-md-1">
+                <label class="form-label text-light fw-medium" style="color: #eadcc6 !important;">Precio</label>
+                <input type="text" class="form-control form-control-dark item-precio text-end fw-bold px-2" readonly
+                       style="color: var(--cy-gold); font-size: 0.85rem;">
             </div>
             <div class="col-md-2">
                 <label class="form-label text-light fw-medium" style="color: #eadcc6 !important;">Subtotal</label>
@@ -265,14 +266,45 @@
             @foreach($productos as $prod)
             {
                 id: {{ $prod->id }},
+                articulo: @json($prod->articulo),
                 nombre: @json($prod->nombre),
-                marca: @json($prod->marca),
+                variante: @json($prod->variante()),
                 categoria: @json($prod->categoria->nombre ?? ''),
                 precio: {{ $prod->precio_venta }},
                 stock: {{ $prod->stock }}
             },
             @endforeach
         ];
+
+        // Carga los talles y colores del artículo elegido en el segundo select.
+        function llenarVariantes(row, codigo, productoId = null) {
+            const selectVariante = row.querySelector('.item-producto');
+            const variantes = productosData.filter(p => p.articulo === codigo);
+
+            selectVariante.innerHTML = variantes.length
+                ? '<option value="">Elegí talle y color...</option>'
+                : '<option value="">Sin stock de este artículo</option>';
+
+            variantes.forEach(function (p) {
+                const option = document.createElement('option');
+                option.value = p.id;
+                option.textContent = p.variante + ' — $' + p.precio.toLocaleString('es-AR') + ' [Stock: ' + p.stock + ']';
+                option.dataset.precio = p.precio;
+                option.dataset.stock = p.stock;
+                option.dataset.nombre = p.nombre;
+                option.dataset.categoria = p.categoria;
+                selectVariante.appendChild(option);
+            });
+
+            selectVariante.disabled = variantes.length === 0;
+
+            // Con una sola variante no tiene sentido hacerlo elegir.
+            if (productoId) {
+                selectVariante.value = productoId;
+            } else if (variantes.length === 1) {
+                selectVariante.value = variantes[0].id;
+            }
+        }
 
         let itemIndex = 0;
         const container = document.getElementById('itemsContainer');
@@ -296,7 +328,8 @@
 
             const matches = productosData.filter(p =>
                 p.nombre.toLowerCase().includes(query) ||
-                p.marca.toLowerCase().includes(query) ||
+                p.articulo.toLowerCase().includes(query) ||
+                p.variante.toLowerCase().includes(query) ||
                 p.categoria.toLowerCase().includes(query)
             );
 
@@ -318,7 +351,7 @@
                      onmouseout="this.style.background='transparent'">
                     <div>
                         <strong class="text-white">${p.nombre}</strong>
-                        <div class="small" style="color: #cdb99c;">${p.marca} · <span class="text-info">${p.categoria}</span></div>
+                        <div class="small" style="color: #cdb99c;">${p.articulo} · ${p.variante} · <span class="text-info">${p.categoria}</span></div>
                     </div>
                     <div class="text-end ms-3">
                         <div class="fw-bold" style="color: var(--cy-gold); font-size: 1rem;">$${p.precio.toLocaleString('es-AR')}</div>
@@ -363,6 +396,7 @@
                 }
             });
 
+
             if (existingRow) {
                 // Incrementar cantidad
                 const cantInput = existingRow.querySelector('.item-cantidad');
@@ -390,13 +424,24 @@
             emptyMessage.style.display = 'none';
 
             const select = row.querySelector('.item-producto');
+            const selectArticulo = row.querySelector('.item-articulo');
             const cantidad = row.querySelector('.item-cantidad');
             const removeBtn = row.querySelector('.btn-remove-item');
 
             if (selectedProductId) {
-                select.value = selectedProductId;
-                updateItemRow(row);
+                const producto = productosData.find(p => p.id === selectedProductId);
+                if (producto) {
+                    selectArticulo.value = producto.articulo;
+                    llenarVariantes(row, producto.articulo, producto.id);
+                    updateItemRow(row);
+                }
             }
+
+            selectArticulo.addEventListener('change', function() {
+                llenarVariantes(row, this.value);
+                updateItemRow(row);
+                updateTotal();
+            });
 
             select.addEventListener('change', function() {
                 updateItemRow(row);

@@ -55,7 +55,7 @@
                     <input type="text"
                            name="buscar"
                            class="form-control form-control-dark"
-                           placeholder="Nombre o marca..."
+                           placeholder="Nombre, artículo o color..."
                            value="{{ request('buscar') }}">
                 </div>
                 <div class="col-md-3">
@@ -97,12 +97,12 @@
                 <table class="table table-dark-custom table-hover align-middle mb-0" style="font-size: 0.84rem;">
                     <thead>
                         <tr>
-                            <th style="width: 35px;">#</th>
+                            <th>Artículo</th>
                             <th>Producto</th>
                             <th>Categoría</th>
                             <th>Proveedor</th>
                             <th>Talle</th>
-                            <th>Marca</th>
+                            <th>Color</th>
                             <th class="text-end text-nowrap">P. Compra</th>
                             <th class="text-end text-nowrap">P. Venta</th>
                             <th class="text-center text-nowrap">Stock</th>
@@ -115,12 +115,12 @@
                     <tbody>
                         @forelse($productos as $producto)
                         <tr>
-                            <td class="text-muted">{{ $producto->id }}</td>
+                            <td class="fw-bold text-nowrap" style="color: var(--cy-gold-light);">{{ $producto->articulo }}</td>
                             <td class="fw-bold">{{ $producto->nombre }}</td>
                             <td>{{ $producto->categoria->nombre }}</td>
                             <td>{{ $producto->proveedor->nombre ?? '—' }}</td>
                             <td>{{ $producto->talle ?? '—' }}</td>
-                            <td>{{ $producto->marca }}</td>
+                            <td>{{ $producto->color ?? '—' }}</td>
                             <td class="text-end text-nowrap">${{ number_format($producto->precio_compra, 0, ',', '.') }}</td>
                             <td class="text-end fw-bold text-nowrap" style="color: var(--cy-gold);">${{ number_format($producto->precio_venta, 0, ',', '.') }}</td>
                             <td class="text-center fw-bold text-nowrap">{{ $producto->stock }}</td>

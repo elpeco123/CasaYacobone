@@ -45,10 +45,15 @@ class VentaController extends Controller
     {
         $productos = Producto::with('categoria')
             ->where('stock', '>', 0)
-            ->orderBy('nombre')
+            ->orderBy('articulo')
+            ->orderBy('talle')
+            ->orderBy('color')
             ->get();
 
-        return view('ventas.create', compact('productos'));
+        // El vendedor elige primero el artículo y después el talle y color.
+        $porArticulo = $productos->groupBy('articulo');
+
+        return view('ventas.create', compact('productos', 'porArticulo'));
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ProductoRequest extends FormRequest
@@ -17,16 +18,17 @@ class ProductoRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
         return [
+            'articulo' => ['required', 'string', 'max:255'],
             'nombre' => ['required', 'string', 'max:255'],
             'categoria_id' => ['required', 'exists:categorias,id'],
             'proveedor_id' => ['required', 'exists:proveedores,id'],
             'talle' => ['nullable', 'string', 'max:10'],
-            'marca' => ['required', 'string', 'max:255'],
+            'color' => ['nullable', 'string', 'max:40'],
             'precio_compra' => ['required', 'numeric', 'min:0'],
             'precio_venta' => ['required', 'numeric', 'min:0', 'gte:precio_compra'],
             'stock' => ['required', 'integer', 'min:0'],
@@ -47,7 +49,7 @@ class ProductoRequest extends FormRequest
             'categoria_id.exists' => 'La categoría seleccionada no existe.',
             'proveedor_id.required' => 'Seleccioná un proveedor.',
             'proveedor_id.exists' => 'El proveedor seleccionado no existe.',
-            'marca.required' => 'La marca es obligatoria.',
+            'articulo.required' => 'El código de artículo es obligatorio. Usá el mismo para los talles y colores del mismo modelo.',
             'precio_compra.required' => 'El precio de compra es obligatorio.',
             'precio_compra.min' => 'El precio de compra no puede ser negativo.',
             'precio_venta.required' => 'El precio de venta es obligatorio.',

@@ -19,11 +19,12 @@ class Producto extends Model
      * @var list<string>
      */
     protected $fillable = [
+        'articulo',
         'nombre',
         'categoria_id',
         'proveedor_id',
         'talle',
-        'marca',
+        'color',
         'precio_compra',
         'precio_venta',
         'stock',
@@ -67,6 +68,16 @@ class Producto extends Model
     public function ventaItems(): HasMany
     {
         return $this->hasMany(VentaItem::class);
+    }
+
+    /**
+     * Talle y color, para distinguir esta variante dentro del artículo.
+     */
+    public function variante(): string
+    {
+        $partes = array_filter([$this->talle, $this->color]);
+
+        return $partes === [] ? 'Único' : implode(' · ', $partes);
     }
 
     /**

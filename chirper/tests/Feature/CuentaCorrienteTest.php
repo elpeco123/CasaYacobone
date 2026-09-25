@@ -19,7 +19,7 @@ function productoDePrueba(int $precioVenta = 10000, int $stock = 10): Producto
 {
     return Producto::create([
         'nombre' => 'Bombacha de campo',
-        'marca' => 'El Fogón',
+        'articulo' => 'ART-1',
         'categoria_id' => Categoria::create(['nombre' => 'Bombachas'])->id,
         'precio_compra' => 6000,
         'precio_venta' => $precioVenta,

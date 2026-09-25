@@ -54,45 +54,45 @@ class SimularDatosSeeder extends Seeder
         $this->command->info('4. Creando 20 productos adicionales repartidos en todas las categorías...');
         $nuevosProductos = [
             // Bombachas
-            ['nombre' => 'Bombacha Gaucha de Vestir', 'categoria' => 'Bombachas', 'talle' => 'XL', 'marca' => 'Pampa', 'precio_compra' => 12000, 'precio_venta' => 18500],
-            ['nombre' => 'Bombacha de Gabardina Reforzada', 'categoria' => 'Bombachas', 'talle' => 'L', 'marca' => 'El Fogón', 'precio_compra' => 11000, 'precio_venta' => 16500],
-            ['nombre' => 'Bombacha de Campo Térmica', 'categoria' => 'Bombachas', 'talle' => 'M', 'marca' => 'Don Gaucho', 'precio_compra' => 13500, 'precio_venta' => 19900],
-            ['nombre' => 'Bombacha de Trabajo Fuerte', 'categoria' => 'Bombachas', 'talle' => 'XXL', 'marca' => 'Ranquel', 'precio_compra' => 9500, 'precio_venta' => 14200],
+            ['nombre' => 'Bombacha Gaucha de Vestir', 'categoria' => 'Bombachas', 'talle' => 'XL', 'precio_compra' => 12000, 'precio_venta' => 18500],
+            ['nombre' => 'Bombacha de Gabardina Reforzada', 'categoria' => 'Bombachas', 'talle' => 'L', 'precio_compra' => 11000, 'precio_venta' => 16500],
+            ['nombre' => 'Bombacha de Campo Térmica', 'categoria' => 'Bombachas', 'talle' => 'M', 'precio_compra' => 13500, 'precio_venta' => 19900],
+            ['nombre' => 'Bombacha de Trabajo Fuerte', 'categoria' => 'Bombachas', 'talle' => 'XXL', 'precio_compra' => 9500, 'precio_venta' => 14200],
 
             // Boinas
-            ['nombre' => 'Boina de Lana Fina Merino', 'categoria' => 'Boinas', 'talle' => null, 'marca' => 'Sureño', 'precio_compra' => 6500, 'precio_venta' => 9800],
-            ['nombre' => 'Boina de Hilo Verano', 'categoria' => 'Boinas', 'talle' => null, 'marca' => 'El Palenque', 'precio_compra' => 4800, 'precio_venta' => 7200],
-            ['nombre' => 'Sombrero de Carpincho Elegante', 'categoria' => 'Boinas', 'talle' => '58', 'marca' => 'Criollo', 'precio_compra' => 18000, 'precio_venta' => 27500],
-            ['nombre' => 'Boina de Paño Tradicional', 'categoria' => 'Boinas', 'talle' => null, 'marca' => 'Pampa', 'precio_compra' => 5200, 'precio_venta' => 7900],
+            ['nombre' => 'Boina de Lana Fina Merino', 'categoria' => 'Boinas', 'talle' => null, 'precio_compra' => 6500, 'precio_venta' => 9800],
+            ['nombre' => 'Boina de Hilo Verano', 'categoria' => 'Boinas', 'talle' => null, 'precio_compra' => 4800, 'precio_venta' => 7200],
+            ['nombre' => 'Sombrero de Carpincho Elegante', 'categoria' => 'Boinas', 'talle' => '58', 'precio_compra' => 18000, 'precio_venta' => 27500],
+            ['nombre' => 'Boina de Paño Tradicional', 'categoria' => 'Boinas', 'talle' => null, 'precio_compra' => 5200, 'precio_venta' => 7900],
 
             // Cuchillos
-            ['nombre' => 'Cuchillo Caza 8 pulgadas', 'categoria' => 'Cuchillos', 'talle' => null, 'marca' => 'Don Gaucho', 'precio_compra' => 18000, 'precio_venta' => 27000],
-            ['nombre' => 'Daga de Plata y Alpaca', 'categoria' => 'Cuchillos', 'talle' => null, 'marca' => 'Sureño', 'precio_compra' => 42000, 'precio_venta' => 65000],
-            ['nombre' => 'Cuchillo Fileteador de Asado', 'categoria' => 'Cuchillos', 'talle' => null, 'marca' => 'El Fogón', 'precio_compra' => 9800, 'precio_venta' => 14900],
-            ['nombre' => 'Cuchillo de Campo Damasco', 'categoria' => 'Cuchillos', 'talle' => null, 'marca' => 'Criollo', 'precio_compra' => 31000, 'precio_venta' => 48000],
+            ['nombre' => 'Cuchillo Caza 8 pulgadas', 'categoria' => 'Cuchillos', 'talle' => null, 'precio_compra' => 18000, 'precio_venta' => 27000],
+            ['nombre' => 'Daga de Plata y Alpaca', 'categoria' => 'Cuchillos', 'talle' => null, 'precio_compra' => 42000, 'precio_venta' => 65000],
+            ['nombre' => 'Cuchillo Fileteador de Asado', 'categoria' => 'Cuchillos', 'talle' => null, 'precio_compra' => 9800, 'precio_venta' => 14900],
+            ['nombre' => 'Cuchillo de Campo Damasco', 'categoria' => 'Cuchillos', 'talle' => null, 'precio_compra' => 31000, 'precio_venta' => 48000],
 
             // Monturas
-            ['nombre' => 'Montura de Salto Profesional', 'categoria' => 'Monturas', 'talle' => null, 'marca' => 'Pampa', 'precio_compra' => 110000, 'precio_venta' => 165000],
-            ['nombre' => 'Recado de Gala Completo', 'categoria' => 'Monturas', 'talle' => null, 'marca' => 'El Palenque', 'precio_compra' => 135000, 'precio_venta' => 195000],
-            ['nombre' => 'Cincha de Lona y Cuero', 'categoria' => 'Monturas', 'talle' => null, 'marca' => 'Sureño', 'precio_compra' => 12500, 'precio_venta' => 18900],
-            ['nombre' => 'Estribos de Bronce Labrados', 'categoria' => 'Monturas', 'talle' => null, 'marca' => 'Don Gaucho', 'precio_compra' => 22000, 'precio_venta' => 33000],
+            ['nombre' => 'Montura de Salto Profesional', 'categoria' => 'Monturas', 'talle' => null, 'precio_compra' => 110000, 'precio_venta' => 165000],
+            ['nombre' => 'Recado de Gala Completo', 'categoria' => 'Monturas', 'talle' => null, 'precio_compra' => 135000, 'precio_venta' => 195000],
+            ['nombre' => 'Cincha de Lona y Cuero', 'categoria' => 'Monturas', 'talle' => null, 'precio_compra' => 12500, 'precio_venta' => 18900],
+            ['nombre' => 'Estribos de Bronce Labrados', 'categoria' => 'Monturas', 'talle' => null, 'precio_compra' => 22000, 'precio_venta' => 33000],
 
             // Botas
-            ['nombre' => 'Bota Borcego Campero', 'categoria' => 'Botas', 'talle' => '41', 'marca' => 'Ranquel', 'precio_compra' => 32000, 'precio_venta' => 48000],
-            ['nombre' => 'Bota de Montar Cuero Flor', 'categoria' => 'Botas', 'talle' => '43', 'marca' => 'El Fogón', 'precio_compra' => 45000, 'precio_venta' => 68000],
-            ['nombre' => 'Alpargata de Carpincho', 'categoria' => 'Botas', 'talle' => '40', 'marca' => 'Criollo', 'precio_compra' => 8500, 'precio_venta' => 12900],
-            ['nombre' => 'Zapatilla de Campo Urbana', 'categoria' => 'Botas', 'talle' => '42', 'marca' => 'Sureño', 'precio_compra' => 19500, 'precio_venta' => 29000],
+            ['nombre' => 'Bota Borcego Campero', 'categoria' => 'Botas', 'talle' => '41', 'precio_compra' => 32000, 'precio_venta' => 48000],
+            ['nombre' => 'Bota de Montar Cuero Flor', 'categoria' => 'Botas', 'talle' => '43', 'precio_compra' => 45000, 'precio_venta' => 68000],
+            ['nombre' => 'Alpargata de Carpincho', 'categoria' => 'Botas', 'talle' => '40', 'precio_compra' => 8500, 'precio_venta' => 12900],
+            ['nombre' => 'Zapatilla de Campo Urbana', 'categoria' => 'Botas', 'talle' => '42', 'precio_compra' => 19500, 'precio_venta' => 29000],
         ];
 
         $catDict = $categorias->keyBy('nombre');
-        foreach ($nuevosProductos as $prodData) {
+        foreach ($nuevosProductos as $i => $prodData) {
             Producto::firstOrCreate(
                 ['nombre' => $prodData['nombre']],
                 [
                     'categoria_id' => $catDict[$prodData['categoria']]->id,
                     'proveedor_id' => $proveedores->random()->id,
                     'talle' => $prodData['talle'],
-                    'marca' => $prodData['marca'],
+                    'articulo' => 'SIM-'.str_pad((string) ($i + 1), 3, '0', STR_PAD_LEFT),
                     'precio_compra' => $prodData['precio_compra'],
                     'precio_venta' => $prodData['precio_venta'],
                     'stock' => rand(20, 60),

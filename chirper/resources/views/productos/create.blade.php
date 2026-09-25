@@ -57,10 +57,28 @@
                             </div>
 
                             <div class="col-md-4">
-                                <label for="marca" class="form-label">Marca *</label>
-                                <input type="text" class="form-control form-control-dark @error('marca') is-invalid @enderror"
-                                       id="marca" name="marca" value="{{ old('marca') }}" required>
-                                @error('marca')
+                                <label for="articulo" class="form-label">Artículo *</label>
+                                <input type="text" class="form-control form-control-dark @error('articulo') is-invalid @enderror"
+                                       id="articulo" name="articulo" value="{{ old('articulo') }}" required
+                                       list="articulos-usados" placeholder="Ej: BC-100" autocomplete="off">
+                                <datalist id="articulos-usados">
+                                    @foreach($articulosUsados as $codigo)
+                                        <option value="{{ $codigo }}"></option>
+                                    @endforeach
+                                </datalist>
+                                <div class="form-text" style="color: var(--cy-text-faint);">
+                                    Mismo código para todos los talles y colores del mismo modelo.
+                                </div>
+                                @error('articulo')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="col-md-4">
+                                <label for="color" class="form-label">Color</label>
+                                <input type="text" class="form-control form-control-dark @error('color') is-invalid @enderror"
+                                       id="color" name="color" value="{{ old('color') }}"
+                                       placeholder="Ej: Negro, Beige...">
+                                @error('color')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>

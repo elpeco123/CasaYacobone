@@ -24,7 +24,8 @@ class ProductoController extends Controller
             $buscar = $request->input('buscar');
             $query->where(function ($q) use ($buscar) {
                 $q->where('nombre', 'like', "%{$buscar}%")
-                  ->orWhere('marca', 'like', "%{$buscar}%");
+                    ->orWhere('articulo', 'like', "%{$buscar}%")
+                    ->orWhere('color', 'like', "%{$buscar}%");
             });
         }
 
@@ -43,7 +44,8 @@ class ProductoController extends Controller
         $valorTotalStockCompra = (float) (Producto::selectRaw('SUM(precio_compra * stock) as total')->value('total') ?? 0);
         $valorTotalStockVenta = (float) (Producto::selectRaw('SUM(precio_venta * stock) as total')->value('total') ?? 0);
 
-        $productos = $query->orderBy('nombre')->paginate(15)->withQueryString();
+        // Las variantes del mismo artículo quedan juntas.
+        $productos = $query->orderBy('articulo')->orderBy('talle')->orderBy('color')->paginate(15)->withQueryString();
         $categorias = Categoria::orderBy('nombre')->get();
 
         return view('productos.index', compact(
@@ -63,8 +65,19 @@ class ProductoController extends Controller
     {
         $categorias = Categoria::orderBy('nombre')->get();
         $proveedores = Proveedor::orderBy('nombre')->get();
+        $articulosUsados = $this->articulosUsados();
 
-        return view('productos.create', compact('categorias', 'proveedores'));
+        return view('productos.create', compact('categorias', 'proveedores', 'articulosUsados'));
+    }
+
+    /**
+     * Códigos de artículo ya cargados, para autocompletar el formulario.
+     *
+     * @return array<int, string>
+     */
+    private function articulosUsados(): array
+    {
+        return Producto::query()->distinct()->orderBy('articulo')->pluck('articulo')->all();
     }
 
     /**
@@ -95,8 +108,9 @@ class ProductoController extends Controller
     {
         $categorias = Categoria::orderBy('nombre')->get();
         $proveedores = Proveedor::orderBy('nombre')->get();
+        $articulosUsados = $this->articulosUsados();
 
-        return view('productos.edit', compact('producto', 'categorias', 'proveedores'));
+        return view('productos.edit', compact('producto', 'categorias', 'proveedores', 'articulosUsados'));
     }
 
     /**
